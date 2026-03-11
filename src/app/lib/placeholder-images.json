@@ -1,0 +1,47 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "hero-bg",
+      "description": "Abstract technological background with glowing purple and green lines",
+      "imageUrl": "https://picsum.photos/seed/tech1/1200/800",
+      "imageHint": "technology blockchain"
+    },
+    {
+      "id": "member-1",
+      "description": "Professional developer portrait",
+      "imageUrl": "https://picsum.photos/seed/mem1/400/400",
+      "imageHint": "professional portrait"
+    },
+    {
+      "id": "member-2",
+      "description": "Designer portrait",
+      "imageUrl": "https://picsum.photos/seed/mem2/400/400",
+      "imageHint": "person portrait"
+    },
+    {
+      "id": "member-3",
+      "description": "Marketing specialist portrait",
+      "imageUrl": "https://picsum.photos/seed/mem3/400/400",
+      "imageHint": "business person"
+    },
+    {
+      "id": "partner-1",
+      "description": "Tech company logo placeholder",
+      "imageUrl": "https://picsum.photos/seed/logo1/200/100",
+      "imageHint": "abstract logo"
+    },
+    {
+      "id": "partner-2",
+      "description": "VC firm logo placeholder",
+      "imageUrl": "https://picsum.photos/seed/logo2/200/100",
+      "imageHint": "corporate logo"
+    },
+    {
+      "id": "event-1",
+      "description": "Tech conference hall",
+      "imageUrl": "https://picsum.photos/seed/evt1/600/400",
+      "imageHint": "conference event"
+    }
+  ]
+}
