@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useRef } from 'react';
@@ -17,7 +18,8 @@ export default function Hero() {
     let width: number, height: number, dpr: number, radius: number, globeCenterY: number;
     const projection = d3.geoOrthographic().clipAngle(90);
 
-    const numStars = 35000; 
+    // Significantly increased star count for a more dense and immersive background
+    const numStars = 80000; 
     const maxZ = 2500;
     let stars: { x: number; y: number; z: number; speed: number }[] = [];
     let scrollVelocity = 0;
@@ -26,6 +28,7 @@ export default function Hero() {
       stars = [];
       for (let i = 0; i < numStars; i++) {
         stars.push({
+          // Spreading stars across a massive coordinate space to fill any screen size
           x: (Math.random() - 0.5) * width * 45,
           y: (Math.random() - 0.5) * height * 45,
           z: Math.random() * maxZ,
@@ -102,12 +105,14 @@ export default function Hero() {
       // 1. Star Rendering
       context.fillStyle = "#ffffff";
       stars.forEach(star => {
+        // Star movement logic with scroll-reactive velocity
         star.z -= (star.speed + scrollVelocity * 6.5);
         if (star.z <= 1) star.z = maxZ;
 
         const px = (width / 2) + (star.x / star.z) * 1500;
         const py = globeCenterY + (star.y / star.z) * 1500;
 
+        // Render only stars within a slightly padded viewport for efficiency
         if (px >= -500 && px <= width + 500 && py >= -500 && py <= height + 1500) {
           const alpha = 1 - (star.z / maxZ);
           context.globalAlpha = alpha;
@@ -131,6 +136,7 @@ export default function Hero() {
       context.fillStyle = grad;
       context.fill();
 
+      // Glowing Neon Atmosphere Rim
       context.shadowBlur = 60 + (scrollVelocity * 20);
       context.shadowColor = '#9945FF';
       context.strokeStyle = 'rgba(153, 69, 255, 0.9)';
