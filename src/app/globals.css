@@ -26,6 +26,30 @@
     --ring: 267 100% 63%;
     --radius: 0.75rem;
   }
+
+  /* Custom Purple Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #02000a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #9945FF;
+    border-radius: 5px;
+    border: 2px solid #02000a;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #c28cff;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #9945FF #02000a;
+  }
 }
 
 @layer base {

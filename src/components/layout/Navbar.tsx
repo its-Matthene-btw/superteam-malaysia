@@ -1,12 +1,36 @@
+
 "use client";
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Twitter } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const controlNavbar = () => {
+      if (typeof window !== 'undefined') {
+        if (window.scrollY > lastScrollY && window.scrollY > 100) {
+          // Scrolling down
+          setIsVisible(false);
+        } else {
+          // Scrolling up
+          setIsVisible(true);
+        }
+        setLastScrollY(window.scrollY);
+      }
+    };
+
+    window.addEventListener('scroll', controlNavbar);
+    return () => {
+      window.removeEventListener('scroll', controlNavbar);
+    };
+  }, [lastScrollY]);
 
   const links = [
     { name: 'Mission', href: '/#mission' },
@@ -16,10 +40,15 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] bg-black">
+    <nav 
+      className={cn(
+        "fixed top-0 left-0 right-0 z-[100] bg-black transition-transform duration-300 ease-in-out",
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      )}
+    >
       <div className="w-full px-8 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(153,69,255,0.4)]">S</div>
+          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(153,69,255,0.4)] text-xl">S</div>
           <span className="font-headline font-bold text-2xl tracking-tighter text-white uppercase">SUPERTEAM</span>
         </Link>
 
@@ -30,7 +59,7 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <div className="flex items-center space-x-4 ml-6">
+          <div className="flex items-center space-x-6 ml-6">
             <a 
               href="https://x.com/superteammy" 
               target="_blank" 
@@ -40,8 +69,10 @@ export default function Navbar() {
             >
               <Twitter className="w-5 h-5 text-black" />
             </a>
-            <Link href="/admin">
-              <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold px-6 py-5 rounded-none">ADMIN CMS</Button>
+            <Link href="/#mission">
+              <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold px-8 h-12 rounded-none uppercase tracking-widest text-xs">
+                EXPLORE MORE
+              </Button>
             </Link>
           </div>
         </div>
