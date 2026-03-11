@@ -169,8 +169,8 @@ export default function Hero() {
       {/* Background radial gradient to fade the globe edge */}
       <div className="absolute inset-0 bg-gradient-radial from-[#1a083a] via-black to-black opacity-80" />
 
-      {/* Centered radial gradient "black box" for text focus - 100% to 0% transparency */}
-      <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_center,_rgba(0,0,0,1)_0%,_transparent_70%)]" />
+      {/* Centered radial gradient "black box" for text focus - 50% to 0% transparency */}
+      <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_center,_rgba(0,0,0,0.5)_0%,_transparent_70%)]" />
 
       <div className="relative z-20 text-center max-w-4xl px-6 pointer-events-auto">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold mb-6 leading-[1.1] tracking-tight text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.5)]">
