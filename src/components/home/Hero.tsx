@@ -166,9 +166,13 @@ export default function Hero() {
 
   return (
     <section className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden">
+      {/* Background radial gradient to fade the globe edge */}
       <div className="absolute inset-0 bg-gradient-radial from-[#1a083a] via-black to-black opacity-80" />
 
-      <div className="relative z-10 text-center max-w-4xl px-6 pointer-events-auto">
+      {/* Centered radial gradient "black box" for text focus - 100% to 0% transparency */}
+      <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_center,_rgba(0,0,0,1)_0%,_transparent_70%)]" />
+
+      <div className="relative z-20 text-center max-w-4xl px-6 pointer-events-auto">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold mb-6 leading-[1.1] tracking-tight text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.5)]">
           Malaysia’s Home <br /> 
           <span className="hero-text-gradient">for Solana Builders</span>
@@ -179,10 +183,10 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button size="lg" className="bg-white text-black hover:bg-white/90 font-bold h-12 px-8 rounded-full">
+          <Button size="lg" className="bg-white text-black hover:bg-white/90 font-bold h-12 px-8 rounded-full uppercase">
             JOIN NETWORK
           </Button>
-          <Button size="lg" variant="outline" className="h-12 px-8 rounded-full border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white uppercase tracking-wider text-xs">
+          <Button size="lg" variant="outline" className="h-12 px-8 rounded-full border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white uppercase tracking-wider text-xs font-bold">
             OPPORTUNITIES
           </Button>
         </div>
