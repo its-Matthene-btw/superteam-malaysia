@@ -16,43 +16,45 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] bg-black border-b border-white/10">
-      <div className="w-full px-6 h-16 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-[100] bg-black">
+      <div className="w-full px-8 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center font-bold text-white">S</div>
-          <span className="font-headline font-bold text-xl tracking-tighter">SUPERTEAM <span className="text-primary">MY</span></span>
+          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(153,69,255,0.4)]">S</div>
+          <span className="font-headline font-bold text-2xl tracking-tighter text-white">SUPERTEAM <span className="text-primary">MY</span></span>
         </Link>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center space-x-10">
           {links.map((link) => (
-            <Link key={link.name} href={link.href} className="text-sm font-medium hover:text-primary transition-colors">
+            <Link key={link.name} href={link.href} className="text-sm font-semibold uppercase tracking-wider text-muted-foreground hover:text-white transition-colors">
               {link.name}
             </Link>
           ))}
-          <Button variant="ghost" className="text-sm hover:text-primary">
-            Join Discord
-          </Button>
-          <Link href="/admin">
-            <Button size="sm" className="bg-primary hover:opacity-90">Admin</Button>
-          </Link>
+          <div className="flex items-center space-x-4 ml-6">
+            <Button variant="ghost" className="text-sm font-bold text-white hover:text-primary transition-colors">
+              Join Discord
+            </Button>
+            <Link href="/admin">
+              <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold px-6 py-5 rounded-none">ADMIN CMS</Button>
+            </Link>
+          </div>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
+        <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X /> : <Menu />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-black border-b border-white/10 p-6 flex flex-col space-y-4 animate-in slide-in-from-top duration-300">
+        <div className="md:hidden bg-black border-t border-white/5 p-8 flex flex-col space-y-6 animate-in slide-in-from-top duration-300">
           {links.map((link) => (
-            <Link key={link.name} href={link.href} onClick={() => setIsOpen(false)} className="text-lg font-medium">
+            <Link key={link.name} href={link.href} onClick={() => setIsOpen(false)} className="text-xl font-bold uppercase tracking-widest text-white">
               {link.name}
             </Link>
           ))}
-          <Button className="w-full bg-primary">Join Discord</Button>
+          <Button className="w-full bg-primary font-bold py-6">Join Discord</Button>
         </div>
       )}
     </nav>
