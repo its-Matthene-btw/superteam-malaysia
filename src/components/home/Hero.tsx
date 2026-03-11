@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef } from 'react';
@@ -166,9 +165,9 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative w-full h-screen flex items-center justify-center bg-[#02000a] overflow-hidden">
-      {/* Background radial gradient */}
-      <div className="absolute inset-0 bg-gradient-radial from-[#1a083a] via-[#02000a] to-[#02000a] opacity-80" />
+    <section className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden">
+      {/* Background radial gradient fading into pure black */}
+      <div className="absolute inset-0 bg-gradient-radial from-[#1a083a] via-black to-black opacity-80" />
 
       <div className="relative z-10 text-center max-w-4xl px-6 pointer-events-auto">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold mb-6 leading-[1.1] tracking-tight text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.5)]">
