@@ -17,25 +17,25 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 px-4 py-4">
-      <div className="max-w-7xl mx-auto glass rounded-full px-6 py-3 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-[100] bg-black/80 backdrop-blur-md border-b border-white/10">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-lg solana-gradient flex items-center justify-center font-bold text-white">S</div>
-          <span className="font-headline font-bold text-xl tracking-tighter">SUPERTEAM <span className="solana-text-gradient">MY</span></span>
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center font-bold text-white">S</div>
+          <span className="font-headline font-bold text-xl tracking-tighter">SUPERTEAM <span className="text-primary">MY</span></span>
         </Link>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center space-x-8">
           {links.map((link) => (
-            <Link key={link.name} href={link.href} className="text-sm font-medium hover:text-secondary transition-colors">
+            <Link key={link.name} href={link.href} className="text-sm font-medium hover:text-primary transition-colors">
               {link.name}
             </Link>
           ))}
-          <Button variant="outline" className="border-primary/50 hover:border-primary">
+          <Button variant="ghost" className="text-sm hover:text-primary">
             Join Discord
           </Button>
           <Link href="/admin">
-            <Button size="sm" className="solana-gradient hover:opacity-90">Admin</Button>
+            <Button size="sm" className="bg-primary hover:opacity-90">Admin</Button>
           </Link>
         </div>
 
@@ -47,13 +47,13 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden mt-2 glass rounded-2xl p-6 flex flex-col space-y-4 animate-in slide-in-from-top duration-300">
+        <div className="md:hidden bg-black border-b border-white/10 p-6 flex flex-col space-y-4 animate-in slide-in-from-top duration-300">
           {links.map((link) => (
             <Link key={link.name} href={link.href} onClick={() => setIsOpen(false)} className="text-lg font-medium">
               {link.name}
             </Link>
           ))}
-          <Button className="w-full solana-gradient">Join Discord</Button>
+          <Button className="w-full bg-primary">Join Discord</Button>
         </div>
       )}
     </nav>

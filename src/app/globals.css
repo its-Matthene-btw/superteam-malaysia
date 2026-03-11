@@ -5,17 +5,17 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 240 10% 2%; /* #02000a approx */
+    --foreground: 0 0% 100%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
-    --primary: 267 100% 63%; /* Solana Purple #9945FF */
+    --primary: 267 100% 63%; /* #9945FF */
     --primary-foreground: 0 0% 100%;
-    --secondary: 155 88% 51%; /* Solana Green #14F195 */
+    --secondary: 267 100% 77%; /* #c28cff */
     --secondary-foreground: 240 10% 3.9%;
-    --muted: 240 3.7% 15.9%;
+    --muted: 240 5% 65%; /* #a1a1aa */
     --muted-foreground: 240 5% 64.9%;
     --accent: 267 100% 63%;
     --accent-foreground: 0 0% 98%;
@@ -46,6 +46,12 @@
 
 .solana-gradient {
   background: linear-gradient(135deg, #9945FF 0%, #14F195 100%);
+}
+
+.hero-text-gradient {
+  background: linear-gradient(to right, #ffffff, #c28cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .solana-text-gradient {
