@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,7 +26,7 @@
     --radius: 0.75rem;
   }
 
-  /* Custom Purple Scrollbar */
+  /* Custom Light Purple Scrollbar */
   ::-webkit-scrollbar {
     width: 10px;
   }
@@ -37,18 +36,18 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #9945FF;
+    background: #c28cff; /* Light purple */
     border-radius: 5px;
     border: 2px solid #02000a;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #c28cff;
+    background: #d4afff;
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: #9945FF #02000a;
+    scrollbar-color: #c28cff #02000a;
   }
 }
 
