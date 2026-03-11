@@ -1,4 +1,3 @@
-
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/home/Hero';
 import EventSection from '@/components/home/EventSection';
@@ -18,6 +17,18 @@ export default function Home() {
       <Navbar />
       <Hero />
       
+      {/* Mission Section */}
+      <section id="mission" className="py-24 px-4 bg-black">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-headline font-bold mb-8">Our <span className="solana-text-gradient">Mission</span></h2>
+          <p className="text-xl text-muted-foreground leading-relaxed">
+            Superteam is a global cooperative of operators, developers, and designers who are building on the Solana ecosystem. 
+            Our mission is to help the most talented builders in Malaysia launch and scale the next generation of 
+            decentralized applications, providing them with the resources, community, and capital they need to succeed.
+          </p>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <section className="py-24 px-4">
         <div className="max-w-3xl mx-auto">

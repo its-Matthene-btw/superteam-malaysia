@@ -2,17 +2,17 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Twitter } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const links = [
-    { name: 'Home', href: '/' },
-    { name: 'Members', href: '/members' },
+    { name: 'Mission', href: '/#mission' },
     { name: 'Events', href: '/#events' },
     { name: 'Ecosystem', href: '/#ecosystem' },
+    { name: 'Members', href: '/members' },
   ];
 
   return (
@@ -20,7 +20,7 @@ export default function Navbar() {
       <div className="w-full px-8 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(153,69,255,0.4)]">S</div>
-          <span className="font-headline font-bold text-2xl tracking-tighter text-white">SUPERTEAM <span className="text-primary">MY</span></span>
+          <span className="font-headline font-bold text-2xl tracking-tighter text-white uppercase">SUPERTEAM</span>
         </Link>
 
         {/* Desktop Links */}
@@ -31,9 +31,15 @@ export default function Navbar() {
             </Link>
           ))}
           <div className="flex items-center space-x-4 ml-6">
-            <Button variant="ghost" className="text-sm font-bold text-white hover:text-primary transition-colors">
-              Join Discord
-            </Button>
+            <a 
+              href="https://x.com/superteammy" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-white/90 transition-all group"
+              title="Follow us on X"
+            >
+              <Twitter className="w-5 h-5 text-black" />
+            </a>
             <Link href="/admin">
               <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold px-6 py-5 rounded-none">ADMIN CMS</Button>
             </Link>
@@ -54,7 +60,17 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
-          <Button className="w-full bg-primary font-bold py-6">Join Discord</Button>
+          <div className="flex items-center space-x-4">
+             <a 
+              href="https://x.com/superteammy" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-12 h-12 bg-white rounded-full flex items-center justify-center"
+            >
+              <Twitter className="w-6 h-6 text-black" />
+            </a>
+            <span className="text-white font-bold">Follow us on X</span>
+          </div>
         </div>
       )}
     </nav>
