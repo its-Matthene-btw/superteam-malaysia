@@ -115,7 +115,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
-              <p className="text-lg text-white leading-relaxed max-w-sm">
+              <p className="text-lg text-white leading-relaxed max-sm:max-w-xs max-w-sm">
                 We provide workshops, learning sessions, and community resources to help builders develop the skills needed to succeed in Web3. From beginners learning Solana development to experienced contributors leveling up their expertise.
               </p>
             </div>
@@ -134,8 +134,8 @@ export default function Home() {
             {stats.map((stat, idx) => (
               <div key={idx} className="stat-cell group border-l border-white/10 p-2.5 px-8 min-h-[160px] flex flex-col justify-between">
                 <div className="flex items-start gap-3">
-                  <stat.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors mt-0.5" />
-                  <span className="text-sm font-medium text-muted-foreground leading-tight uppercase tracking-wider">
+                  <stat.icon className="w-5 h-5 text-white/60 group-hover:text-primary transition-colors mt-0.5" />
+                  <span className="text-sm font-medium text-white leading-tight uppercase tracking-wider">
                     {stat.label}
                   </span>
                 </div>
