@@ -8,19 +8,27 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 export default function EventSection({ events }: { events: Event[] }) {
-  // Sort events to show upcoming ones first
-  const sortedEvents = [...events].sort((a, b) => 
-    new Date(a.event_date).getTime() - new Date(b.event_date).getTime()
-  ).slice(0, 4); // Show top 4 on homepage
+  // Show top upcoming events
+  const sortedEvents = [...events]
+    .sort((a, b) => new Date(a.event_date).getTime() - new Date(b.event_date).getTime())
+    .slice(0, 4);
 
   return (
-    <section id="events" className="w-full border-b border-white/10 bg-black overflow-hidden">
+    <section id="events" className="w-full border-b border-white/10 bg-black">
       <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-[4fr_6fr] border-x border-white/10 bg-white/5 gap-[1px]">
         
         {/* LEFT COLUMN - STICKY */}
         <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center p-10 lg:p-20 bg-black relative overflow-hidden">
-          {/* Grid Background Effect */}
-          <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(circle_at_center,black_0%,transparent_80%)] pointer-events-none" />
+          {/* Abstract Grid Background */}
+          <div 
+            className="absolute inset-0 z-0 opacity-50"
+            style={{
+              backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
+              maskImage: 'radial-gradient(circle at center, black 0%, transparent 80%)',
+              WebkitMaskImage: 'radial-gradient(circle at center, black 0%, transparent 80%)'
+            }}
+          />
           
           <div className="relative z-10">
             <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-6">// EVENTS_RADAR</div>
@@ -46,9 +54,9 @@ export default function EventSection({ events }: { events: Event[] }) {
             <Link 
               key={event.id} 
               href={`/events/${event.id}`}
-              className="event-card-blueprint group bg-black border border-white/10 transition-all duration-500 hover:-translate-x-2 hover:shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative flex flex-col"
+              className="group bg-black border border-white/10 transition-all duration-500 hover:-translate-x-2 relative flex flex-col"
             >
-              {/* Image Box */}
+              {/* Card Image Box */}
               <div className="relative h-72 w-full overflow-hidden border-b border-white/10 bg-[#111]">
                 {event.image_url ? (
                   <Image 
@@ -74,7 +82,7 @@ export default function EventSection({ events }: { events: Event[] }) {
                   {new Date(event.event_date).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' }).replace(/ /g, '_')}
                 </div>
                 
-                <h3 className="text-3xl lg:text-4xl font-black mb-8 leading-none tracking-tight text-white group-hover:text-primary transition-colors">
+                <h3 className="text-3xl lg:text-4xl font-black mb-10 leading-none tracking-tight text-white group-hover:text-primary transition-colors">
                   {event.title}
                 </h3>
 
@@ -112,12 +120,12 @@ export default function EventSection({ events }: { events: Event[] }) {
                 </div>
               </div>
 
-              {/* Blueprint Border Hover Effect */}
+              {/* Inner Glow Border Hover Effect */}
               <div className="absolute inset-0 border border-transparent group-hover:border-primary/40 pointer-events-none transition-colors duration-500 shadow-[inset_0_0_30px_rgba(153,69,255,0)] group-hover:shadow-[inset_0_0_30px_rgba(153,69,255,0.1)]" />
             </Link>
           )) : (
             <div className="py-40 text-center border border-white/10 bg-black">
-              <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground">No events found in local node.</p>
+              <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground">No upcoming events found.</p>
             </div>
           )}
         </div>
