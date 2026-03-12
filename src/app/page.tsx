@@ -71,7 +71,7 @@ export default function Home() {
               <div>
                 <h4 className="font-bold text-white uppercase text-xs tracking-widest mb-2">Sync Required</h4>
                 <p className="text-[10px] text-muted-foreground leading-relaxed mb-4">Core infrastructure tables not detected. Initialize the system to activate full functionality.</p>
-                <Link href="/admin/seed" className="text-[10px] font-black uppercase text-primary underline">Execute Sync -&gt;</Link>
+                <Link href="/admin/seed" className="text-[10px] font-black uppercase text-primary underline">Execute Sync {'->'}</Link>
               </div>
             </div>
           </div>
