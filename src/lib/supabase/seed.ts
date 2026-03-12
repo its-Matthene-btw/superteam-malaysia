@@ -17,18 +17,13 @@ export async function seedDatabase() {
   };
 
   try {
-    // 1. Destructive Wipe
-    const tables = ['stats', 'members', 'events', 'partners', 'testimonials', 'news', 'faqs', 'contacts', 'newsletter_subscribers'];
-    for (const table of tables) {
-      await supabase.from(table).delete().neq('id', '00000000-0000-0000-0000-000000000000');
-    }
+    // 1. Seed Stats
+    const { error: statsErr } = await supabase.from('stats').insert(hardcodedStats.map((s, i) => ({ label: s.label, value: s.value, order_index: i })));
+    if (statsErr) results.errors.push(`Stats: ${statsErr.message}`);
+    else results.stats = hardcodedStats.length;
 
-    // 2. Seed Stats
-    await supabase.from('stats').insert(hardcodedStats.map((s, i) => ({ label: s.label, value: s.value, order_index: i })));
-    results.stats = hardcodedStats.length;
-
-    // 3. Seed Members
-    await supabase.from('members').insert(hardcodedMembers.map(m => ({
+    // 2. Seed Members
+    const { error: memErr } = await supabase.from('members').insert(hardcodedMembers.map(m => ({
       name: m.name, 
       role: m.track, 
       company: m.company, 
@@ -38,9 +33,10 @@ export async function seedDatabase() {
       featured: true, 
       twitter_url: m.social.twitter 
     })));
-    results.members = hardcodedMembers.length;
+    if (memErr) results.errors.push(`Members: ${memErr.message}`);
+    else results.members = hardcodedMembers.length;
 
-    // 4. Seed Partners
+    // 3. Seed Partners
     const partnerData = hardcodedPartners.map(p => ({
       name: p.name,
       slug: p.name.toLowerCase().replace(/ /g, '-'),
@@ -51,10 +47,11 @@ export async function seedDatabase() {
       featured: true,
       website_url: 'https://solana.com'
     }));
-    await supabase.from('partners').insert(partnerData);
-    results.partners = partnerData.length;
+    const { error: partErr } = await supabase.from('partners').insert(partnerData);
+    if (partErr) results.errors.push(`Partners: ${partErr.message}`);
+    else results.partners = partnerData.length;
 
-    // 5. Seed Events
+    // 4. Seed Events
     const sampleEvents = [
       { 
         title: 'Solana Hacker House KL 2026', 
@@ -93,10 +90,11 @@ export async function seedDatabase() {
         featured: true 
       },
     ];
-    await supabase.from('events').insert(sampleEvents);
-    results.events = sampleEvents.length;
+    const { error: evtErr } = await supabase.from('events').insert(sampleEvents);
+    if (evtErr) results.errors.push(`Events: ${evtErr.message}`);
+    else results.events = sampleEvents.length;
 
-    // 6. Seed Testimonials
+    // 5. Seed Testimonials
     const sampleTestimonials = [
       { 
         name: 'Aiman Rahman', 
@@ -128,18 +126,20 @@ export async function seedDatabase() {
         type: 'discord' 
       },
     ];
-    await supabase.from('testimonials').insert(sampleTestimonials);
-    results.testimonials = sampleTestimonials.length;
+    const { error: testErr } = await supabase.from('testimonials').insert(sampleTestimonials);
+    if (testErr) results.errors.push(`Testimonials: ${testErr.message}`);
+    else results.testimonials = sampleTestimonials.length;
 
-    // 7. Seed FAQs
-    await supabase.from('faqs').insert(hardcodedFAQs.map((f, i) => ({
+    // 6. Seed FAQs
+    const { error: faqErr } = await supabase.from('faqs').insert(hardcodedFAQs.map((f, i) => ({
       question: f.question,
       answer: f.answer,
       order_index: i
     })));
-    results.faqs = hardcodedFAQs.length;
+    if (faqErr) results.errors.push(`FAQs: ${faqErr.message}`);
+    else results.faqs = hardcodedFAQs.length;
 
-    // 8. Seed News
+    // 7. Seed News
     const news = [
       { 
         title: 'Superteam Malaysia Hits 70k Builders', 
@@ -158,8 +158,9 @@ export async function seedDatabase() {
         published_at: new Date().toISOString() 
       }
     ];
-    await supabase.from('news').insert(news);
-    results.news = news.length;
+    const { error: newsErr } = await supabase.from('news').insert(news);
+    if (newsErr) results.errors.push(`News: ${newsErr.message}`);
+    else results.news = news.length;
 
   } catch (err: any) {
     results.errors.push(err.message);

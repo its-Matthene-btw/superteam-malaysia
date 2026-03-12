@@ -6,7 +6,7 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { seedDatabase } from '@/lib/supabase/seed';
-import { Database, AlertCircle, CheckCircle2, Copy, ShieldCheck } from 'lucide-react';
+import { Database, CheckCircle2, Copy, ShieldCheck } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 export default function SeedPage() {
@@ -81,7 +81,11 @@ CREATE POLICY "Allow auth all newsletter" ON newsletter_subscribers FOR ALL TO a
     try {
       const data = await seedDatabase();
       setResult(data);
-      toast({ title: "Success!", description: "System re-initialized." });
+      if (data.errors.length > 0) {
+        toast({ variant: "destructive", title: "Partial Success", description: "Seed completed with some errors (likely duplicate keys)." });
+      } else {
+        toast({ title: "Success!", description: "Database seeded successfully." });
+      }
     } catch (err: any) {
       toast({ variant: "destructive", title: "Error", description: err.message });
     } finally {
@@ -93,11 +97,11 @@ CREATE POLICY "Allow auth all newsletter" ON newsletter_subscribers FOR ALL TO a
     <AdminLayout>
       <div className="max-w-4xl mx-auto space-y-10 animate-fade-up">
         <div>
-          <div className="pill-badge mb-6"><span>✦</span> CORE INITIALIZATION v3</div>
+          <div className="pill-badge mb-6"><span>✦</span> CORE INITIALIZATION v4</div>
           <h1 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-white">
-            DATABASE <span className="text-primary">MIGRATION</span>
+            DATABASE <span className="text-primary">SYNC</span>
           </h1>
-          <p className="text-muted-foreground mt-2">Initialize News, FAQ, and Inbox systems.</p>
+          <p className="text-muted-foreground mt-2">Initialize News, FAQ, and Ecosystem systems.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -109,7 +113,7 @@ CREATE POLICY "Allow auth all newsletter" ON newsletter_subscribers FOR ALL TO a
             </CardHeader>
             <CardContent className="p-6 space-y-4 flex-1">
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Execute this in Supabase SQL Editor to create the News, FAQ, and Contacts tables.
+                Execute this in Supabase SQL Editor to ensure all tables and RLS policies are active.
               </p>
               <pre className="p-4 rounded bg-black/50 border border-white/5 text-[9px] font-code text-primary h-[300px] overflow-y-auto whitespace-pre-wrap relative">
                 {sqlSchema}
@@ -128,12 +132,14 @@ CREATE POLICY "Allow auth all newsletter" ON newsletter_subscribers FOR ALL TO a
           <Card className="glass border-white/10 flex flex-col">
             <CardHeader className="border-b border-white/5 bg-white/5">
               <CardTitle className="flex items-center gap-2 text-white uppercase tracking-widest text-xs">
-                <Database className="w-4 h-4 text-secondary" /> 2. Destructive Seed
+                <Database className="w-4 h-4 text-secondary" /> 2. System Seed
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Wipes all tables and re-inserts fresh ecosystem content, including events, news, FAQs, and testimonials.
+                Inserts fresh ecosystem content, including events, news, FAQs, and testimonials. 
+                <br /><br />
+                <strong className="text-secondary uppercase">Note:</strong> This is now non-destructive and will not delete your existing data.
               </p>
               
               <div className="mt-auto">
@@ -142,20 +148,33 @@ CREATE POLICY "Allow auth all newsletter" ON newsletter_subscribers FOR ALL TO a
                   disabled={loading}
                   className="w-full solana-gradient h-14 font-bold uppercase tracking-widest text-xs"
                 >
-                  {loading ? 'Processing Transaction...' : 'Wipe & Seed v3'}
+                  {loading ? 'Processing Transaction...' : 'Execute Seed'}
                 </Button>
               </div>
 
               {result && (
-                <div className="mt-8 p-4 rounded border border-white/10 bg-white/5 space-y-2">
-                  <h4 className="font-bold text-[10px] uppercase tracking-widest text-secondary">System Synced</h4>
-                  <ul className="text-[10px] font-code space-y-1 text-muted-foreground">
-                    <li>News: {result.news || 0} posts</li>
-                    <li>FAQs: {result.faqs || 0} entries</li>
-                    <li>Events: {result.events || 0} scheduled</li>
-                    <li>Wall of Love: {result.testimonials || 0} records</li>
-                    <li>Partners: {result.partners || 0} updated</li>
-                  </ul>
+                <div className="mt-8 p-4 rounded border border-white/10 bg-white/5 space-y-4">
+                  <div>
+                    <h4 className="font-bold text-[10px] uppercase tracking-widest text-secondary mb-2">Record Insertion Status</h4>
+                    <ul className="text-[10px] font-code space-y-1 text-muted-foreground">
+                      <li>News: {result.news} added</li>
+                      <li>FAQs: {result.faqs} added</li>
+                      <li>Events: {result.events} added</li>
+                      <li>Wall of Love: {result.testimonials} added</li>
+                      <li>Partners: {result.partners} added</li>
+                    </ul>
+                  </div>
+
+                  {result.errors.length > 0 && (
+                    <div>
+                      <h4 className="font-bold text-[10px] uppercase tracking-widest text-destructive mb-2">System Logs</h4>
+                      <ul className="text-[10px] font-code space-y-1 text-destructive/70">
+                        {result.errors.map((err: string, i: number) => (
+                          <li key={i}>ERR: {err}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               )}
             </CardContent>
