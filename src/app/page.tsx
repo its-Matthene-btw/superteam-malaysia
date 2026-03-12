@@ -17,9 +17,9 @@ export default function Home() {
       <section id="mission" className="bg-black">
         {/* Row 1 */}
         <div className="w-full border-b border-white/10">
-          <div className="max-w-[1600px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
+          <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter">Builder<br />Support</h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Builder<br />Support</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 01 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -38,9 +38,9 @@ export default function Home() {
 
         {/* Row 2 */}
         <div className="w-full border-b border-white/10">
-          <div className="max-w-[1600px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
+          <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter">Events &<br />Hackathons</h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Events &<br />Hackathons</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 02 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -58,9 +58,9 @@ export default function Home() {
 
         {/* Row 3 */}
         <div className="w-full border-b border-white/10">
-          <div className="max-w-[1600px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
+          <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter">Grants &<br />Funding</h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Grants &<br />Funding</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 03 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -79,9 +79,9 @@ export default function Home() {
 
         {/* Row 4 */}
         <div className="w-full border-b border-white/10">
-          <div className="max-w-[1600px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
+          <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter">Bounties &<br />Opportunities</h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Bounties &<br />Opportunities</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 04 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -100,9 +100,9 @@ export default function Home() {
 
         {/* Row 5 */}
         <div className="w-full border-b border-white/10">
-          <div className="max-w-[1600px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
+          <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter">Education &<br />Learning</h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Education &<br />Learning</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 05 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -120,22 +120,22 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="w-full bg-white/5 relative py-24 md:py-32 overflow-hidden border-b border-white/10">
+      <section className="w-full bg-white/5 relative overflow-hidden border-b border-white/10">
         <div className="bg-watermark">S</div>
-        <div className="max-w-[1600px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-[2.5fr_7.5fr] gap-10 md:gap-16 border-x border-white/10 px-10">
+        <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-[2.5fr_7.5fr] gap-10 md:gap-16 border-x border-white/10 px-10 py-24 md:py-32">
           <div className="stats-header">
-            <h2 className="text-5xl font-headline font-bold tracking-tight">In numbers</h2>
+            <h2 className="text-5xl font-headline font-bold tracking-tight text-white">In numbers</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-y-16 md:gap-y-20">
             {stats.map((stat, idx) => (
-              <div key={idx} className="stat-cell group">
+              <div key={idx} className="stat-cell group border-l border-white/10 p-2.5 px-8 min-h-[160px] flex flex-col justify-between">
                 <div className="flex items-start gap-3">
                   <stat.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors mt-0.5" />
                   <span className="text-sm font-medium text-muted-foreground leading-tight uppercase tracking-wider">
                     {stat.label}
                   </span>
                 </div>
-                <div className="text-5xl md:text-6xl font-headline font-bold tracking-tighter mt-10 group-hover:solana-text-gradient transition-all duration-300">
+                <div className="text-5xl md:text-6xl font-headline font-bold tracking-tighter mt-10 text-white group-hover:solana-text-gradient transition-all duration-300">
                   {stat.value}
                 </div>
               </div>

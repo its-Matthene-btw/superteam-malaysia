@@ -29,7 +29,7 @@ const testimonials: Testimonial[] = [
     avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=200&auto=format&fit=crop',
     content: 'Just deployed my first program on Solana mainnet! The Superteam MY workshops were the catalyst. Went from zero Rust knowledge to shipping in 3 weeks. LFG! 🚀',
     platform: 'twitter',
-    date: '10:42 AM • OCT 14, 2024',
+    date: '10:42 AM • OCT 14, 2026',
     stats: { likes: 142, reposts: 12 }
   },
   {
@@ -58,7 +58,7 @@ const testimonials: Testimonial[] = [
     avatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=200&auto=format&fit=crop',
     content: 'What a weekend at the Kuala Lumpur Hacker House! 150+ builders, 24 hours of coding, endless Red Bull, and 12 incredible Web3 projects shipped to devnet. 🇲🇾⚡',
     platform: 'twitter',
-    date: '09:15 PM • NOV 02, 2024',
+    date: '09:15 PM • NOV 02, 2026',
     image: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1200&auto=format&fit=crop',
     stats: { likes: 319, reposts: 48 },
     isWide: true
@@ -70,7 +70,7 @@ const testimonials: Testimonial[] = [
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop',
     content: 'The talent density in the Malaysian Web3 scene right now is wildly underrated. Keep your eyes on this ecosystem. We are building the future here.',
     platform: 'twitter',
-    date: '11:05 AM • DEC 08, 2024',
+    date: '11:05 AM • DEC 08, 2026',
     stats: { likes: 180, reposts: 21 }
   },
   {
@@ -89,7 +89,7 @@ const testimonials: Testimonial[] = [
     avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop',
     content: 'First bounty completed! Earned my first crypto by contributing to open source documentation for a Solana project. Best feeling ever. 💸',
     platform: 'twitter',
-    date: '02:30 PM • JAN 12, 2025',
+    date: '02:30 PM • JAN 12, 2027',
     stats: { likes: 89, reposts: 4 }
   }
 ];
@@ -145,7 +145,7 @@ function WallCard({ testimonial }: { testimonial: Testimonial }) {
               <Image src={testimonial.avatar} alt={testimonial.author} fill className="object-cover" />
             </div>
             <div className="author-details flex flex-col">
-              <span className="author-name font-bold text-lg">{testimonial.author}</span>
+              <span className="author-name font-bold text-lg text-white">{testimonial.author}</span>
               <span className="author-handle font-code text-xs text-muted-foreground group-hover:text-primary transition-colors">
                 {testimonial.handle}
               </span>
@@ -209,17 +209,17 @@ function WallCard({ testimonial }: { testimonial: Testimonial }) {
 export default function WallOfLove() {
   return (
     <section className="wall-section w-full bg-black border-t border-white/10">
-      <div className="header-wrapper max-w-[1600px] mx-auto px-10 pt-20 border-x border-white/10">
-        <div className="flex flex-col gap-6 mb-10">
+      <div className="header-wrapper max-w-[1400px] mx-auto pt-20 border-x border-white/10">
+        <div className="flex flex-col gap-6 mb-10 px-10">
           <div className="inline-flex items-center gap-2 border border-white/10 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[2px] text-muted-foreground uppercase w-fit">
             <span className="text-primary text-base">✦</span> Wall of Love
           </div>
-          <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none">
+          <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
             Community<br />Voices.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-10 py-10 border-t border-white/10">
+        <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-10 py-10 border-t border-white/10 px-10">
           <div className="uppercase font-bold text-sm tracking-wider leading-relaxed text-white max-w-sm">
             REAL BUILDERS. REAL STORIES. THE ALPHA SITS IN OUR CHATS.
           </div>
@@ -230,7 +230,7 @@ export default function WallOfLove() {
       </div>
 
       <div className="grid-full-width w-full border-y border-white/10">
-        <div className="wall-grid max-w-[1600px] mx-auto flex flex-wrap gap-[1px] bg-white/10 border-x border-white/10">
+        <div className="wall-grid max-w-[1400px] mx-auto flex flex-wrap gap-[1px] bg-white/10 border-x border-white/10">
           {testimonials.map((testimonial) => (
             <WallCard key={testimonial.id} testimonial={testimonial} />
           ))}

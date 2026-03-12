@@ -11,15 +11,15 @@ export default function FaqCtaSection() {
   return (
     <section className="faq-section w-full border-t border-white/10 bg-black">
       {/* Header */}
-      <div className="header-wrapper max-w-[1600px] mx-auto px-10 py-20 border-x border-white/10">
+      <div className="header-wrapper max-w-[1400px] mx-auto px-10 py-20 border-x border-white/10">
         <div className="pill-badge mb-6"><span>✦</span> KNOWLEDGE BASE</div>
-        <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none">
+        <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
           Have Questions?
         </h2>
       </div>
 
       <div className="grid-full-width w-full border-y border-white/10">
-        <div className="faq-cta-grid max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-[6fr_4fr] border-x border-white/10">
+        <div className="faq-cta-grid max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[6fr_4fr] border-x border-white/10">
           
           {/* FAQ Column */}
           <div className="faq-column border-b lg:border-b-0 lg:border-r border-white/10 bg-black flex flex-col">
@@ -33,7 +33,7 @@ export default function FaqCtaSection() {
                     <span className="font-code text-xs text-muted-foreground mt-1.5 hidden md:block">
                       {(idx + 1).toString().padStart(2, '0')} //
                     </span>
-                    <h3 className="text-2xl lg:text-3xl font-headline font-bold group-hover:text-primary transition-colors text-left">
+                    <h3 className="text-2xl lg:text-3xl font-headline font-bold group-hover:text-primary transition-colors text-left text-white">
                       {faq.question}
                     </h3>
                   </div>

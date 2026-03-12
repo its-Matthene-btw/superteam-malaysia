@@ -10,14 +10,14 @@ export default function Footer() {
 
   return (
     <footer className="footer-section w-full bg-[#050505] border-t border-white/10">
-      <div className="footer-wrapper max-w-[1600px] mx-auto border-x border-white/10 flex flex-col">
+      <div className="footer-wrapper max-w-[1400px] mx-auto border-x border-white/10 flex flex-col">
         
         {/* Main Footer Grid */}
         <div className="footer-main-grid grid grid-cols-1 lg:grid-cols-[5fr_3fr_4fr] border-b border-white/10">
           
           {/* Column 1: Brand */}
           <div className="footer-col p-10 lg:p-20 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col">
-            <Link href="/" className="brand-logo text-4xl lg:text-6xl font-headline font-extrabold tracking-tighter uppercase leading-none mb-8 hover:opacity-80 transition-opacity">
+            <Link href="/" className="brand-logo text-4xl lg:text-6xl font-headline font-extrabold tracking-tighter uppercase leading-none mb-8 hover:opacity-80 transition-opacity text-white">
               Superteam<br /><span className="text-primary">Malaysia</span>
             </Link>
             <p className="brand-desc text-lg text-muted-foreground leading-relaxed max-w-sm">
@@ -64,7 +64,7 @@ export default function Footer() {
         {/* Footer Bottom Bar */}
         <div className="footer-bottom flex flex-col md:flex-row justify-between items-center p-8 lg:px-10 bg-black">
           <div className="copyright font-code text-[10px] lg:text-xs text-muted-foreground uppercase tracking-[1px] mb-4 md:mb-0">
-            © 2024 Superteam Malaysia. All Rights Reserved.
+            © 2026 Superteam Malaysia. All Rights Reserved.
           </div>
           <button 
             onClick={scrollToTop}
