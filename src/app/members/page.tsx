@@ -165,41 +165,41 @@ export default function MemberDirectory() {
     <main className="min-h-screen bg-black overflow-x-hidden">
       <Navbar />
       
-      {/* HERO SECTION - Strictly Managed Flex for Tablet/Mobile/Stability (≤1200px) */}
+      {/* HERO SECTION - Now Full Width with no side borders */}
       <section className="relative overflow-hidden bg-black border-b border-white/10 flex flex-col min-h-screen min-h-[100svh] min-[1201px]:block min-[1201px]:min-h-[750px]">
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] bg-center [mask-image:linear-gradient(to_bottom,black_40%,transparent_100%)]" />
         <div className="absolute top-[-30%] left-[20%] w-[1000px] h-[800px] bg-[radial-gradient(circle,rgba(153,69,255,0.25)_0%,transparent_70%)] rounded-full pointer-events-none z-0" />
         
-        {/* Main Content Area (Zones 1 & 2) - Vertical Stack ≤1200px, Horizontal >1200px */}
-        <div className="flex flex-col flex-grow relative z-10 min-[1201px]:flex-row min-[1201px]:max-w-[1400px] min-[1201px]:mx-auto min-[1201px]:border-x min-[1201px]:border-white/10 min-[1201px]:h-full min-[1201px]:min-h-[750px]">
+        {/* Main Content Area - Occupies full width, responsive flex stack */}
+        <div className="flex flex-col flex-grow relative z-10 min-[1201px]:flex-row min-[1201px]:h-full min-[1201px]:min-h-[750px] w-full">
           
-          {/* ZONE 1: TEXT BLOCK - Added pt-32 to avoid Navbar overlap */}
-          <div className="flex-shrink-0 pt-32 pb-10 px-5 text-center min-[1201px]:pt-48 min-[1201px]:pb-32 min-[1201px]:w-3/5 min-[1201px]:text-left min-[1201px]:flex min-[1201px]:flex-col min-[1201px]:justify-center min-[1201px]:px-10">
+          {/* ZONE 1: TEXT BLOCK - Centered for tablet/mobile, Left for desktop */}
+          <div className="flex-shrink-0 pt-40 pb-10 px-6 text-center min-[1201px]:pt-48 min-[1201px]:pb-32 min-[1201px]:w-3/5 min-[1201px]:text-left min-[1201px]:flex min-[1201px]:flex-col min-[1201px]:justify-center min-[1201px]:px-20 z-10">
             <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md inline-flex mx-auto min-[1201px]:mx-0">
               <span>✦</span> THE DIRECTORY
             </div>
-            <h1 className="text-6xl md:text-8xl lg:text-[120px] font-black uppercase tracking-tighter leading-[0.9] mb-10 flex flex-col">
+            <h1 className="text-[clamp(4rem,8vw,7.5rem)] font-black uppercase tracking-tighter leading-[0.9] mb-10 flex flex-col">
               <span className="text-white">BUILDER</span>
-              <span className="text-transparent" style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.4)' }}>NETWORK</span>
+              <span className="text-black [-webkit-text-stroke:1.5px_rgba(255,255,255,0.4)] tracking-[0.02em]">NETWORK</span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-md mx-auto min-[1201px]:mx-0 leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-md mx-auto min-[1201px]:mx-0 leading-relaxed font-medium [text-shadow:0_4px_20px_rgba(0,0,0,0.8)]">
               Discover the top developers, designers, and founders scaling the Solana ecosystem across Malaysia.
             </p>
           </div>
           
-          {/* ZONE 2: GLOBE AREA */}
+          {/* ZONE 2: GLOBE AREA - Flex-grow to fill remaining space between text and marquee */}
           <div className="flex-grow relative w-full min-h-[400px] min-[1201px]:absolute min-[1201px]:inset-0 min-[1201px]:z-0 pointer-events-auto overflow-hidden">
             <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing opacity-80" />
           </div>
         </div>
 
         {/* ZONE 3: MARQUEE TICKER (Locked to absolute bottom) */}
-        <div className="flex-shrink-0 w-full bg-primary py-4 overflow-hidden relative z-20 border-y border-white/10 mt-auto">
+        <div className="flex-shrink-0 w-full bg-[#9945FF] py-4 overflow-hidden relative z-20 border-y border-white/10 mt-auto">
           <div className="flex whitespace-nowrap animate-infinite-scroll">
             {Array(4).fill(null).map((_, i) => (
               <div key={i} className="flex items-center gap-12 px-6">
                 {['RUST', 'SOLANA', 'ANCHOR', 'REACT', 'TYPESCRIPT', 'DEFI', 'WEB3.JS', 'SMART CONTRACTS'].map(item => (
-                  <span key={item} className="font-code font-bold text-black tracking-[2px] flex items-center gap-12">
+                  <span key={item} className="font-code font-bold text-black tracking-[2px] flex items-center gap-12 text-sm uppercase">
                     {item} <span className="text-[10px]">✦</span>
                   </span>
                 ))}
@@ -264,7 +264,7 @@ export default function MemberDirectory() {
                     src={member.image} 
                     alt={member.name} 
                     fill 
-                    className="object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                    className="object-cover object-[center_15%] grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-40 transition-opacity" />
                 </div>
@@ -332,7 +332,7 @@ export default function MemberDirectory() {
             </button>
             
             <div className="lg:w-2/5 relative min-h-[400px] lg:min-h-full border-r border-white/10">
-              <Image src={selectedMember.image} alt={selectedMember.name} fill className="object-cover object-top grayscale" />
+              <Image src={selectedMember.image} alt={selectedMember.name} fill className="object-cover object-[center_15%] grayscale" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
             </div>
             

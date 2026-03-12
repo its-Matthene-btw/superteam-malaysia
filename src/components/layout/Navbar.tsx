@@ -52,10 +52,10 @@ export default function Navbar() {
           <span className="font-headline font-bold text-xl lg:text-2xl tracking-tighter text-white uppercase">SUPERTEAM</span>
         </Link>
 
-        {/* Desktop Links - Adjusted spacing for better tablet responsiveness */}
-        <div className="hidden md:flex items-center lg:space-x-10 space-x-6">
+        {/* Desktop Links - Adjusted spacing and scaling for better tablet responsiveness (768px-1200px) */}
+        <div className="hidden md:flex items-center lg:space-x-10 space-x-4">
           {links.map((link) => (
-            <Link key={link.name} href={link.href} className="text-[10px] lg:text-sm font-semibold uppercase tracking-wider text-muted-foreground hover:text-white transition-colors whitespace-nowrap">
+            <Link key={link.name} href={link.href} className="text-[11px] lg:text-sm font-semibold uppercase tracking-wider text-muted-foreground hover:text-white transition-colors whitespace-nowrap">
               {link.name}
             </Link>
           ))}
@@ -70,7 +70,7 @@ export default function Navbar() {
               <Twitter className="w-4 h-4 lg:w-5 lg:h-5 text-black" />
             </a>
             <Link href="/#mission">
-              <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold px-4 lg:px-8 h-10 lg:h-12 rounded-none uppercase tracking-widest text-[9px] lg:text-xs">
+              <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold px-3 lg:px-8 h-9 lg:h-12 rounded-none uppercase tracking-widest text-[9px] lg:text-xs">
                 EXPLORE MORE
               </Button>
             </Link>
