@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { PlusCircle, AlertCircle } from 'lucide-react';
 import CategoriesTable from './components/CategoriesTable';
-import EcosystemLayout from '../layout';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default async function AdminCategoriesPage() {
@@ -21,17 +20,17 @@ export default async function AdminCategoriesPage() {
     console.error('Error fetching categories:', error.message || error);
   }
 
-  const actions = (
-    <Link href="/admin/ecosystem/categories/new">
-      <Button className="solana-gradient font-bold uppercase tracking-widest text-[10px]">
-        <PlusCircle className="mr-2 h-4 w-4" />
-        Add Category
-      </Button>
-    </Link>
-  );
-
   return (
-    <EcosystemLayout actions={actions}>
+    <div className="space-y-6">
+      <div className="flex justify-end">
+        <Link href="/admin/ecosystem/categories/new">
+          <Button className="solana-gradient font-bold uppercase tracking-widest text-[10px]">
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Add Category
+          </Button>
+        </Link>
+      </div>
+
       {error ? (
         <Alert variant="destructive" className="glass border-destructive/20 bg-destructive/5 mb-6">
           <AlertCircle className="h-4 w-4" />
@@ -48,6 +47,6 @@ export default async function AdminCategoriesPage() {
       ) : (
         <CategoriesTable categories={categories || []} />
       )}
-    </EcosystemLayout>
+    </div>
   );
 }

@@ -1,21 +1,20 @@
 
-import AdminLayout from '@/components/admin/AdminLayout';
+'use client';
+
 import SubNav from './components/SubNav';
 
-export default function EcosystemLayout({ children, actions }: { children: React.ReactNode, actions: React.ReactNode }) {
+export default function EcosystemLayout({ children }: { children: React.ReactNode }) {
+  // This layout is automatically nested inside the root admin/layout.tsx
   return (
-    <AdminLayout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Ecosystem</h1>
-            <p className="text-muted-foreground">Manage the projects and categories in the ecosystem.</p>
-          </div>
-          {actions}
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Ecosystem</h1>
+          <p className="text-muted-foreground">Manage the projects and categories in the ecosystem.</p>
         </div>
-        <SubNav />
-        <div>{children}</div>
       </div>
-    </AdminLayout>
+      <SubNav />
+      <div>{children}</div>
+    </div>
   );
 }
