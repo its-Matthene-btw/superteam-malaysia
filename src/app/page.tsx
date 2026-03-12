@@ -23,7 +23,7 @@ export default function Home() {
         <div className="w-full border-b border-white/10">
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Builder<br /><span className="text-primary">Support</span></h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Builder<br />Support</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 01 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -44,7 +44,7 @@ export default function Home() {
         <div className="w-full border-b border-white/10">
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Events &<br /><span className="text-primary">Hackathons</span></h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Events &<br />Hackathons</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 02 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -64,7 +64,7 @@ export default function Home() {
         <div className="w-full border-b border-white/10">
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Grants &<br /><span className="text-primary">Funding</span></h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Grants &<br />Funding</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 03 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -85,7 +85,7 @@ export default function Home() {
         <div className="w-full border-b border-white/10">
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white"><span className="text-primary">Bounties</span> &<br />Opportunities</h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Bounties &<br />Opportunities</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 04 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -106,7 +106,7 @@ export default function Home() {
         <div className="w-full border-b border-white/10">
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Education &<br /><span className="text-primary">Learning</span></h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Education &<br />Learning</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 05 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -128,7 +128,7 @@ export default function Home() {
         <div className="bg-watermark">S</div>
         <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-[2.5fr_7.5fr] gap-10 md:gap-16 px-10 py-24 md:py-32">
           <div className="stats-header">
-            <h2 className="text-5xl font-headline font-bold tracking-tight text-white">In <span className="text-primary">Numbers</span></h2>
+            <h2 className="text-5xl font-headline font-bold tracking-tight text-white">In Numbers</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-y-16 md:gap-y-20">
             {stats.map((stat, idx) => (

@@ -50,7 +50,7 @@ export default function FaqCtaSection() {
             ))}
           </div>
 
-          <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 overflow-visible">
+          <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 overflow-visible items-start">
              <div className="cta-bg-wrapper absolute inset-0 pointer-events-none overflow-hidden z-0">
                 <div className="absolute -bottom-[10%] -right-[10%] w-[800px] h-[800px] bg-primary/15 rounded-full blur-[100px]" />
                 
@@ -64,7 +64,7 @@ export default function FaqCtaSection() {
                 />
              </div>
              
-             <div className="p-10 lg:p-20 z-10">
+             <div className="p-10 lg:p-20 z-10 w-full">
                 <h2 className="text-5xl lg:text-7xl font-headline font-extrabold tracking-tighter leading-[1.1] mb-8 uppercase text-white">
                   BUILD<br />THE<br />FUTURE.
                 </h2>
