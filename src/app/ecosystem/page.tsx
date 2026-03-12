@@ -17,6 +17,7 @@ export default function EcosystemPage() {
   const [opportunities, setOpportunities] = useState<EcosystemOpportunity[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
   const supabase = createClient();
 
   useEffect(() => {
@@ -40,9 +41,13 @@ export default function EcosystemPage() {
   }, []);
 
   const filteredProjects = useMemo(() => {
-    if (activeFilter === 'all') return projects;
-    return projects.filter(p => p.category === activeFilter);
-  }, [projects, activeFilter]);
+    return projects.filter(p => {
+      const matchesFilter = activeFilter === 'all' || p.category === activeFilter;
+      const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                            p.short_description?.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesFilter && matchesSearch;
+    });
+  }, [projects, activeFilter, searchTerm]);
 
   const featured = projects.filter(p => p.featured).slice(0, 2);
 
@@ -77,19 +82,19 @@ export default function EcosystemPage() {
             <div className="grid grid-cols-3 gap-8">
               <StatItem value={projects.length} label="Ecosystem Projects" />
               <StatItem value={45} label="Global Partners" />
-              <StatItem value="2.5k+" label="Active Builders" />
+              <StatItem value="2.5k" label="Active Builders" />
             </div>
           </div>
 
           <div className="relative group perspective-1000 hidden lg:block">
-            <div className="relative aspect-[4/3] rounded-3xl border border-white/10 overflow-hidden bg-zinc-900 shadow-2xl transition-transform duration-700 group-hover:-rotate-2 animate-in fade-in zoom-in duration-1000">
+            <div className="relative aspect-[4/3] rounded-3xl border border-white/10 overflow-hidden bg-zinc-900 shadow-2xl transition-transform duration-700 hover:scale-[1.02] animate-in fade-in zoom-in duration-1000 group">
               <Image 
                 src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=1200" 
                 alt="Ecosystem Blueprint" 
                 fill 
-                className="object-cover grayscale contrast-125 opacity-40 mix-blend-screen"
+                className="object-cover grayscale contrast-125 opacity-40 mix-blend-screen group-hover:opacity-60 transition-all duration-1000"
               />
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent pointer-events-none" />
             </div>
           </div>
         </div>
@@ -97,20 +102,32 @@ export default function EcosystemPage() {
 
       {/* FILTER BAR (STICKY) */}
       <div className="sticky top-20 z-50 bg-[#0a0a0c]/80 backdrop-blur-xl border-b border-white/10 py-6">
-        <div className="max-w-[1400px] mx-auto px-10 flex gap-4 overflow-x-auto no-scrollbar">
-          <FilterButton 
-            active={activeFilter === 'all'} 
-            onClick={() => setActiveFilter('all')}
-            label="All Ecosystem" 
-          />
-          {categories.map(cat => (
+        <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between gap-6">
+          <div className="flex gap-4 overflow-x-auto no-scrollbar">
             <FilterButton 
-              key={cat.id}
-              active={activeFilter === cat.name}
-              onClick={() => setActiveFilter(cat.name)}
-              label={cat.name}
+              active={activeFilter === 'all'} 
+              onClick={() => setActiveFilter('all')}
+              label="All Ecosystem" 
             />
-          ))}
+            {categories.map(cat => (
+              <FilterButton 
+                key={cat.id}
+                active={activeFilter === cat.name}
+                onClick={() => setActiveFilter(cat.name)}
+                label={cat.name}
+              />
+            ))}
+          </div>
+          <div className="relative w-full md:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input 
+              type="text"
+              placeholder="Search protocols..."
+              className="w-full bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2 text-sm outline-none focus:border-primary transition-all"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
@@ -161,7 +178,8 @@ export default function EcosystemPage() {
                 <div>
                   <div className={cn(
                     "inline-block px-4 py-1.5 rounded-full font-code text-[10px] font-bold uppercase tracking-widest mb-8 border",
-                    opp.type === 'Grant' ? "border-[#14F195] text-[#14F195]" : "border-primary text-primary"
+                    opp.type === 'Grant' ? "border-[#14F195] text-[#14F195]" : 
+                    opp.type === 'Bounty' ? "border-primary text-primary" : "border-yellow-500 text-yellow-500"
                   )}>
                     {opp.type}
                   </div>
@@ -177,21 +195,6 @@ export default function EcosystemPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-40 text-center relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_top,rgba(153,69,255,0.1)_0%,transparent_60%)] pointer-events-none" />
-        <div className="max-w-2xl mx-auto px-10 relative z-10">
-          <h2 className="text-5xl lg:text-7xl font-black tracking-tighter leading-[0.9] mb-10 uppercase">
-            Ready to build <br />the future?
-          </h2>
-          <p className="text-xl text-muted-foreground mb-12">Connect with founders, find co-builders, and accelerate your Web3 journey with Superteam Malaysia.</p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link href="https://discord.gg/superteammy" target="_blank" className="px-12 py-6 bg-white text-black font-black uppercase tracking-widest text-xs hover:bg-primary transition-all">Join Discord</Link>
-            <Link href="/events" className="px-12 py-6 border border-white/10 text-white font-black uppercase tracking-widest text-xs hover:bg-white/5 transition-all">Local Events</Link>
-          </div>
-        </div>
-      </section>
-
       <Footer />
     </main>
   );
@@ -199,10 +202,9 @@ export default function EcosystemPage() {
 
 function StatItem({ value, label }: { value: any, label: string }) {
   const [count, setCount] = useState(0);
-  const ref = useRef(null);
+  const target = typeof value === 'string' ? parseInt(value) : value;
 
   useEffect(() => {
-    const target = typeof value === 'string' ? parseInt(value) : value;
     let start = 0;
     const duration = 2000;
     const increment = target / (duration / 16);
@@ -218,12 +220,12 @@ function StatItem({ value, label }: { value: any, label: string }) {
     }, 16);
 
     return () => clearInterval(timer);
-  }, [value]);
+  }, [target]);
 
   return (
     <div className="border-l-2 border-primary pl-6">
       <div className="text-4xl font-black font-code text-white mb-1">
-        {typeof value === 'string' && value.includes('+') ? `${count}+` : count}
+        {count}{typeof value === 'string' && value.includes('k') ? 'k+' : '+'}
       </div>
       <div className="font-code text-[10px] text-muted-foreground uppercase tracking-widest">{label}</div>
     </div>
@@ -250,19 +252,23 @@ function ProjectCard({ project }: { project: EcosystemProject }) {
   return (
     <Link 
       href={`/ecosystem/${project.slug}`}
-      className="bg-[#0f0f13] p-10 flex flex-col group transition-all duration-500 hover:bg-[#050505] relative overflow-hidden"
+      className="bg-[#0f0f13] p-10 flex flex-col group transition-all duration-500 hover:bg-[#050505] relative overflow-hidden h-full"
     >
-      <div className="absolute inset-0 border border-transparent group-hover:border-primary/30 transition-colors z-10 pointer-events-none" />
+      <div className="absolute inset-0 border border-transparent group-hover:border-primary/30 transition-colors z-10 pointer-events-none shadow-[inset_0_0_30px_rgba(153,69,255,0)] group-hover:shadow-[inset_0_0_30px_rgba(153,69,255,0.1)]" />
       <div className="flex justify-between items-start mb-8 relative z-20">
         <div className="w-14 h-14 rounded-2xl bg-zinc-800 border border-white/10 overflow-hidden p-2">
-          {project.logo_url && <Image src={project.logo_url} alt={project.name} width={56} height={56} className="object-contain" />}
+          {project.logo_url ? (
+            <Image src={project.logo_url} alt={project.name} width={56} height={56} className="object-contain grayscale group-hover:grayscale-0 transition-all duration-500" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-white/5"><Box className="w-6 h-6 text-white/20" /></div>
+          )}
         </div>
         <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
       </div>
       <div className="relative z-20 flex-1">
         <div className="font-code text-[9px] text-primary font-bold uppercase tracking-widest mb-2">{project.category}</div>
-        <h3 className="text-2xl font-black uppercase tracking-tight mb-4">{project.name}</h3>
-        <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3">{project.short_description}</p>
+        <h3 className="text-2xl font-black uppercase tracking-tight mb-4 group-hover:text-white transition-colors">{project.name}</h3>
+        <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 group-hover:text-white/70 transition-colors">{project.short_description}</p>
       </div>
     </Link>
   );
@@ -272,7 +278,7 @@ function FeaturedCard({ project }: { project: EcosystemProject }) {
   return (
     <Link 
       href={`/ecosystem/${project.slug}`}
-      className="rounded-3xl border border-white/10 overflow-hidden flex flex-col group transition-all duration-500 hover:border-primary hover:shadow-[0_0_50px_rgba(153,69,255,0.2)] bg-[#050505]"
+      className="rounded-3xl border border-white/10 overflow-hidden flex flex-col group transition-all duration-500 hover:border-primary hover:shadow-[0_0_50px_rgba(153,69,255,0.2)] bg-[#050505] h-full"
     >
       <div className="h-60 relative overflow-hidden bg-zinc-900">
         <Image 
@@ -283,12 +289,12 @@ function FeaturedCard({ project }: { project: EcosystemProject }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent" />
       </div>
-      <div className="p-10 -mt-16 relative z-10">
+      <div className="p-10 -mt-16 relative z-10 flex-1 flex flex-col">
         <div className="w-16 h-16 rounded-2xl bg-[#050505] border-2 border-[#050505] shadow-xl overflow-hidden p-3 mb-6 relative">
           {project.logo_url && <Image src={project.logo_url} alt={project.name} width={64} height={64} className="object-contain" />}
         </div>
         <h3 className="text-3xl font-black uppercase tracking-tight mb-4">{project.name}</h3>
-        <p className="text-muted-foreground text-lg leading-relaxed mb-8">{project.short_description}</p>
+        <p className="text-muted-foreground text-lg leading-relaxed mb-8 flex-1">{project.short_description}</p>
         <div className="font-code text-xs text-primary font-bold uppercase tracking-widest flex items-center gap-3">
           Explore Protocol <ArrowRight className="w-4 h-4" />
         </div>

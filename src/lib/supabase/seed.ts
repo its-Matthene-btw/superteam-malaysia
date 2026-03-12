@@ -4,6 +4,10 @@ import { stats as hardcodedStats, members as hardcodedMembers, partners as hardc
 
 const supabase = createClient();
 
+/**
+ * Main System Seed: Non-destructive.
+ * Seeds stats, members, FAQs, news, testimonials, events.
+ */
 export async function seedDatabase() {
   const results = {
     stats: 0,
@@ -83,6 +87,9 @@ export async function seedDatabase() {
   return results;
 }
 
+/**
+ * Ecosystem Wipe & Seed: Destructive only for ecosystem tables.
+ */
 export async function seedEcosystemData() {
   const categories = [
     { name: 'DeFi', slug: 'defi' },
@@ -105,38 +112,54 @@ export async function seedEcosystemData() {
       token_symbol: 'JUP',
       status: 'Live & Audited',
       contract_address: 'JUPyiwrYJFskUPiHa7hkeR8VUT...',
-      featured: true 
+      featured: true,
+      website_url: 'https://jup.ag',
+      twitter_url: 'https://x.com/JupiterExchange'
     },
     { 
       name: 'Phantom', 
       slug: 'phantom', 
       category: 'Wallets', 
       short_description: 'The friendly crypto wallet for DeFi & NFTs. Safe and easy to use.', 
+      long_description: 'Phantom is a non-custodial wallet that provides a seamless and secure way to interact with the Solana blockchain. It allows users to store, send, receive, and swap tokens, as well as collect and trade NFTs.',
       logo_url: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&w=200&q=80',
-      network: 'Solana, ETH, BTC',
+      hero_image_url: 'https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?auto=format&fit=crop&q=80&w=1200',
+      network: 'Multi-chain',
       status: 'Live',
-      featured: true 
+      featured: true,
+      website_url: 'https://phantom.app',
+      twitter_url: 'https://x.com/phantom'
     }
   ];
 
   const opportunities = [
     { title: 'Regional Growth Grant', description: 'Receive up to $25,000 in equity-free funding to build public goods for Malaysia.', type: 'Grant', link: 'https://earn.superteam.fun' },
-    { title: 'Solana Pay Integration', description: 'Build an open-source plugin for local e-commerce. Reward: 2,000 USDC.', type: 'Bounty', link: 'https://earn.superteam.fun' }
+    { title: 'Solana Pay Integration', description: 'Build an open-source plugin for local e-commerce. Reward: 2,000 USDC.', type: 'Bounty', link: 'https://earn.superteam.fun' },
+    { title: 'Senior Rust Developer', description: 'Join a top-tier DeFi protocol based out of Kuala Lumpur.', type: 'Job', link: 'https://earn.superteam.fun' }
   ];
 
-  const { data: catData } = await supabase.from('ecosystem_categories').upsert(categories, { onConflict: 'slug' }).select();
-  const { data: projData } = await supabase.from('ecosystem_projects').upsert(projects, { onConflict: 'slug' }).select();
-  await supabase.from('ecosystem_opportunities').upsert(opportunities, { onConflict: 'title' });
+  // 1. Wipe Ecosystem Data
+  await supabase.from('ecosystem_opportunities').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  await supabase.from('ecosystem_features').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  await supabase.from('ecosystem_projects').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  await supabase.from('ecosystem_categories').delete().neq('id', '00000000-0000-0000-0000-000000000000');
 
-  // Seed some features for Jupiter
+  // 2. Seed Fresh Data
+  const { data: catData } = await supabase.from('ecosystem_categories').insert(categories).select();
+  const { data: projData } = await supabase.from('ecosystem_projects').insert(projects).select();
+  await supabase.from('ecosystem_opportunities').insert(opportunities);
+
+  // 3. Seed features for Jupiter
   if (projData) {
     const jup = projData.find(p => p.slug === 'jupiter');
     if (jup) {
       const features = [
         { project_id: jup.id, title: 'Smart Routing', description: 'Proprietary algorithm splits trades across multiple liquidity pools.' },
-        { project_id: jup.id, title: 'Limit Orders', description: 'Place decentralized limit orders that execute automatically.' }
+        { project_id: jup.id, title: 'Limit Orders', description: 'Place decentralized limit orders that execute automatically.' },
+        { project_id: jup.id, title: 'DCA', description: 'Automate your investment strategy with on-chain DCA.' },
+        { project_id: jup.id, title: 'Perpetuals', description: 'Trade with up to 100x leverage on a decentralized exchange.' }
       ];
-      await supabase.from('ecosystem_features').upsert(features, { onConflict: 'title' });
+      await supabase.from('ecosystem_features').insert(features);
     }
   }
 

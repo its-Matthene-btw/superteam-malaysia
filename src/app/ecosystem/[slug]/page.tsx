@@ -12,6 +12,12 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
+
 export default function ProjectDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const [project, setProject] = useState<EcosystemProject | null>(null);
@@ -33,14 +39,12 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
         if (pData) {
           setProject(pData);
           
-          // Fetch features
           const { data: fData } = await supabase
             .from('ecosystem_features')
             .select('*')
             .eq('project_id', pData.id);
           setFeatures(fData || []);
 
-          // Fetch similar projects
           const { data: sData } = await supabase
             .from('ecosystem_projects')
             .select('*')
@@ -92,7 +96,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
       <header className="relative border-b border-white/10 grid grid-cols-1 lg:grid-cols-2 min-h-[60vh]">
         <div className="p-10 lg:p-20 border-r border-white/10 flex flex-col justify-center">
           <div className="w-20 h-20 rounded-2xl bg-[#222] border border-white/10 overflow-hidden mb-10 group">
-            {project.logo_url && (
+            {project.logo_url ? (
               <Image 
                 src={project.logo_url} 
                 alt={project.name} 
@@ -100,6 +104,8 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
                 height={80} 
                 className="object-cover group-hover:scale-110 transition-transform duration-500" 
               />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-white/5"><Box className="w-10 h-10 text-white/20" /></div>
             )}
           </div>
           <div className="font-code text-[#14F195] text-xs font-bold tracking-[3px] mb-6 uppercase">
@@ -174,7 +180,6 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
             <div className="flex flex-col gap-2">
               <SideLink href={project.github_url} label="GitHub Repos" />
               <SideLink href={project.docs_url} label="API / SDK Docs" />
-              <SideLink href="#" label="Security Audits" />
             </div>
           </div>
 
@@ -229,7 +234,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
         </article>
       </section>
 
-      {/* SIMILAR PROJECTS */}
+      {/* discovery footer */}
       {similar.length > 0 && (
         <section className="py-32 bg-[#050505] border-b border-white/10">
           <div className="max-w-[1400px] mx-auto px-10">
@@ -243,7 +248,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
                 <Link 
                   key={p.id} 
                   href={`/ecosystem/${p.slug}`}
-                  className="bg-[#0a0a0c] p-12 flex flex-col group hover:bg-white/[0.02] transition-colors"
+                  className="bg-[#0a0a0c] p-12 flex flex-col group hover:bg-white/[0.02] transition-colors h-full"
                 >
                   <div className="flex justify-between items-start mb-10">
                     <div className="w-14 h-14 rounded-2xl bg-[#222] border border-white/10 overflow-hidden">
@@ -271,7 +276,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
           </h2>
           <p className="text-xl text-muted-foreground mb-12">Get notified about new protocol launches, airdrops, and developer bounties in the region.</p>
           
-          <form className="max-w-md mx-auto flex border border-white/10 bg-black p-1">
+          <div className="max-w-md mx-auto flex border border-white/10 bg-black p-1">
             <input 
               type="email" 
               placeholder="ENTER_EMAIL_ADDRESS" 
@@ -284,7 +289,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
             >
               JOIN
             </button>
-          </form>
+          </div>
         </div>
       </section>
 
