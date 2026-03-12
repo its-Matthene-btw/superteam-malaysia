@@ -1,4 +1,3 @@
-
 import { createClient } from './client';
 import { stats as hardcodedStats, members as hardcodedMembers, partners as hardcodedPartners, faqs as hardcodedFAQs } from '../data';
 
@@ -83,11 +82,32 @@ export async function seedDatabase() {
 
     // 6. Seed Events
     const events = [
-      { title: 'Solana Hacker House KL', description: '3 days of building, workshops, and high-stakes networking.', location: 'Kuala Lumpur', event_date: new Date(Date.now() + 86400000 * 30).toISOString(), status: 'upcoming', featured: true },
-      { title: 'Founders Breakfast', description: 'Exclusive gathering for Web3 founders.', location: 'Bangsar South', event_date: new Date(Date.now() + 86400000 * 15).toISOString(), status: 'upcoming', featured: false }
+      { 
+        title: 'Solana Hacker House KL', 
+        description: '3 days of building, workshops, and high-stakes networking.', 
+        location: 'Kuala Lumpur', 
+        event_date: new Date(Date.now() + 86400000 * 30).toISOString(), 
+        status: 'upcoming', 
+        featured: true,
+        category: 'Hackathon',
+        image_url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1200',
+        luma_url: 'https://lu.ma/superteammy'
+      },
+      { 
+        title: 'Founders Breakfast', 
+        description: 'Exclusive gathering for Web3 founders to discuss regional scaling.', 
+        location: 'Bangsar South', 
+        event_date: new Date(Date.now() + 86400000 * 15).toISOString(), 
+        status: 'upcoming', 
+        featured: false,
+        category: 'Meetup',
+        image_url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80',
+        luma_url: 'https://lu.ma/superteammy'
+      }
     ];
-    await supabase.from('events').upsert(events, { onConflict: 'title' });
-    results.events = events.length;
+    const { error: eventsErr } = await supabase.from('events').upsert(events, { onConflict: 'title' });
+    if (eventsErr) results.errors.push(`Events: ${eventsErr.message}`);
+    else results.events = events.length;
 
   } catch (err: any) {
     results.errors.push(err.message);

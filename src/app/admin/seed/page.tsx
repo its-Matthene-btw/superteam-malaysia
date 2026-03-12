@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -87,7 +86,22 @@ CREATE TABLE IF NOT EXISTS site_settings (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 5. Enable RLS
+-- 5. Create Events Table (Enhanced)
+CREATE TABLE IF NOT EXISTS events (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  description text,
+  location text,
+  event_date timestamp WITH TIME ZONE NOT NULL,
+  luma_url text,
+  image_url text,
+  status text DEFAULT 'upcoming',
+  featured boolean DEFAULT false,
+  category text,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+-- 6. Enable RLS
 ALTER TABLE ecosystem_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
@@ -95,8 +109,9 @@ ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 
--- 6. Create Policies (Idempotent using DROP IF EXISTS)
+-- 7. Create Policies (Idempotent using DROP IF EXISTS)
 DROP POLICY IF EXISTS "Public Read Ecosystem" ON ecosystem_projects;
 CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
 
@@ -138,6 +153,12 @@ CREATE POLICY "Public Read Settings" ON site_settings FOR SELECT USING (true);
 
 DROP POLICY IF EXISTS "Admin All Settings" ON site_settings;
 CREATE POLICY "Admin All Settings" ON site_settings FOR ALL TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Public Read Events" ON events;
+CREATE POLICY "Public Read Events" ON events FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin All Events" ON events;
+CREATE POLICY "Admin All Events" ON events FOR ALL TO authenticated USING (true);
 `;
 
   const copySql = () => {

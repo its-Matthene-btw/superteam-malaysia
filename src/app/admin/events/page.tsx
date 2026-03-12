@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -24,7 +23,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getEvents, createEvent, updateEvent, deleteEvent } from '@/services/events';
 import { Event } from '@/types/database';
-import { Plus, Edit2, Trash2, Calendar, MapPin, Star, Image as ImageIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, Calendar, MapPin, Star, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
@@ -292,14 +291,33 @@ export default function EventsAdmin() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Image URL</Label>
-              <Input 
-                value={formData.image_url ?? ''} 
-                onChange={(e) => setFormData({...formData, image_url: e.target.value})} 
-                className="glass border-white/10" 
-                placeholder="https://picsum.photos/..."
-              />
+            <div className="space-y-4 p-4 rounded-lg bg-white/5 border border-white/10">
+              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-2">Event Graphic</Label>
+              <div className="flex flex-col gap-4">
+                <div className="relative w-full h-40 rounded-lg overflow-hidden border border-white/10 bg-black flex items-center justify-center">
+                  {formData.image_url ? (
+                    <Image src={formData.image_url} alt="Preview" fill className="object-cover grayscale" />
+                  ) : (
+                    <div className="text-center">
+                      <ImageIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-[9px] text-muted-foreground font-code">PREVIEW_UNAVAILABLE</p>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="space-y-1">
+                  <Label className="text-[9px] uppercase tracking-tighter text-muted-foreground flex items-center gap-1">
+                    <LinkIcon className="w-2 h-2" /> Direct Image Link
+                  </Label>
+                  <Input 
+                    placeholder="https://images.unsplash.com/..." 
+                    value={formData.image_url ?? ''}
+                    onChange={(e) => setFormData({...formData, image_url: e.target.value})}
+                    className="glass border-white/10 h-10 text-xs"
+                  />
+                  <p className="text-[9px] text-muted-foreground mt-1 italic">Provide a link to a high-res JPG/PNG banner.</p>
+                </div>
+              </div>
             </div>
 
             <div className="space-y-2">
