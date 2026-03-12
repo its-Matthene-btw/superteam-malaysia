@@ -1,9 +1,23 @@
+import { 
+  Wrench, 
+  LayoutGrid, 
+  DollarSign, 
+  TrendingUp, 
+  Code2, 
+  Globe, 
+  CheckCircle2, 
+  Users 
+} from 'lucide-react';
 
 export const stats = [
-  { label: 'Community Members', value: '2,500+' },
-  { label: 'Bounties Won', value: '$120k+' },
-  { label: 'Events Hosted', value: '45+' },
-  { label: 'Projects Built', value: '18' },
+  { label: 'Builders', value: '70K+', icon: Wrench },
+  { label: 'Projects', value: '5K+', icon: LayoutGrid },
+  { label: 'Funding', value: '$650M+', icon: DollarSign },
+  { label: 'Earnings', value: '$1.7M+', icon: TrendingUp },
+  { label: 'Hackathon Projects', value: '150+', icon: Code2 },
+  { label: 'Global Chapters', value: '20+', icon: Globe },
+  { label: 'Bounties Completed', value: '500+', icon: CheckCircle2 },
+  { label: 'Talent Network', value: '160K+', icon: Users },
 ];
 
 export const members = [

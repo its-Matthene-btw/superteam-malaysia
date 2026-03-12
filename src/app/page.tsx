@@ -123,6 +123,31 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Stats Section */}
+      <section className="w-full bg-white/5 relative py-24 md:py-32 px-6 overflow-hidden border-y border-white/10">
+        <div className="bg-watermark">S</div>
+        <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-[2.5fr_7.5fr] gap-10 md:gap-16">
+          <div className="stats-header">
+            <h2 className="text-5xl font-headline font-bold tracking-tight">In numbers</h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-y-16 md:gap-y-20">
+            {stats.map((stat, idx) => (
+              <div key={idx} className="stat-cell group">
+                <div className="flex items-start gap-3">
+                  <stat.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors mt-0.5" />
+                  <span className="text-sm font-medium text-muted-foreground leading-tight uppercase tracking-wider">
+                    {stat.label}
+                  </span>
+                </div>
+                <div className="text-5xl md:text-6xl font-headline font-bold tracking-tighter mt-10 group-hover:solana-text-gradient transition-all duration-300">
+                  {stat.value}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <section className="py-24 px-4 bg-black">
         <div className="max-w-3xl mx-auto">
