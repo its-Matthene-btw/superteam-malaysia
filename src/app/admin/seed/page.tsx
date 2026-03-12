@@ -4,14 +4,15 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { seedDatabase } from '@/lib/supabase/seed';
+import { seedDatabase, seedFAQsOnly } from '@/lib/supabase/seed';
 import { seedEcosystemData } from '@/lib/supabase/ecosystem-seed';
-import { Database, CheckCircle2, Copy, ShieldCheck, Trash2 } from 'lucide-react';
+import { Database, CheckCircle2, Copy, ShieldCheck, Trash2, HelpCircle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 export default function SeedPage() {
   const [loading, setLoading] = useState(false);
   const [ecoLoading, setEcoLoading] = useState(false);
+  const [faqLoading, setFaqLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const sqlSchema = `-- MASTER MIGRATION SQL
@@ -61,13 +62,25 @@ CREATE TABLE IF NOT EXISTS ecosystem_opportunities (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 2. Enable RLS
+-- 2. Create FAQs Table
+CREATE TABLE IF NOT EXISTS faqs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  category text NOT NULL,
+  question text NOT NULL,
+  answer text NOT NULL,
+  faq_id text,
+  order_index integer DEFAULT 0,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+-- 3. Enable RLS
 ALTER TABLE ecosystem_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
+ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
 
--- 3. Create Policies (Safe for re-runs)
+-- 4. Create Policies (Safe for re-runs)
 DROP POLICY IF EXISTS "Public Read Ecosystem" ON ecosystem_projects;
 CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
 
@@ -91,6 +104,12 @@ CREATE POLICY "Public Read Opportunities" ON ecosystem_opportunities FOR SELECT 
 
 DROP POLICY IF EXISTS "Admin All Opportunities" ON ecosystem_opportunities;
 CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Public Read FAQs" ON faqs;
+CREATE POLICY "Public Read FAQs" ON faqs FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin All FAQs" ON faqs;
+CREATE POLICY "Admin All FAQs" ON faqs FOR ALL TO authenticated USING (true);
 `;
 
   const copySql = () => {
@@ -122,6 +141,18 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
       toast({ variant: "destructive", title: "Error", description: "Run SQL migration first." });
     } finally {
       setEcoLoading(false);
+    }
+  };
+
+  const handleFaqSeed = async () => {
+    setFaqLoading(true);
+    try {
+      await seedFAQsOnly();
+      toast({ title: "FAQs Seeded", description: "Knowledge base updated." });
+    } catch (err: any) {
+      toast({ variant: "destructive", title: "Error", description: err.message });
+    } finally {
+      setFaqLoading(false);
     }
   };
 
@@ -173,10 +204,26 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
             </CardContent>
           </Card>
 
-          <Card className="glass border-white/10 border-red-500/20 flex flex-col bg-red-500/5">
+          <Card className="glass border-white/10 flex flex-col">
+            <CardHeader className="border-b border-white/5 bg-white/5">
+              <CardTitle className="flex items-center gap-2 text-white uppercase tracking-widest text-xs">
+                <HelpCircle className="w-4 h-4 text-[#14F195]" /> 3. Knowledge Base
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
+              <p className="text-xs text-muted-foreground">Populate FAQ parameters for Grants, Bounties, and Build Stations.</p>
+              <div className="mt-auto">
+                <Button onClick={handleFaqSeed} disabled={faqLoading} className="w-full bg-[#14F195] text-black hover:bg-[#14F195]/80 font-bold h-12 text-xs uppercase">
+                  {faqLoading ? 'Seeding...' : 'Seed Knowledge Base'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="glass border-white/10 border-red-500/20 flex flex-col bg-red-500/5 col-span-1 md:col-span-2">
             <CardHeader className="border-b border-white/5 bg-white/5">
               <CardTitle className="flex items-center gap-2 text-red-400 uppercase tracking-widest text-xs">
-                <Trash2 className="w-4 h-4" /> 3. Wipe & Seed Ecosystem
+                <Trash2 className="w-4 h-4" /> 4. Wipe & Seed Ecosystem
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">

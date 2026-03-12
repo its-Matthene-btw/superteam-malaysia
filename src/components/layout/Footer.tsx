@@ -71,6 +71,7 @@ export default function Footer() {
               <FooterNavLink href="/events" label="Events" />
               <FooterNavLink href="/ecosystem" label="Ecosystem" />
               <FooterNavLink href="/members" label="Members" />
+              <FooterNavLink href="/faq" label="Knowledge Base" />
               <FooterNavLink href="/contact" label="Contact" />
             </ul>
           </div>

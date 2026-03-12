@@ -77,8 +77,10 @@ export interface NewsPost {
 
 export interface FAQ {
   id: string;
+  category: string;
   question: string;
   answer: string;
+  faq_id: string | null;
   order_index: number;
   created_at: string;
 }

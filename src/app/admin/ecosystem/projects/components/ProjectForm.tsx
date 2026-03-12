@@ -39,9 +39,11 @@ const projectSchema = z.object({
 export default function ProjectForm({ project, categories }: { project?: EcosystemProject, categories: string[] }) {
   const router = useRouter();
   
-  // Normalize null values to empty strings for controlled inputs
+  // NORMALIZE NULLS TO EMPTY STRINGS to prevent React controlled input warnings
   const defaultValues = project ? {
-    ...project,
+    name: project.name || '',
+    slug: project.slug || '',
+    category: project.category || '',
     short_description: project.short_description || '',
     long_description: project.long_description || '',
     logo_url: project.logo_url || '',
@@ -55,6 +57,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
     token_symbol: project.token_symbol || '',
     contract_address: project.contract_address || '',
     status: project.status || '',
+    featured: project.featured || false,
   } : { 
     featured: false,
     name: '',
