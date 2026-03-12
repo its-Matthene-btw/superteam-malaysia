@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -14,9 +15,7 @@ export default function SeedPage() {
   const [copied, setCopied] = useState(false);
 
   const sqlSchema = `-- MASTER MIGRATION SQL
--- Run this in Supabase SQL Editor.
-
--- 1. Create Tables
+-- 1. Create Ecosystem Tables
 CREATE TABLE IF NOT EXISTS ecosystem_projects (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
@@ -68,7 +67,7 @@ ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
 
--- 3. Create Policies (Idempotent)
+-- 3. Create Policies (Safe for re-runs)
 DROP POLICY IF EXISTS "Public Read Ecosystem" ON ecosystem_projects;
 CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
 
@@ -97,7 +96,7 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
   const copySql = () => {
     navigator.clipboard.writeText(sqlSchema);
     setCopied(true);
-    toast({ title: "Copied!", description: "Master SQL migration copied." });
+    toast({ title: "Copied!", description: "SQL migration copied." });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -105,7 +104,7 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
     setLoading(true);
     try {
       await seedDatabase();
-      toast({ title: "System Seeded", description: "Main system data updated." });
+      toast({ title: "System Seeded", description: "Base records updated." });
     } catch (err: any) {
       toast({ variant: "destructive", title: "Error", description: err.message });
     } finally {
@@ -114,13 +113,13 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
   };
 
   const handleEcosystemSeed = async () => {
-    if (!confirm('This will WIPE ALL ecosystem data (Projects, Categories, Features, Opportunities) and re-seed with fresh blueprints. Proceed?')) return;
+    if (!confirm('WIPE ALL ecosystem data and re-seed blueprints?')) return;
     setEcoLoading(true);
     try {
       await seedEcosystemData();
-      toast({ title: "Ecosystem Seeded", description: "Fresh ecosystem blueprints are now live." });
+      toast({ title: "Ecosystem Re-Seeded", description: "Blueprints are live." });
     } catch (err: any) {
-      toast({ variant: "destructive", title: "Error", description: "Ensure you have run the SQL migration first." });
+      toast({ variant: "destructive", title: "Error", description: "Run SQL migration first." });
     } finally {
       setEcoLoading(false);
     }
@@ -136,7 +135,7 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
           <h1 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-white">
             DATABASE <span className="text-primary">SYNC</span>
           </h1>
-          <p className="text-muted-foreground mt-2">Maintain the core infrastructure and ecosystem content.</p>
+          <p className="text-muted-foreground mt-2">Maintain core infrastructure and technical blueprints.</p>
         </div>
       </div>
 
@@ -148,7 +147,6 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-4 flex-1">
-            <p className="text-xs text-muted-foreground">Run this in Supabase first to create the correct table structure.</p>
             <pre className="p-4 rounded bg-black/50 border border-white/5 text-[9px] font-code text-primary h-[400px] overflow-y-auto whitespace-pre-wrap relative">
               {sqlSchema}
               <button onClick={copySql} className="absolute top-2 right-2 p-2 bg-black/80 hover:bg-primary transition-all rounded">
@@ -166,7 +164,7 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
-              <p className="text-xs text-muted-foreground">Non-destructive seed for members, news, and stats.</p>
+              <p className="text-xs text-muted-foreground">Non-destructive update for News, Members, and Stats.</p>
               <div className="mt-auto">
                 <Button onClick={handleSeed} disabled={loading} className="w-full solana-gradient font-bold h-12 text-xs uppercase">
                   {loading ? 'Syncing...' : 'Execute System Seed'}
@@ -182,7 +180,7 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
-              <p className="text-xs text-red-200/60 font-medium">DESTRUCTIVE: Deletes all Projects, Categories, and Features before re-seeding technical blueprints.</p>
+              <p className="text-xs text-red-200/60 font-medium">DESTRUCTIVE: Swipes only Ecosystem data and Features.</p>
               <div className="mt-auto">
                 <Button onClick={handleEcosystemSeed} disabled={ecoLoading} variant="destructive" className="w-full h-12 text-xs uppercase font-bold">
                   {ecoLoading ? 'Wiping...' : 'Wipe & Re-Seed Ecosystem'}

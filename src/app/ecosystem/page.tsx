@@ -29,7 +29,7 @@ export default function EcosystemPage() {
           supabase.from('ecosystem_projects').select('*').order('name'),
           supabase.from('ecosystem_categories').select('*').order('name'),
           supabase.from('ecosystem_opportunities').select('*').order('created_at', { ascending: false }),
-          supabase.from('news').select('*').order('published_at', { ascending: false }).limit(5)
+          supabase.from('news').select('*').order('published_at', { ascending: false }).limit(10)
         ]);
         
         setProjects(p.data || []);
@@ -102,7 +102,6 @@ export default function EcosystemPage() {
                 alt="Ecosystem Blueprint" 
                 fill 
                 className="object-cover grayscale contrast-125 opacity-40 mix-blend-screen group-hover:opacity-60 transition-all duration-1000"
-                data-ai-hint="technology blueprint"
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent pointer-events-none" />
             </div>
@@ -110,7 +109,7 @@ export default function EcosystemPage() {
         </div>
       </section>
 
-      {/* FILTER BAR (NON-STICKY) */}
+      {/* FILTER BAR - NON-STICKY */}
       <div className="bg-[#0a0a0c] border-b border-white/10 py-10 relative z-50">
         <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between gap-6">
           <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
@@ -185,14 +184,14 @@ export default function EcosystemPage() {
                 <span className="text-primary">{randomPost.title.split(' ').slice(2).join(' ')}</span>
               </h2>
               <p className="text-xl text-muted-foreground mb-12 max-w-lg leading-relaxed">
-                {randomPost.excerpt || "Discover how builders in the Malaysian ecosystem are scaling world-class protocols on Solana."}
+                {randomPost.excerpt || "Discover the innovations scaling world-class protocols on Solana."}
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link href={`/news/${randomPost.slug}`} className="px-10 py-5 bg-white text-black font-code font-bold uppercase tracking-widest text-xs hover:bg-primary hover:text-white transition-all">
-                  Read Dispatch
+                  Read Case Study
                 </Link>
                 <Link href="/news" className="px-10 py-5 border border-white/10 text-white font-code font-bold uppercase tracking-widest text-xs hover:bg-white/5 transition-all">
-                  Browse Terminal
+                  Visit Feed
                 </Link>
               </div>
             </div>
@@ -335,7 +334,6 @@ function FeaturedCard({ project }: { project: EcosystemProject }) {
           alt={project.name} 
           fill 
           className="object-cover opacity-40 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700" 
-          data-ai-hint="abstract technology"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent" />
       </div>
