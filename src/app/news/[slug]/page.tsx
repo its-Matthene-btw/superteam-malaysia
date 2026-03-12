@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState, use } from 'react';
@@ -6,7 +5,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { getPostBySlug, getNews } from '@/services/news';
 import { NewsPost } from '@/types/database';
-import { ArrowLeft, Sparkles, Loader2, Send, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Loader2, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -177,7 +176,7 @@ export default function NewsDetail({ params }: { params: Promise<{ slug: string 
                   {rec.title}
                 </h3>
               </div>
-              <div className="font-code text-[10px] uppercase tracking-[3px] text-primary">READ_NOW -></div>
+              <div className="font-code text-[10px] uppercase tracking-[3px] text-primary">READ_NOW -&gt;</div>
             </Link>
           ))}
         </section>
