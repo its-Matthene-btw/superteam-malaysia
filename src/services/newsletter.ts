@@ -14,3 +14,9 @@ export async function getSubscribers() {
   if (error) throw error;
   return data;
 }
+
+export async function deleteSubscriber(id: string) {
+  const { error } = await supabase.from('newsletter_subscribers').delete().eq('id', id);
+  if (error) throw error;
+  return true;
+}

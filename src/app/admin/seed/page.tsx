@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -72,14 +73,22 @@ CREATE TABLE IF NOT EXISTS faqs (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 3. Enable RLS
+-- 3. Create Newsletter Table
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email text UNIQUE NOT NULL,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+-- 4. Enable RLS
 ALTER TABLE ecosystem_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
 
--- 4. Create Policies (Idempotent using DROP IF EXISTS)
+-- 5. Create Policies (Idempotent using DROP IF EXISTS)
 DROP POLICY IF EXISTS "Public Read Ecosystem" ON ecosystem_projects;
 CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
 
@@ -109,6 +118,12 @@ CREATE POLICY "Public Read FAQs" ON faqs FOR SELECT USING (true);
 
 DROP POLICY IF EXISTS "Admin All FAQs" ON faqs;
 CREATE POLICY "Admin All FAQs" ON faqs FOR ALL TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Public Write News" ON newsletter_subscribers;
+CREATE POLICY "Public Write News" ON newsletter_subscribers FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Admin All News" ON newsletter_subscribers;
+CREATE POLICY "Admin All News" ON newsletter_subscribers FOR ALL TO authenticated USING (true);
 `;
 
   const copySql = () => {
