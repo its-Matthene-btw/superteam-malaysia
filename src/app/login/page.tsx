@@ -76,7 +76,7 @@ export default function LoginPage() {
             <CardContent className="pt-8">
               <form onSubmit={handleLogin} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="font-code text-[10px] uppercase tracking-[2px] text-muted-foreground ml-1">Email Protocol</Label>
+                  <Label htmlFor="email" className="font-code text-[10px] uppercase tracking-[2px] text-muted-foreground ml-1">Email</Label>
                   <Input
                     id="email"
                     type="email"
@@ -88,10 +88,7 @@ export default function LoginPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <Label htmlFor="password" className="font-code text-[10px] uppercase tracking-[2px] text-muted-foreground ml-1">Key Phrase</Label>
-                    <button type="button" className="text-[10px] font-code uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">Forgot?</button>
-                  </div>
+                  <Label htmlFor="password" className="font-code text-[10px] uppercase tracking-[2px] text-muted-foreground ml-1">Password</Label>
                   <Input
                     id="password"
                     type="password"
@@ -117,12 +114,6 @@ export default function LoginPage() {
                   {loading ? 'Verifying...' : 'Initiate Session'}
                 </Button>
               </form>
-              
-              <div className="mt-8 pt-6 border-t border-white/5 text-center">
-                <p className="text-[10px] font-code text-muted-foreground uppercase tracking-widest">
-                  Not a member? <Link href="/#mission" className="text-primary hover:underline">Apply to the network</Link>
-                </p>
-              </div>
             </CardContent>
           </Card>
         </div>
