@@ -15,7 +15,17 @@ export async function seedDatabase() {
   };
 
   try {
-    // 1. Seed Stats
+    // 1. Wipe existing data to ensure a fresh start
+    // We use .neq('id', '00000000-0000-0000-0000-000000000000') as a filter to bypass Supabase's protection against filterless deletes
+    const tables = ['stats', 'members', 'events', 'partners', 'testimonials'];
+    for (const table of tables) {
+      const { error: delErr } = await supabase.from(table).delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      if (delErr) {
+        results.errors.push(`Clear ${table}: ${delErr.message}`);
+      }
+    }
+
+    // 2. Seed Stats
     if (hardcodedStats.length > 0) {
       const { error: sErr } = await supabase.from('stats').insert(
         hardcodedStats.map((s, i) => ({
@@ -24,11 +34,11 @@ export async function seedDatabase() {
           order_index: i
         }))
       );
-      if (sErr) results.errors.push(`Stats: ${sErr.message}`);
+      if (sErr) results.errors.push(`Stats Insert: ${sErr.message}`);
       else results.stats = hardcodedStats.length;
     }
 
-    // 2. Seed Members
+    // 3. Seed Members
     if (hardcodedMembers.length > 0) {
       const { error: mErr } = await supabase.from('members').insert(
         hardcodedMembers.map(m => ({
@@ -42,11 +52,11 @@ export async function seedDatabase() {
           twitter_url: m.social.twitter
         }))
       );
-      if (mErr) results.errors.push(`Members: ${mErr.message}`);
+      if (mErr) results.errors.push(`Members Insert: ${mErr.message}`);
       else results.members = hardcodedMembers.length;
     }
 
-    // 3. Seed Events
+    // 4. Seed Events
     if (hardcodedEvents.length > 0) {
       const { error: eErr } = await supabase.from('events').insert(
         hardcodedEvents.map(e => ({
@@ -59,11 +69,11 @@ export async function seedDatabase() {
           featured: true
         }))
       );
-      if (eErr) results.errors.push(`Events: ${eErr.message}`);
+      if (eErr) results.errors.push(`Events Insert: ${eErr.message}`);
       else results.events = hardcodedEvents.length;
     }
 
-    // 4. Seed Partners
+    // 5. Seed Partners
     if (hardcodedPartners.length > 0) {
       const { error: pErr } = await supabase.from('partners').insert(
         hardcodedPartners.map(p => ({
@@ -72,18 +82,18 @@ export async function seedDatabase() {
           featured: true
         }))
       );
-      if (pErr) results.errors.push(`Partners: ${pErr.message}`);
+      if (pErr) results.errors.push(`Partners Insert: ${pErr.message}`);
       else results.partners = hardcodedPartners.length;
     }
 
-    // 5. Seed Testimonials
+    // 6. Seed Testimonials
     const testimonials = [
       { name: 'Aiman Rahman', role: 'Solana Developer', content: 'Superteam Malaysia is the ultimate launching pad for builders. The network effect here is real.', type: 'official' },
       { name: 'Sarah Chen', role: 'Product Designer', content: 'Being part of this community accelerated my transition into Web3 by months.', type: 'official' },
       { name: 'Anatoly Yakovenko', role: 'Solana Founder', content: 'Superteam is the gold standard for ecosystem communities.', type: 'twitter' }
     ];
     const { error: tErr } = await supabase.from('testimonials').insert(testimonials);
-    if (tErr) results.errors.push(`Testimonials: ${tErr.message}`);
+    if (tErr) results.errors.push(`Testimonials Insert: ${tErr.message}`);
     else results.testimonials = testimonials.length;
 
   } catch (err: any) {
