@@ -210,14 +210,14 @@ export default function WallOfLove() {
   return (
     <section className="wall-section w-full bg-black border-t border-white/10">
       <div className="max-w-[1400px] mx-auto border-x border-white/10">
-        <div className="flex flex-col gap-6 mb-10 px-10 pt-20">
+        <div className="flex flex-col gap-6 mb-24 px-10 pt-32">
           <div className="pill-badge mb-6"><span>✦</span> Wall of Love</div>
           <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
             Community<br />Voices.
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-10 py-10 border-t border-white/10 px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-10 py-20 border-t border-white/10 px-10">
           <div className="uppercase font-bold text-sm tracking-wider leading-relaxed text-white max-w-sm">
             REAL BUILDERS. REAL STORIES. THE ALPHA SITS IN OUR CHATS.
           </div>
