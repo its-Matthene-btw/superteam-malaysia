@@ -1,6 +1,4 @@
 
-'use client';
-
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/home/Hero';
 import EcosystemPartners from '@/components/home/EcosystemPartners';
@@ -13,7 +11,7 @@ import { stats } from '@/lib/data';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen">
       <Navbar />
       <Hero />
       
@@ -25,9 +23,7 @@ export default function Home() {
         <div className="w-full border-b border-white/10">
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">
-                Builder Support
-              </h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Builder<br />Support</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 01 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -48,9 +44,7 @@ export default function Home() {
         <div className="w-full border-b border-white/10">
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">
-                Events & Hackathons
-              </h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Events &<br />Hackathons</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 02 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -70,9 +64,7 @@ export default function Home() {
         <div className="w-full border-b border-white/10">
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">
-                Grants & Funding
-              </h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Grants &<br />Funding</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 03 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -93,9 +85,7 @@ export default function Home() {
         <div className="w-full border-b border-white/10">
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">
-                Bounties & Opportunities
-              </h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Bounties &<br />Opportunities</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 04 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -116,9 +106,7 @@ export default function Home() {
         <div className="w-full border-b border-white/10">
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
-              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">
-                Education & Learning
-              </h2>
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Education &<br />Learning</h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 05 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
@@ -146,12 +134,12 @@ export default function Home() {
             {stats.map((stat, idx) => (
               <div key={idx} className="stat-cell group border-l border-white/10 p-2.5 px-8 min-h-[160px] flex flex-col justify-between">
                 <div className="flex items-start gap-3">
-                  <stat.icon className="w-5 h-5 text-white group-hover:text-primary transition-colors mt-0.5" />
+                  <stat.icon className="w-5 h-5 text-white/60 group-hover:text-primary transition-colors mt-0.5" />
                   <span className="text-sm font-medium text-white leading-tight uppercase tracking-wider">
                     {stat.label}
                   </span>
                 </div>
-                <div className="text-5xl md:text-6xl font-headline font-bold tracking-tighter mt-10 text-white group-hover:text-primary transition-all duration-300">
+                <div className="text-5xl md:text-6xl font-headline font-bold tracking-tighter mt-10 text-white group-hover:solana-text-gradient transition-all duration-300">
                   {stat.value}
                 </div>
               </div>
