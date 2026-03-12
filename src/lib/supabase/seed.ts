@@ -1,6 +1,6 @@
 
 import { createClient } from './client';
-import { stats as hardcodedStats, members as hardcodedMembers, partners as hardcodedPartners } from '../data';
+import { stats as hardcodedStats, members as hardcodedMembers, partners as hardcodedPartners, faqs as hardcodedFAQs } from '../data';
 
 const supabase = createClient();
 
@@ -12,69 +12,55 @@ export async function seedDatabase() {
     partners: 0,
     testimonials: 0,
     news: 0,
-    contacts: 0,
-    subscribers: 0,
+    faqs: 0,
     errors: [] as string[]
   };
 
   try {
-    const tables = ['stats', 'members', 'events', 'partners', 'testimonials', 'news', 'contacts', 'newsletter_subscribers'];
+    const tables = ['stats', 'members', 'events', 'partners', 'testimonials', 'news', 'faqs', 'contacts', 'newsletter_subscribers'];
     for (const table of tables) {
       await supabase.from(table).delete().neq('id', '00000000-0000-0000-0000-000000000000');
     }
 
     // Seed Stats
-    const { error: sErr } = await supabase.from('stats').insert(hardcodedStats.map((s, i) => ({ label: s.label, value: s.value, order_index: i })));
-    if (!sErr) results.stats = hardcodedStats.length;
+    await supabase.from('stats').insert(hardcodedStats.map((s, i) => ({ label: s.label, value: s.value, order_index: i })));
+    results.stats = hardcodedStats.length;
 
     // Seed Members
-    const { error: mErr } = await supabase.from('members').insert(hardcodedMembers.map(m => ({
+    await supabase.from('members').insert(hardcodedMembers.map(m => ({
       name: m.name, role: m.track, company: m.company, skills: m.skills, bio: m.description, avatar_url: m.image, featured: true, twitter_url: m.social.twitter
     })));
-    if (!mErr) results.members = hardcodedMembers.length;
-
-    // Seed Events
-    const events = [
-      { title: 'Solana Hacker House KL', location: 'KLCC', status: 'upcoming', event_date: '2026-10-12T09:00:00Z', featured: true },
-      { title: 'DeFi Summer Meetup', location: 'Bangsar', status: 'upcoming', event_date: '2026-11-15T18:00:00Z', featured: false },
-      { title: 'Rust Workshops v4', location: 'Sunway', status: 'upcoming', event_date: '2026-12-01T10:00:00Z', featured: true },
-      { title: 'Web3 Breakfast', location: 'Cyberjaya', status: 'upcoming', event_date: '2026-12-20T08:30:00Z', featured: false },
-      { title: 'Solana Genesis 2025', location: 'Global', status: 'past', event_date: '2025-01-01T09:00:00Z', featured: false },
-      { title: 'MY NFT Week', location: 'Kuala Lumpur', status: 'past', event_date: '2025-03-10T09:00:00Z', featured: false },
-      { title: 'Build Station Phase 1', location: 'Virtual', status: 'past', event_date: '2025-06-20T09:00:00Z', featured: false },
-      { title: 'Solana Speedrun MY', location: 'Johor', status: 'past', event_date: '2025-09-05T09:00:00Z', featured: false }
-    ];
-    const { error: eErr } = await supabase.from('events').insert(events);
-    if (!eErr) results.events = events.length;
+    results.members = hardcodedMembers.length;
 
     // Seed Partners
     const partnerData = hardcodedPartners.map(p => ({
       name: p.name,
       slug: p.name.toLowerCase().replace(/ /g, '-'),
       logo_url: p.logo,
-      description: `A core ecosystem partner specializing in ${p.name} integration.`,
-      long_description: `Leading the way in Malaysian Web3 development with high-performance infrastructure on Solana.`,
-      case_study: `Successfully scaled 50+ localized dApps in the 2026 cycle.`,
-      featured: true
+      description: `Leading ecosystem project building on Solana in Malaysia.`,
+      long_description: `Full technical analysis of the project's impact and architecture on the high-performance Solana blockchain.`,
+      case_study: `Successfully scaled user base by 300% within the first 6 months of the 2026 cycle.`,
+      featured: true,
+      website_url: '#'
     }));
-    const { error: pErr } = await supabase.from('partners').insert(partnerData);
-    if (!pErr) results.partners = partnerData.length;
+    await supabase.from('partners').insert(partnerData);
+    results.partners = partnerData.length;
+
+    // Seed FAQs
+    await supabase.from('faqs').insert(hardcodedFAQs.map((f, i) => ({
+      question: f.question,
+      answer: f.answer,
+      order_index: i
+    })));
+    results.faqs = hardcodedFAQs.length;
 
     // Seed News
     const news = [
-      { title: 'Superteam Malaysia Hits 70k Builders', slug: 'builders-milestone', excerpt: 'Our community continues to grow at an unprecedented rate.', content: 'Full details on our 2026 growth strategy...', image_url: 'https://picsum.photos/seed/news1/800/400', published_at: new Date().toISOString() },
-      { title: 'Announcing KL Hacker House 2026', slug: 'hacker-house-2026', excerpt: 'Join us for 3 days of building in the heart of KL.', content: 'Registration is now open for the biggest event...', image_url: 'https://picsum.photos/seed/news2/800/400', published_at: new Date().toISOString() },
-      { title: 'Solana DeFi Report: MY Edition', slug: 'defi-report', excerpt: 'Local volume is surging across decentralized exchanges.', content: 'An in-depth look at how Malaysians are using Jupiter...', image_url: 'https://picsum.photos/seed/news3/800/400', published_at: new Date().toISOString() }
+      { title: 'Superteam Malaysia Hits 70k Builders', slug: 'builders-milestone', excerpt: 'Our community continues to grow at an unprecedented rate, signaling a massive shift in local developer interest.', content: 'In a landmark achievement for the Malaysian Web3 ecosystem, Superteam Malaysia has officially crossed the 70,000 builder mark. This milestone is not just a number—it represents a vibrant community of developers, designers, and founders dedicated to scaling the Solana blockchain.\n\nOver the past year, we have seen a 400% increase in hackathon submissions and local project launches. From the heart of Kuala Lumpur to the digital hubs of Cyberjaya, the energy is undeniable.', image_url: 'https://picsum.photos/seed/news1/1200/600', published_at: new Date().toISOString() },
+      { title: 'Announcing KL Hacker House 2026', slug: 'hacker-house-2026', excerpt: 'Join us for 3 days of building in the heart of KL with global mentorship and high-stakes bounties.', content: 'The world-famous Solana Hacker House returns to Malaysia for 3 days of building, workshops, and high-stakes networking. This year, we are focusing on RWA and AI integration within the Solana ecosystem.\n\nParticipants will have direct access to core Solana Foundation engineers, project founders, and venture capitalists. Registration is now open.', image_url: 'https://picsum.photos/seed/news2/1200/600', published_at: new Date().toISOString() }
     ];
-    const { error: nErr } = await supabase.from('news').insert(news);
-    if (!nErr) results.news = news.length;
-
-    // Seed Testimonials (Tweets)
-    const tweets = [
-      { name: 'Anatoly Yakovenko', role: 'Solana Founder', content: 'The Superteam model is the future of ecosystem growth. Malaysia is leading the pack.', type: 'twitter', tweet_image_url: 'https://picsum.photos/seed/tweet1/600/300' },
-      { name: 'Raj Gokal', role: 'Solana Co-founder', content: 'Unbelievable energy from the KL builders this week. 100% focused on shipping.', type: 'twitter', tweet_image_url: 'https://picsum.photos/seed/tweet2/600/300' }
-    ];
-    await supabase.from('testimonials').insert(tweets);
+    await supabase.from('news').insert(news);
+    results.news = news.length;
 
   } catch (err: any) {
     results.errors.push(err.message);

@@ -17,7 +17,8 @@ import {
   X,
   Newspaper,
   Inbox,
-  Database
+  Database,
+  Settings
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -31,6 +32,7 @@ const navItems = [
   { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote },
   { name: 'News', href: '/admin/news', icon: Newspaper },
   { name: 'Messages', href: '/admin/messages', icon: Inbox },
+  { name: 'Settings', href: '/admin/settings', icon: Settings },
   { name: 'Seed', href: '/admin/seed', icon: Database },
 ];
 

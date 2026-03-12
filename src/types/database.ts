@@ -75,6 +75,14 @@ export interface NewsPost {
   created_at: string;
 }
 
+export interface FAQ {
+  id: string;
+  question: string;
+  answer: string;
+  order_index: number;
+  created_at: string;
+}
+
 export interface NewsletterSubscriber {
   id: string;
   email: string;
