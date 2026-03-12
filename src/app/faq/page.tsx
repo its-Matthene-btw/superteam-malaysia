@@ -7,7 +7,7 @@ import Footer from '@/components/layout/Footer';
 import { getFAQs } from '@/services/faqs';
 import { FAQ } from '@/types/database';
 import { cn } from '@/lib/utils';
-import { Plus, Minus, Loader2, Sparkles, HelpCircle, AlertCircle, Search, ChevronRight, Send } from 'lucide-react';
+import { Loader2, Search, Plus, Send, ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export default function FAQPage() {
@@ -41,6 +41,13 @@ export default function FAQPage() {
     return cats;
   }, [faqs]);
 
+  const categoryCounts = useMemo(() => {
+    return faqs.reduce((acc, f) => {
+      acc[f.category] = (acc[f.category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+  }, [faqs]);
+
   const filteredFaqs = useMemo(() => {
     return faqs.filter(f => {
       const matchesSearch = f.question.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -50,50 +57,42 @@ export default function FAQPage() {
     });
   }, [faqs, activeCategory, searchTerm]);
 
-  const categoryCounts = useMemo(() => {
-    return faqs.reduce((acc, f) => {
-      acc[f.category] = (acc[f.category] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-  }, [faqs]);
-
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center">
         <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-        <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground">Accessing Records...</p>
+        <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground">Accessing Node...</p>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-black text-white selection:bg-primary/30 font-body">
+    <main className="min-h-screen bg-black text-white font-body selection:bg-primary/30">
       <Navbar />
 
-      {/* TOP NAV BAR (Static) */}
-      <nav className="relative pt-20 px-10 h-20 border-b border-white/10 flex items-center justify-between bg-black/50 backdrop-blur-xl">
+      {/* TOP NAV BAR - Static Terminal Mode */}
+      <nav className="relative pt-20 px-10 h-20 border-b border-white/10 flex items-center justify-between bg-[#050505] z-50">
         <Link href="/" className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] hover:text-primary transition-colors flex items-center gap-2">
-          <span>←</span> SYSTEM_ROOT
+          <ChevronLeft className="w-3 h-3" /> SYSTEM_ROOT
         </Link>
         <span className="font-code text-[10px] text-[#14F195] uppercase tracking-[3px] hidden sm:block">// DATA_RETRIEVAL_MODE</span>
       </nav>
 
       {/* TERMINAL HEADER */}
-      <header className="relative border-b border-white/10 grid grid-cols-1 lg:grid-cols-2 min-h-[50vh] bg-white/5">
-        <div className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center relative overflow-hidden bg-black">
-          <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:linear-gradient(to_right,black:0%,transparent_100%)] pointer-events-none" />
-          <div className="relative z-10">
-            <div className="font-code text-primary text-xs font-bold tracking-[3px] mb-6 uppercase">// KNOWLEDGE_BASE_v2.0</div>
-            <h1 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10 uppercase">
-              Query<br />System.
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-lg leading-relaxed font-medium">
-              Access parameters for Grants, Ecosystem Bounties, Build Stations, and Technical Support protocols across the Malaysian network.
-            </p>
-          </div>
+      <header className="relative border-b border-white/10 grid grid-cols-1 lg:grid-cols-2 min-h-[50vh] bg-black">
+        <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:linear-gradient(to_right,black:0%,transparent:100%)] pointer-events-none" />
+        
+        <div className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center relative z-10">
+          <div className="font-code text-primary text-xs font-bold tracking-[3px] mb-6 uppercase">// KNOWLEDGE_BASE_v2.0</div>
+          <h1 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10 uppercase">
+            Query<br />System.
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-lg leading-relaxed font-medium">
+            Access parameters for Grants, Ecosystem Bounties, Build Stations, and Technical Support protocols across the Malaysian network.
+          </p>
         </div>
 
-        <div className="bg-[#050505] p-10 lg:p-24 flex items-center justify-center">
+        <div className="bg-[#050505] p-10 lg:p-24 flex items-center justify-center relative z-10">
           <div className="w-full max-w-[600px] bg-[#030303] border border-white/10 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 focus-within:border-primary focus-within:shadow-[0_0_30px_rgba(153,69,255,0.15)]">
             <div className="bg-[#111] px-6 py-3 border-b border-white/10 flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
@@ -124,7 +123,7 @@ export default function FAQPage() {
       {/* MAIN ASYMMETRIC GRID */}
       <section className="grid grid-cols-1 lg:grid-cols-[350px_1fr] border-b border-white/10 min-h-screen">
         {/* SIDEBAR DIRECTORY */}
-        <aside className="p-10 lg:p-16 border-r border-white/10 bg-[#050505]">
+        <aside className="p-10 lg:p-16 border-r border-white/10 bg-[#050505] lg:sticky lg:top-20 lg:h-[calc(100vh-80px)] overflow-y-auto">
           <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-10 flex items-center gap-3">
             <div className="w-2 h-2 bg-primary rounded-full" /> DATA_DIRECTORIES
           </div>
@@ -153,14 +152,14 @@ export default function FAQPage() {
           <div className="max-w-[900px]">
             <div className="flex items-center gap-6 mb-16">
               <span className="font-code text-sm border border-primary text-primary px-3 py-1">
-                {searchTerm ? 'SEARCH' : categories.indexOf(activeCategory) + 1 < 10 ? `0${categories.indexOf(activeCategory) + 1}` : categories.indexOf(activeCategory) + 1}
+                {searchTerm ? 'SEARCH' : (categories.indexOf(activeCategory) + 1).toString().padStart(2, '0')}
               </span>
               <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tight">
                 {searchTerm ? `Results for "${searchTerm}"` : activeCategory}
               </h2>
             </div>
 
-            <div className="border border-white/10 bg-white/[0.02]">
+            <div className="border border-white/10 bg-[#050505]">
               {filteredFaqs.map((faq) => (
                 <div key={faq.id} className={cn(
                   "border-b border-white/10 last:border-b-0 transition-all duration-300",
@@ -186,7 +185,7 @@ export default function FAQPage() {
                   </button>
                   <div className={cn(
                     "overflow-hidden transition-all duration-500 ease-in-out",
-                    openId === faq.id ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                    openId === faq.id ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"
                   )}>
                     <div className="pl-[100px] pr-10 pb-10 text-xl text-muted-foreground leading-relaxed font-medium">
                       {faq.answer}

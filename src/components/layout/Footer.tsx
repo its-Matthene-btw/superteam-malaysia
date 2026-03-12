@@ -18,7 +18,9 @@ export default function Footer() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleSubscribe = async (e: React.FormEvent) => {
@@ -71,7 +73,7 @@ export default function Footer() {
               <FooterNavLink href="/events" label="Events" />
               <FooterNavLink href="/ecosystem" label="Ecosystem" />
               <FooterNavLink href="/members" label="Members" />
-              <FooterNavLink href="/faq" label="Knowledge Base" />
+              <FooterNavLink href="/faq" label="FAQ" />
               <FooterNavLink href="/contact" label="Contact" />
             </ul>
           </div>
