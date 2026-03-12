@@ -173,8 +173,8 @@ export default function MemberDirectory() {
         {/* Main Content Area (Zones 1 & 2) - Vertical Stack ≤1200px, Horizontal >1200px */}
         <div className="flex flex-col flex-grow relative z-10 min-[1201px]:flex-row min-[1201px]:max-w-[1400px] min-[1201px]:mx-auto min-[1201px]:border-x min-[1201px]:border-white/10 min-[1201px]:h-full min-[1201px]:min-h-[750px]">
           
-          {/* ZONE 1: TEXT BLOCK */}
-          <div className="flex-shrink-0 pt-[60px] pb-10 px-5 text-center min-[1201px]:pt-48 min-[1201px]:pb-32 min-[1201px]:w-3/5 min-[1201px]:text-left min-[1201px]:flex min-[1201px]:flex-col min-[1201px]:justify-center min-[1201px]:px-10">
+          {/* ZONE 1: TEXT BLOCK - Added pt-32 to avoid Navbar overlap */}
+          <div className="flex-shrink-0 pt-32 pb-10 px-5 text-center min-[1201px]:pt-48 min-[1201px]:pb-32 min-[1201px]:w-3/5 min-[1201px]:text-left min-[1201px]:flex min-[1201px]:flex-col min-[1201px]:justify-center min-[1201px]:px-10">
             <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md inline-flex mx-auto min-[1201px]:mx-0">
               <span>✦</span> THE DIRECTORY
             </div>
@@ -264,7 +264,7 @@ export default function MemberDirectory() {
                     src={member.image} 
                     alt={member.name} 
                     fill 
-                    className="object-cover object-[center_15%] grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                    className="object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-40 transition-opacity" />
                 </div>
@@ -332,7 +332,7 @@ export default function MemberDirectory() {
             </button>
             
             <div className="lg:w-2/5 relative min-h-[400px] lg:min-h-full border-r border-white/10">
-              <Image src={selectedMember.image} alt={selectedMember.name} fill className="object-cover object-[center_15%] grayscale" />
+              <Image src={selectedMember.image} alt={selectedMember.name} fill className="object-cover object-top grayscale" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
             </div>
             
@@ -384,4 +384,3 @@ export default function MemberDirectory() {
     </main>
   );
 }
-
