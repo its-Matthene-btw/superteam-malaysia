@@ -54,7 +54,14 @@ export default function CommunityCarousel({ members }: { members: Member[] }) {
     e.preventDefault();
     const x = e.pageX - sliderRef.current.offsetLeft;
     const walk = (x - startX) * 1.5;
-    if (Math.abs(walk) > 5) setIsDragging(true);
+    
+    // Detection of intentional drag
+    if (Math.abs(walk) > 5) {
+      setIsDragging(true);
+      // Auto-close card when sliding away via mouse drag
+      if (expandedId) setExpandedId(null);
+    }
+    
     sliderRef.current.scrollLeft = scrollLeft - walk;
   };
 
@@ -98,6 +105,13 @@ export default function CommunityCarousel({ members }: { members: Member[] }) {
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={() => setIsDown(false)}
+          onScroll={() => {
+            // Auto-close card when sliding away via trackpad/wheel
+            // We only trigger this if the user is actively hovering (intentional interaction)
+            if (isHovering && expandedId && !isDown) {
+              setExpandedId(null);
+            }
+          }}
         >
           <div className="flex whitespace-nowrap">
             {displayMembers.map((member, idx) => (
