@@ -1,9 +1,9 @@
-
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/home/Hero';
 import EventSection from '@/components/home/EventSection';
 import EcosystemPartners from '@/components/home/EcosystemPartners';
 import CommunityCarousel from '@/components/home/CommunityCarousel';
+import WallOfLove from '@/components/home/WallOfLove';
 import Footer from '@/components/layout/Footer';
 import { stats, faqs } from '@/lib/data';
 import { 
@@ -169,6 +169,7 @@ export default function Home() {
 
       <EventSection />
       <CommunityCarousel />
+      <WallOfLove />
       <EcosystemPartners />
       <Footer />
     </main>

@@ -139,3 +139,23 @@
 .event-high-fidelity-card {
   @apply glass rounded-[32px] overflow-hidden border-white/5 transition-all duration-500 hover:border-primary/40 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_40px_rgba(153,69,255,0.1)];
 }
+
+/* --- Wall of Love Spotlight Logic --- */
+.wall-card::before {
+  content: '';
+  position: absolute;
+  top: var(--mouse-y, -1000px);
+  left: var(--mouse-x, -1000px);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(153, 69, 255, 0.15) 0%, transparent 60%);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s ease;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.wall-card:hover::before {
+  opacity: 1;
+}
