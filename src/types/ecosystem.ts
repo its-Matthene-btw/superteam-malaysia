@@ -3,20 +3,20 @@ export type EcosystemProject = {
   id: string;
   name: string;
   slug: string;
-  category: string;
-  short_description: string;
-  long_description: string;
-  logo_url: string;
-  hero_image_url: string;
-  website_url: string;
-  docs_url: string;
-  twitter_url: string;
-  discord_url: string;
-  github_url: string;
-  contract_address: string;
-  network: string;
-  token_symbol: string;
-  status: string;
+  category: string | null;
+  short_description: string | null;
+  long_description: string | null;
+  logo_url: string | null;
+  hero_image_url: string | null;
+  website_url: string | null;
+  docs_url: string | null;
+  twitter_url: string | null;
+  discord_url: string | null;
+  github_url: string | null;
+  network: string | null;
+  token_symbol: string | null;
+  contract_address: string | null;
+  status: string | null;
   featured: boolean;
   created_at: string;
 };
@@ -24,16 +24,15 @@ export type EcosystemProject = {
 export type EcosystemCategory = {
   id: string;
   name: string;
-  slug: string;
   created_at: string;
 };
 
 export type EcosystemOpportunity = {
   id: string;
-  title: string;
-  description: string;
-  type: string;
-  link: string;
+  title: string | null;
+  description: string | null;
+  type: string | null;
+  link: string | null;
   created_at: string;
 };
 
@@ -41,5 +40,6 @@ export type EcosystemFeature = {
   id: string;
   project_id: string;
   title: string;
-  description: string;
+  description: string | null;
+  created_at: string;
 };

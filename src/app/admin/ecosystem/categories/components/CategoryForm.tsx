@@ -15,14 +15,13 @@ import { Card, CardContent } from '@/components/ui/card';
 
 const categorySchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  slug: z.string().min(1, 'Slug is required'),
 });
 
 export default function CategoryForm({ category }: { category?: EcosystemCategory }) {
   const router = useRouter();
   const form = useForm<z.infer<typeof categorySchema>>({
     resolver: zodResolver(categorySchema),
-    defaultValues: category || {},
+    defaultValues: category ? { name: category.name } : { name: '' },
   });
 
   const onSubmit = async (values: z.infer<typeof categorySchema>) => {
@@ -38,7 +37,7 @@ export default function CategoryForm({ category }: { category?: EcosystemCategor
   };
 
   return (
-    <Card>
+    <Card className="glass border-white/10">
       <CardContent className="p-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -47,28 +46,17 @@ export default function CategoryForm({ category }: { category?: EcosystemCategor
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Category Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} className="glass border-white/10 h-12" placeholder="e.g. DeFi" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="slug"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Slug</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">{category ? 'Update Category' : 'Create Category'}</Button>
+            <Button type="submit" className="w-full solana-gradient font-bold uppercase tracking-widest text-xs h-12">
+              {category ? 'Update Category' : 'Create Category'}
+            </Button>
           </form>
         </Form>
       </CardContent>
