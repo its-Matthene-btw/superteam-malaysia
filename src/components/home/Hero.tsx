@@ -169,8 +169,7 @@ export default function Hero() {
 
       <div className="relative z-20 text-center max-w-4xl px-6 pointer-events-auto">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold mb-6 leading-[1.1] tracking-tight text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-          Malaysia’s Home <br /> 
-          for Solana <span className="text-primary">Builders</span>
+          Malaysia’s Home for Solana <span className="text-primary">Builders</span>
         </h1>
 
         <p className="max-w-xl mx-auto text-lg text-[#a1a1aa] mb-10 leading-relaxed">

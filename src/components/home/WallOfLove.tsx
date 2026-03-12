@@ -143,7 +143,7 @@ function WallCard({ testimonial }: { testimonial: Testimonial }) {
         <div className="card-header flex justify-between items-start mb-6 translate-z-20">
           <div className="author-info flex items-center gap-4">
             <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/10 grayscale group-hover:grayscale-0 group-hover:border-primary transition-all duration-300">
-              <Image src={testimonial.avatar} alt={testimonial.author} fill className="object-cover" />
+              <Image src={testimonial.avatar} alt={testimonial.author} fill className="object-cover object-[center_15%]" />
             </div>
             <div className="author-details flex flex-col">
               <span className="author-name font-bold text-lg text-white">{testimonial.author}</span>
@@ -211,14 +211,14 @@ export default function WallOfLove() {
   return (
     <section className="wall-section w-full bg-black border-t border-white/10">
       <div className="max-w-[1400px] mx-auto border-x border-white/10">
-        <div className="flex flex-col gap-6 mb-24 px-10 pt-32">
+        <div className="flex flex-col gap-6 mb-24 px-10 pt-32 lg:pt-48">
           <div className="pill-badge mb-6"><span>✦</span> Wall of Love</div>
           <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
-            Community<br /><span className="text-primary">Voices</span>.
+            Community <span className="text-primary">Voices</span>
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-10 py-20 border-t border-white/10 px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-10 py-20 lg:py-32 border-t border-white/10 px-10">
           <div className="uppercase font-bold text-sm tracking-wider leading-relaxed text-white max-w-sm">
             REAL BUILDERS. REAL STORIES. THE ALPHA SITS IN OUR CHATS.
           </div>

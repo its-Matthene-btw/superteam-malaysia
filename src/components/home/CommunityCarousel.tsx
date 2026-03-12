@@ -65,15 +65,15 @@ export default function CommunityCarousel() {
   return (
     <section className="w-full bg-black border-t border-white/10">
       <div className="max-w-[1400px] mx-auto border-x border-white/10">
-        <div className="px-10 py-32">
-          <div className="flex flex-col gap-6 mb-24">
+        <div className="px-10 py-32 lg:py-48">
+          <div className="flex flex-col gap-6 mb-24 lg:mb-32">
             <div className="pill-badge mb-6"><span>✦</span> THE COMMUNITY</div>
             <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none max-w-3xl text-white">
-              A Team of<br />Web3 <span className="text-primary">Experts</span>.
+              A Team of<br />Web3 <span className="text-primary">Experts</span>
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-10 py-20 border-t border-white/10">
+          <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-10 py-20 lg:py-32 border-t border-white/10">
             <div className="uppercase font-bold text-sm tracking-wider leading-relaxed text-white max-w-sm">
               SUPERTEAM MALAYSIA STARTED AS A COLLECTIVE TO MANAGE WEB3 PROJECTS WITH FRIENDS AND BUILDERS.
             </div>

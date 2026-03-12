@@ -64,7 +64,7 @@ export default function FaqCtaSection() {
                 />
              </div>
              
-             <div className="cta-sticky-box p-10 lg:p-20 z-10 lg:sticky lg:top-[100px]">
+             <div className="p-10 lg:p-20 z-10">
                 <h2 className="text-5xl lg:text-7xl font-headline font-extrabold tracking-tighter leading-[1.1] mb-8 uppercase text-white">
                   BUILD<br />THE<br />FUTURE.
                 </h2>
