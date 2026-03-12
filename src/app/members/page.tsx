@@ -53,12 +53,12 @@ export default function MemberDirectory() {
         centerY = height / 2;
         radius = Math.min(width, height) * 0.45;
       } else if (window.innerWidth <= 1200) {
-        // TABLET: Rising planet from bottom (only top half visible)
+        // TABLET & STABILITY (1024-1200): Rising planet from bottom
         centerX = width / 2;
         centerY = height; 
         radius = Math.min(width * 0.5, height * 0.8);
       } else {
-        // DESKTOP: Half globe emerging from right edge
+        // DESKTOP (>1200px): Half globe emerging from right edge
         centerX = width;
         centerY = height * 0.5;
         radius = Math.max(width * 0.5, height) / 1.3;
@@ -162,60 +162,59 @@ export default function MemberDirectory() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen bg-black overflow-x-hidden">
       <Navbar />
       
-      {/* HERO SECTION - Strictly Managed Flex for Tablet/Mobile */}
-      <section className="relative overflow-hidden bg-black border-b border-white/10">
+      {/* HERO SECTION - Strictly Managed Flex for Tablet/Mobile/Stability (≤1200px) */}
+      <section className="relative overflow-hidden bg-black border-b border-white/10 flex flex-col min-h-screen min-h-[100svh] min-[1201px]:block min-[1201px]:min-h-[750px]">
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] bg-center [mask-image:linear-gradient(to_bottom,black_40%,transparent_100%)]" />
         <div className="absolute top-[-30%] left-[20%] w-[1000px] h-[800px] bg-[radial-gradient(circle,rgba(153,69,255,0.25)_0%,transparent_70%)] rounded-full pointer-events-none z-0" />
         
-        <div className="max-w-[1400px] mx-auto border-x border-white/10 relative">
-          <div className="flex flex-col min-h-screen min-h-[100svh] lg:min-h-[750px] lg:flex-row">
-            
-            {/* ZONE 1: TEXT BLOCK (Top on Mobile/Tablet, Left on Desktop) */}
-            <div className="flex-shrink-0 pt-32 pb-10 px-10 text-center lg:pt-48 lg:pb-32 lg:w-3/5 lg:text-left z-10 flex flex-col justify-center">
-              <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md inline-flex mx-auto lg:mx-0">
-                <span>✦</span> THE DIRECTORY
-              </div>
-              <h1 className="text-6xl md:text-8xl lg:text-[120px] font-black uppercase tracking-tighter leading-[0.9] mb-10 flex flex-col">
-                <span className="text-white">BUILDER</span>
-                <span className="text-transparent" style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.4)' }}>NETWORK</span>
-              </h1>
-              <p className="text-xl text-muted-foreground max-w-md mx-auto lg:mx-0 leading-relaxed">
-                Discover the top developers, designers, and founders scaling the Solana ecosystem across Malaysia.
-              </p>
+        {/* Main Content Area (Zones 1 & 2) - Vertical Stack ≤1200px, Horizontal >1200px */}
+        <div className="flex flex-col flex-grow relative z-10 min-[1201px]:flex-row min-[1201px]:max-w-[1400px] min-[1201px]:mx-auto min-[1201px]:border-x min-[1201px]:border-white/10 min-[1201px]:h-full min-[1201px]:min-h-[750px]">
+          
+          {/* ZONE 1: TEXT BLOCK */}
+          <div className="flex-shrink-0 pt-[60px] pb-10 px-5 text-center min-[1201px]:pt-48 min-[1201px]:pb-32 min-[1201px]:w-3/5 min-[1201px]:text-left min-[1201px]:flex min-[1201px]:flex-col min-[1201px]:justify-center min-[1201px]:px-10">
+            <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md inline-flex mx-auto min-[1201px]:mx-0">
+              <span>✦</span> THE DIRECTORY
             </div>
-            
-            {/* ZONE 2: GLOBE AREA (Fills remaining height on Tablet/Mobile) */}
-            <div className="flex-grow relative w-full h-[400px] lg:h-full lg:absolute lg:inset-0 z-0 pointer-events-auto">
-              <canvas ref={canvasRef} id="globeCanvas" className="w-full h-full cursor-grab active:cursor-grabbing opacity-80" />
-            </div>
+            <h1 className="text-6xl md:text-8xl lg:text-[120px] font-black uppercase tracking-tighter leading-[0.9] mb-10 flex flex-col">
+              <span className="text-white">BUILDER</span>
+              <span className="text-transparent" style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.4)' }}>NETWORK</span>
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-md mx-auto min-[1201px]:mx-0 leading-relaxed">
+              Discover the top developers, designers, and founders scaling the Solana ecosystem across Malaysia.
+            </p>
+          </div>
+          
+          {/* ZONE 2: GLOBE AREA */}
+          <div className="flex-grow relative w-full min-h-[400px] min-[1201px]:absolute min-[1201px]:inset-0 min-[1201px]:z-0 pointer-events-auto overflow-hidden">
+            <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing opacity-80" />
+          </div>
+        </div>
 
-            {/* ZONE 3: MARQUEE TICKER (Sticks to bottom of 100vh) */}
-            <div className="flex-shrink-0 w-full bg-primary py-4 overflow-hidden relative z-10 border-y border-white/10 mt-auto">
-              <div className="flex whitespace-nowrap animate-infinite-scroll">
-                {Array(4).fill(null).map((_, i) => (
-                  <div key={i} className="flex items-center gap-12 px-6">
-                    {['RUST', 'SOLANA', 'ANCHOR', 'REACT', 'TYPESCRIPT', 'DEFI', 'WEB3.JS', 'SMART CONTRACTS'].map(item => (
-                      <span key={item} className="font-code font-bold text-black tracking-[2px] flex items-center gap-12">
-                        {item} <span className="text-[10px]">✦</span>
-                      </span>
-                    ))}
-                  </div>
+        {/* ZONE 3: MARQUEE TICKER (Locked to absolute bottom) */}
+        <div className="flex-shrink-0 w-full bg-primary py-4 overflow-hidden relative z-20 border-y border-white/10 mt-auto">
+          <div className="flex whitespace-nowrap animate-infinite-scroll">
+            {Array(4).fill(null).map((_, i) => (
+              <div key={i} className="flex items-center gap-12 px-6">
+                {['RUST', 'SOLANA', 'ANCHOR', 'REACT', 'TYPESCRIPT', 'DEFI', 'WEB3.JS', 'SMART CONTRACTS'].map(item => (
+                  <span key={item} className="font-code font-bold text-black tracking-[2px] flex items-center gap-12">
+                    {item} <span className="text-[10px]">✦</span>
+                  </span>
                 ))}
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* SEARCH & FILTERS SECTION */}
-      <section className="bg-black border-b border-white/10">
-        <div className="max-w-[1400px] mx-auto border-x border-white/10 p-10">
+      {/* SEARCH & FILTERS SECTION - EDGE TO EDGE */}
+      <section className="bg-black border-b border-white/10 w-screen max-w-none">
+        <div className="w-full px-10 py-10">
           <div className="flex flex-col gap-8">
             <div className="relative group">
-              <svg className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 fill-none stroke-muted-foreground group-focus-within:stroke-primary transition-colors stroke-[2px]" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-muted-foreground group-focus-within:text-primary transition-colors" />
               <input 
                 type="text" 
                 placeholder="Search developers, designers, or protocols..."
@@ -250,10 +249,10 @@ export default function MemberDirectory() {
         </div>
       </section>
 
-      {/* MEMBER GRID SECTION */}
-      <section className="bg-black">
-        <div className="max-w-[1400px] mx-auto border-x border-white/10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border-b border-white/10">
+      {/* MEMBER GRID SECTION - EDGE TO EDGE */}
+      <section className="bg-black w-screen max-w-none">
+        <div className="w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-[1px] bg-white/10 border-b border-white/10">
             {displayedMembers.map((member) => (
               <div 
                 key={member.id} 
@@ -313,6 +312,9 @@ export default function MemberDirectory() {
           )}
         </div>
       </section>
+
+      <FaqCtaSection />
+      <Footer />
 
       {/* MEMBER MODAL */}
       {selectedMember && (
@@ -379,9 +381,7 @@ export default function MemberDirectory() {
           </div>
         </div>
       )}
-
-      <FaqCtaSection />
-      <Footer />
     </main>
   );
 }
+
