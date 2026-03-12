@@ -54,8 +54,8 @@ export default function EcosystemPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-        <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground">Synchronizing Network...</p>
+        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground text-center">Synchronizing Network...</p>
       </div>
     );
   }
@@ -93,6 +93,7 @@ export default function EcosystemPage() {
                 alt="Ecosystem Blueprint" 
                 fill 
                 className="object-cover grayscale contrast-125 opacity-40 mix-blend-screen group-hover:opacity-60 transition-all duration-1000"
+                data-ai-hint="technology blueprint"
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent pointer-events-none" />
             </div>
@@ -100,8 +101,8 @@ export default function EcosystemPage() {
         </div>
       </section>
 
-      {/* FILTER BAR (NOT STICKY) */}
-      <div className="bg-[#0a0a0c] border-b border-white/10 py-10">
+      {/* FILTER BAR (NON-STICKY) */}
+      <div className="bg-[#0a0a0c] border-b border-white/10 py-10 relative z-50">
         <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between gap-6">
           <div className="flex gap-4 overflow-x-auto no-scrollbar">
             <FilterButton 
@@ -141,7 +142,7 @@ export default function EcosystemPage() {
             {filteredProjects.length === 0 && (
               <div className="col-span-full py-40 text-center bg-[#0f0f13]">
                 <Box className="w-12 h-12 text-muted-foreground/20 mx-auto mb-4" />
-                <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">No projects listed in this category yet.</p>
+                <p className="font-code text-xs uppercase tracking-widest text-muted-foreground text-center">No projects listed in this category yet.</p>
               </div>
             )}
           </div>
@@ -164,7 +165,7 @@ export default function EcosystemPage() {
         </div>
       </section>
 
-      {/* DEEP DIVE SECTION */}
+      {/* DEEP DIVE SECTION (BACKPACK) */}
       <section className="border-b border-white/10">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           <div className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center">
@@ -176,7 +177,7 @@ export default function EcosystemPage() {
               Backpack isn't just a wallet; it's an operating system for Web3. Discover how xNFTs allow developers to build native applications directly within the wallet interface.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link href="/news/backpack-xnft-deep-dive" className="px-10 py-5 bg-white text-black font-code font-bold uppercase tracking-widest text-xs hover:bg-primary hover:text-white transition-all">
+              <Link href="/news/blueprint-2026" className="px-10 py-5 bg-white text-black font-code font-bold uppercase tracking-widest text-xs hover:bg-primary hover:text-white transition-all">
                 Read Case Study
               </Link>
               <a href="https://backpack.app" target="_blank" className="px-10 py-5 border border-white/10 text-white font-code font-bold uppercase tracking-widest text-xs hover:bg-white/5 transition-all">
@@ -190,6 +191,7 @@ export default function EcosystemPage() {
               alt="Matrix Abstract" 
               fill 
               className="object-cover grayscale opacity-40 mix-blend-screen group-hover:opacity-60 group-hover:scale-105 transition-all duration-1000"
+              data-ai-hint="matrix code"
             />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0a0a0c_100%)] pointer-events-none" />
           </div>
@@ -206,7 +208,7 @@ export default function EcosystemPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-white/10 border border-white/10">
             {opportunities.map(opp => (
-              <div key={opp.id} className="bg-[#0a0a0c] p-12 flex flex-col justify-between group hover:bg-white/[0.02] transition-colors">
+              <div key={opp.id} className="bg-[#0a0a0c] p-12 flex flex-col justify-between group hover:bg-white/[0.02] transition-colors h-full">
                 <div>
                   <div className={cn(
                     "inline-block px-4 py-1.5 rounded-full font-code text-[10px] font-bold uppercase tracking-widest mb-8 border",
@@ -218,7 +220,7 @@ export default function EcosystemPage() {
                   <h3 className="text-3xl font-black uppercase tracking-tight mb-6">{opp.title}</h3>
                   <p className="text-muted-foreground text-lg mb-10 leading-relaxed">{opp.description}</p>
                 </div>
-                <a href={opp.link} target="_blank" className="font-code text-xs font-bold uppercase tracking-widest flex items-center gap-3 group-hover:text-primary transition-colors">
+                <a href={opp.link || '#'} target="_blank" className="font-code text-xs font-bold uppercase tracking-widest flex items-center gap-3 group-hover:text-primary transition-colors">
                   Apply Now <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
@@ -318,6 +320,7 @@ function FeaturedCard({ project }: { project: EcosystemProject }) {
           alt={project.name} 
           fill 
           className="object-cover opacity-40 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700" 
+          data-ai-hint="abstract technology"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent" />
       </div>

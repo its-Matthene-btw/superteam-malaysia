@@ -176,7 +176,7 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
                 </Button>
               </div>
             </CardContent>
-          </Card>
+          </div>
         </div>
       </div>
     </div>
