@@ -13,7 +13,7 @@ export default function EventSection() {
         <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center p-10 lg:p-20 border-b lg:border-b-0 lg:border-r border-white/10">
           <div className="max-w-md">
             <h2 className="text-6xl lg:text-7xl font-headline font-bold mb-8 leading-[1.1] tracking-tighter text-white">
-              Upcoming<br /><span className="solana-text-gradient">Events</span>
+              Upcoming<br /><span className="text-primary">Events</span>
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed mb-12">
               Join the Malaysian Web3 community. We host workshops, hackathons, and exclusive networking sessions to help you build and scale on Solana.
@@ -21,9 +21,10 @@ export default function EventSection() {
             <a 
               href="https://lu.ma/superteammy" 
               target="_blank" 
-              className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest px-8 py-4 rounded-full border border-white/10 bg-white/5 hover:bg-white text-white hover:text-black transition-all duration-300"
+              className="inline-flex items-center gap-3 text-xs font-code font-bold uppercase tracking-[2px] px-10 py-5 rounded-full border border-white/10 bg-white/5 hover:bg-primary hover:text-black hover:border-primary transition-all duration-300 group"
             >
               View Full Calendar
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
         </div>
