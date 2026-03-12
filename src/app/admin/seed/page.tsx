@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -235,7 +234,7 @@ CREATE TABLE IF NOT EXISTS partners (
                 </Button>
               </div>
             </CardContent>
-          </div>
+          </Card>
         </div>
       </div>
     </div>

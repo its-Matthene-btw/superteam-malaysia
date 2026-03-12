@@ -1,4 +1,3 @@
-
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -256,6 +255,32 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground text-primary">Discord</FormLabel>
+                    <FormControl>
+                      <Input {...field} className="glass border-white/10" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="github_url"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground text-secondary">GitHub</FormLabel>
+                    <FormControl>
+                      <Input {...field} className="glass border-white/10" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="docs_url"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground text-secondary">Documentation</FormLabel>
                     <FormControl>
                       <Input {...field} className="glass border-white/10" />
                     </FormControl>
