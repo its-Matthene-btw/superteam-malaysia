@@ -1,3 +1,4 @@
 
-// This file is empty to resolve module conflict errors.
+// This route is deprecated to resolve module conflict errors.
+// The home page is now served from src/app/page.tsx.
 export default function Deprecated() { return null; }

@@ -19,7 +19,7 @@ export default function FaqCtaSection() {
       </div>
 
       <div className="grid-full-width w-full border-y border-white/10">
-        <div className="faq-cta-grid max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[6fr_4fr] border-x border-white/10">
+        <div className="faq-cta-grid max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[6fr_4fr] border-x border-white/10 items-stretch">
           
           <div className="faq-column border-b lg:border-b-0 lg:border-r border-white/10 bg-black flex flex-col">
             {faqs.map((faq, idx) => (
@@ -50,8 +50,8 @@ export default function FaqCtaSection() {
             ))}
           </div>
 
-          {/* CTA Column - Stable Content */}
-          <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 items-start overflow-hidden">
+          {/* CTA Column - Stable Fixed-at-top column */}
+          <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 items-start overflow-hidden border-l border-white/10">
              <div className="cta-bg-wrapper absolute inset-0 pointer-events-none overflow-hidden z-0">
                 <div className="absolute -bottom-[10%] -right-[10%] w-[800px] h-[800px] bg-[#9945FF]/15 rounded-full blur-[100px]" />
                 
@@ -65,8 +65,8 @@ export default function FaqCtaSection() {
                 />
              </div>
              
-             {/* Content stays at top and is fixed relative to the column start */}
-             <div className="p-10 lg:p-20 z-10 w-full flex-shrink-0">
+             {/* Pinned content at top - will stay in place while column stretches */}
+             <div className="p-10 lg:p-20 z-10 w-full sticky top-0">
                 <h2 className="text-5xl lg:text-7xl font-headline font-extrabold tracking-tighter leading-[1.1] mb-8 uppercase text-white">
                   BUILD<br />THE<br />FUTURE.
                 </h2>
@@ -74,11 +74,11 @@ export default function FaqCtaSection() {
                   Ready to ship your next big idea on Solana? Get access to exclusive bounties, ecosystem funding, and the smartest builders in Malaysia.
                 </p>
                 <div className="flex flex-col gap-4 w-full max-w-sm">
-                  <a href="#" className="group flex items-center justify-between bg-[#9945FF] text-black px-8 py-5 font-code font-bold uppercase tracking-widest border border-[#9945FF] hover:bg-white hover:border-white transition-all shadow-lg hover:shadow-[#9945FF]/20">
+                  <a href="https://discord.gg/superteammy" target="_blank" className="group flex items-center justify-between bg-[#9945FF] text-black px-8 py-5 font-code font-bold uppercase tracking-widest border border-[#9945FF] hover:bg-white hover:border-white transition-all shadow-lg hover:shadow-[#9945FF]/20">
                     Join Discord
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </a>
-                  <a href="#" className="group flex items-center justify-between bg-transparent text-white border border-white/10 px-8 py-5 font-code font-bold uppercase tracking-widest hover:bg-white/5 hover:border-white transition-all">
+                  <a href="https://earn.superteam.fun" target="_blank" className="group flex items-center justify-between bg-transparent text-white border border-white/10 px-8 py-5 font-code font-bold uppercase tracking-widest hover:bg-white/5 hover:border-white transition-all">
                     Apply For Grant
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </a>

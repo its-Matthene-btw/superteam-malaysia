@@ -26,7 +26,7 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
               <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">
-                Builder <span className="text-[#9945FF]">Support</span>
+                Builder Support
               </h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 01 / 05 ]</div>
             </div>
@@ -49,7 +49,7 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
               <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">
-                Events & <span className="text-[#9945FF]">Hackathons</span>
+                Events & Hackathons
               </h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 02 / 05 ]</div>
             </div>
@@ -71,7 +71,7 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
               <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">
-                Grants & <span className="text-[#9945FF]">Funding</span>
+                Grants & Funding
               </h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 03 / 05 ]</div>
             </div>
@@ -94,7 +94,7 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
               <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">
-                <span className="text-[#9945FF]">Bounties</span> & Opportunities
+                Bounties & Opportunities
               </h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 04 / 05 ]</div>
             </div>
@@ -117,7 +117,7 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
               <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">
-                Education & <span className="text-[#9945FF]">Learning</span>
+                Education & Learning
               </h2>
               <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 05 / 05 ]</div>
             </div>

@@ -3,6 +3,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import * as d3 from 'd3';
 
 export default function Hero() {
@@ -186,12 +187,16 @@ export default function Hero() {
             Discover bounties, grants, events, and opportunities while building with the fastest growing Web3 ecosystem.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center min-[1201px]:justify-start gap-4">
-            <Button size="lg" className="bg-white text-black hover:bg-white/90 font-bold h-12 px-8 rounded-full uppercase">
-              JOIN NETWORK
-            </Button>
-            <Button size="lg" variant="outline" className="h-12 px-8 rounded-full border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white uppercase tracking-wider text-xs font-bold">
-              OPPORTUNITIES
-            </Button>
+            <Link href="https://discord.gg/superteammy" target="_blank">
+              <Button size="lg" className="bg-white text-black hover:bg-white/90 font-bold h-12 px-8 rounded-full uppercase">
+                JOIN NETWORK
+              </Button>
+            </Link>
+            <Link href="#events">
+              <Button size="lg" variant="outline" className="h-12 px-8 rounded-full border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white uppercase tracking-wider text-xs font-bold">
+                OPPORTUNITIES
+              </Button>
+            </Link>
           </div>
         </div>
 

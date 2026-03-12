@@ -22,7 +22,7 @@ export default function EventSection() {
             <a 
               href="https://lu.ma/superteammy" 
               target="_blank" 
-              className="inline-flex items-center gap-3 text-xs font-code font-bold uppercase tracking-[2px] px-10 py-5 rounded-full border border-white/10 bg-white/5 hover:bg-[#9945FF] hover:text-black hover:border-[#9945FF] transition-all duration-300 group"
+              className="inline-flex items-center gap-3 text-xs font-code font-bold uppercase tracking-[2px] px-10 py-5 rounded-full border border-white/10 bg-white/5 hover:bg-[#9945FF] hover:text-black hover:border-[#9945FF] transition-all duration-300 group shadow-lg hover:shadow-[#9945FF]/20"
             >
               View Full Calendar
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
