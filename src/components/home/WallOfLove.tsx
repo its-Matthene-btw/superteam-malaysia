@@ -3,7 +3,7 @@
 
 import { useRef } from 'react';
 import Image from 'next/image';
-import { MessageSquare, Quote } from 'lucide-react';
+import { MessageSquare, Quote, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Testimonial } from '@/types/database';
 
@@ -88,9 +88,13 @@ export default function WallOfLove({ testimonials }: { testimonials: Testimonial
       <div className="max-w-[1400px] mx-auto border-x border-white/10">
         <div className="flex flex-col gap-6 mb-24 px-10 pt-32 lg:pt-48">
           <div className="pill-badge mb-6"><span>✦</span> Wall of Love</div>
-          <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
-            Community <span className="text-[#9945FF]">Voices</span>
+          <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white mb-8">
+            REAL BUILDERS. REAL STORIES.<br />
+            <span className="text-[#9945FF]">THE ALPHA SITS IN OUR CHATS.</span>
           </h2>
+          <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+            Don't just take our word for it. See what founders, developers, and ecosystem participants are saying about their experience building with Superteam Malaysia.
+          </p>
         </div>
 
         <div className="border-t border-b border-white/10 overflow-hidden">
