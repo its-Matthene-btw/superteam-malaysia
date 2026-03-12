@@ -22,9 +22,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { getMembers, createMember, updateMember, deleteMember, uploadAvatar } from '@/services/members';
+import { getMembers, createMember, updateMember, deleteMember } from '@/services/members';
 import { Member } from '@/types/database';
-import { Plus, Edit2, Trash2, User, Star, Upload, Link as LinkIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, User, Star, Link as LinkIcon } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -105,24 +105,6 @@ export default function MembersAdmin() {
         fetchMembers();
       } catch (error) {
         toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete member.' });
-      }
-    }
-  };
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      try {
-        const url = await uploadAvatar(file);
-        setFormData({ ...formData, avatar_url: url });
-        toast({ title: 'Success', description: 'Avatar uploaded to storage.' });
-      } catch (error: any) {
-        console.error(error);
-        toast({ 
-          variant: 'destructive', 
-          title: 'Upload Failed', 
-          description: error.message || 'Check if Storage RLS is configured in Supabase.' 
-        });
       }
     }
   };
@@ -281,26 +263,15 @@ export default function MembersAdmin() {
                   <div className="flex-1 space-y-4">
                     <div className="space-y-1">
                       <Label className="text-[9px] uppercase tracking-tighter text-muted-foreground flex items-center gap-1">
-                        <LinkIcon className="w-2 h-2" /> Direct URL
+                        <LinkIcon className="w-2 h-2" /> Image Link (External)
                       </Label>
                       <Input 
-                        placeholder="https://picsum.photos/..." 
+                        placeholder="https://picsum.photos/seed/..." 
                         value={formData.avatar_url || ''}
                         onChange={(e) => setFormData({...formData, avatar_url: e.target.value})}
-                        className="glass border-white/10 h-8 text-xs"
+                        className="glass border-white/10 h-10 text-xs"
                       />
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <Label className="text-[9px] uppercase tracking-tighter text-muted-foreground flex items-center gap-1">
-                        <Upload className="w-2 h-2" /> Upload to Supabase
-                      </Label>
-                      <Input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={handleImageUpload} 
-                        className="glass border-white/10 cursor-pointer text-[10px] h-8 file:bg-white/10 file:text-white file:border-0" 
-                      />
+                      <p className="text-[9px] text-muted-foreground mt-1 italic">Provide a direct link to an image (Unsplash, Picsum, etc.)</p>
                     </div>
                   </div>
                 </div>

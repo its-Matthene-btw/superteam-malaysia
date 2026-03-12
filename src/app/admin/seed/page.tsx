@@ -5,7 +5,7 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { seedDatabase } from '@/lib/supabase/seed';
-import { Database, AlertCircle, CheckCircle2, Copy, Terminal, ShieldCheck } from 'lucide-react';
+import { Database, AlertCircle, CheckCircle2, Copy, ShieldCheck } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 export default function SeedPage() {
@@ -85,14 +85,7 @@ CREATE POLICY "Allow auth all" ON stats FOR ALL TO authenticated USING (true) WI
 CREATE POLICY "Allow auth all" ON members FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Allow auth all" ON events FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Allow auth all" ON partners FOR ALL TO authenticated USING (true) WITH CHECK (true);
-CREATE POLICY "Allow auth all" ON testimonials FOR ALL TO authenticated USING (true) WITH CHECK (true);
-
--- 5. UNLOCK STORAGE BUCKETS (Run this to fix Upload Errors)
--- Make sure buckets 'avatars' and 'logos' are created in the Storage tab first.
-CREATE POLICY "Public Access" ON storage.objects FOR SELECT USING ( bucket_id IN ('avatars', 'logos') );
-CREATE POLICY "Authenticated Upload" ON storage.objects FOR INSERT TO authenticated WITH CHECK ( bucket_id IN ('avatars', 'logos') );
-CREATE POLICY "Authenticated Update" ON storage.objects FOR UPDATE TO authenticated USING ( bucket_id IN ('avatars', 'logos') );
-CREATE POLICY "Authenticated Delete" ON storage.objects FOR DELETE TO authenticated USING ( bucket_id IN ('avatars', 'logos') );`;
+CREATE POLICY "Allow auth all" ON testimonials FOR ALL TO authenticated USING (true) WITH CHECK (true);`;
 
   const copySql = () => {
     navigator.clipboard.writeText(sqlSchema);
@@ -126,7 +119,7 @@ CREATE POLICY "Authenticated Delete" ON storage.objects FOR DELETE TO authentica
           <h1 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-white">
             DATABASE <span className="text-primary">SETUP</span>
           </h1>
-          <p className="text-muted-foreground mt-2">Unlock your CMS tables and Storage buckets with proper security policies.</p>
+          <p className="text-muted-foreground mt-2">Unlock your CMS tables with proper security policies. Note: Storage buckets are disabled; use direct image links.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -138,7 +131,7 @@ CREATE POLICY "Authenticated Delete" ON storage.objects FOR DELETE TO authentica
             </CardHeader>
             <CardContent className="p-6 space-y-4 flex-1 flex flex-col">
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Run this in your **Supabase SQL Editor** to create tables and **fix upload permissions**.
+                Run this in your **Supabase SQL Editor** to create tables and set permissions.
               </p>
               <div className="relative flex-1 group">
                 <pre className="p-4 rounded bg-black/50 border border-white/5 text-[10px] font-code text-primary h-[400px] overflow-y-auto whitespace-pre-wrap">
@@ -164,7 +157,7 @@ CREATE POLICY "Authenticated Delete" ON storage.objects FOR DELETE TO authentica
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Inject the initial ecosystem content once policies are active.
+                Inject the initial ecosystem content once policies are active. This will wipe previous data.
               </p>
               
               <div className="mt-auto">
@@ -202,7 +195,6 @@ CREATE POLICY "Authenticated Delete" ON storage.objects FOR DELETE TO authentica
                           <li key={i}>ERR: {err}</li>
                         ))}
                       </ul>
-                      <p className="text-[9px] text-muted-foreground italic mt-2">If you see RLS errors, verify you ran the policies in the SQL Editor.</p>
                     </div>
                   )}
                 </div>

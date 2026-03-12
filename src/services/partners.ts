@@ -25,11 +25,3 @@ export async function deletePartner(id: string) {
   const { error } = await supabase.from('partners').delete().eq('id', id);
   if (error) throw error;
 }
-
-export async function uploadLogo(file: File) {
-  const fileName = `${Date.now()}-${file.name}`;
-  const { data, error } = await supabase.storage.from('logos').upload(fileName, file);
-  if (error) throw error;
-  const { data: { publicUrl } } = supabase.storage.from('logos').getPublicUrl(data.path);
-  return publicUrl;
-}

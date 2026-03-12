@@ -21,9 +21,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { getPartners, createPartner, updatePartner, deletePartner, uploadLogo } from '@/services/partners';
+import { getPartners, createPartner, updatePartner, deletePartner } from '@/services/partners';
 import { Partner } from '@/types/database';
-import { Plus, Edit2, Trash2, Image as ImageIcon, Link as LinkIcon, Upload } from 'lucide-react';
+import { Plus, Edit2, Trash2, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from '@/hooks/use-toast';
 
@@ -90,23 +90,6 @@ export default function PartnersAdmin() {
         fetchPartners();
       } catch (error) {
         toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete partner.' });
-      }
-    }
-  };
-
-  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      try {
-        const url = await uploadLogo(file);
-        setFormData({ ...formData, logo_url: url });
-        toast({ title: 'Success', description: 'Logo uploaded to storage.' });
-      } catch (error: any) {
-        toast({ 
-          variant: 'destructive', 
-          title: 'Upload Failed', 
-          description: error.message || 'Check storage policies in Supabase.' 
-        });
       }
     }
   };
@@ -225,21 +208,15 @@ export default function PartnersAdmin() {
                   <div className="space-y-3">
                     <div className="space-y-1">
                       <Label className="text-[9px] uppercase tracking-tighter text-muted-foreground flex items-center gap-1">
-                        <LinkIcon className="w-2 h-2" /> Direct Image Link
+                        <LinkIcon className="w-2 h-2" /> Direct Logo Link
                       </Label>
                       <Input 
                         placeholder="Paste image URL here..." 
                         value={formData.logo_url || ''}
                         onChange={(e) => setFormData({...formData, logo_url: e.target.value})}
-                        className="glass border-white/10 h-8 text-xs"
+                        className="glass border-white/10 h-10 text-xs"
                       />
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <Label className="text-[9px] uppercase tracking-tighter text-muted-foreground flex items-center gap-1">
-                        <Upload className="w-2 h-2" /> Upload File
-                      </Label>
-                      <Input type="file" accept="image/*" onChange={handleLogoUpload} className="glass border-white/10 text-[10px] h-8 file:bg-white/10 file:text-white file:border-0" />
+                      <p className="text-[9px] text-muted-foreground mt-1 italic">Provide a link to a transparent PNG or SVG logo.</p>
                     </div>
                   </div>
                 </div>

@@ -31,11 +31,3 @@ export async function deleteMember(id: string) {
   const { error } = await supabase.from('members').delete().eq('id', id);
   if (error) throw error;
 }
-
-export async function uploadAvatar(file: File) {
-  const fileName = `${Date.now()}-${file.name}`;
-  const { data, error } = await supabase.storage.from('avatars').upload(fileName, file);
-  if (error) throw error;
-  const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(data.path);
-  return publicUrl;
-}
