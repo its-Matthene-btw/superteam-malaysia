@@ -1,5 +1,6 @@
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/home/Hero';
+import EcosystemPartners from '@/components/home/EcosystemPartners';
 import EventSection from '@/components/home/EventSection';
 import CommunityCarousel from '@/components/home/CommunityCarousel';
 import WallOfLove from '@/components/home/WallOfLove';
@@ -13,6 +14,8 @@ export default function Home() {
       <Navbar />
       <Hero />
       
+      <EcosystemPartners />
+
       {/* Framed Mission Layout */}
       <section id="mission" className="bg-black">
         {/* Row 1 */}
