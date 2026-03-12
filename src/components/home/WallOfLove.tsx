@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { Twitter, MessageSquare, Heart, Repeat2, Quote } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -209,8 +209,8 @@ function WallCard({ testimonial }: { testimonial: Testimonial }) {
 export default function WallOfLove() {
   return (
     <section className="wall-section w-full bg-black border-t border-white/10">
-      <div className="header-wrapper max-w-[1400px] mx-auto pt-20 border-x border-white/10">
-        <div className="flex flex-col gap-6 mb-10 px-10">
+      <div className="max-w-[1400px] mx-auto border-x border-white/10">
+        <div className="flex flex-col gap-6 mb-10 px-10 pt-20">
           <div className="pill-badge mb-6"><span>✦</span> Wall of Love</div>
           <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
             Community<br />Voices.
@@ -225,13 +225,13 @@ export default function WallOfLove() {
             <p>Don't just take our word for it. See what founders, developers, and ecosystem participants are saying about their experience building with Superteam Malaysia.</p>
           </div>
         </div>
-      </div>
 
-      <div className="grid-full-width w-full border-y border-white/10 overflow-hidden">
-        <div className="wall-grid max-w-[1400px] mx-auto flex flex-wrap bg-transparent border-x border-white/10">
-          {testimonials.map((testimonial) => (
-            <WallCard key={testimonial.id} testimonial={testimonial} />
-          ))}
+        <div className="border-t border-b border-white/10 overflow-hidden">
+          <div className="wall-grid flex flex-wrap bg-transparent">
+            {testimonials.map((testimonial) => (
+              <WallCard key={testimonial.id} testimonial={testimonial} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
