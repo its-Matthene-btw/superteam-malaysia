@@ -159,3 +159,37 @@
 .wall-card:hover::before {
   opacity: 1;
 }
+
+/* --- FAQ & CTA HIGH FIDELITY --- */
+.faq-section {
+  @apply relative bg-black;
+}
+
+.pill-badge {
+  @apply inline-flex items-center gap-2 border border-white/15 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[2px] text-muted-foreground uppercase w-fit;
+}
+
+.faq-icon-custom {
+  @apply relative w-6 h-6 flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors;
+}
+
+.faq-icon-custom::before,
+.faq-icon-custom::after {
+  content: '';
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-current transition-transform duration-500;
+}
+
+.faq-icon-custom::before { @apply w-4 h-0.5; }
+.faq-icon-custom::after { @apply w-0.5 h-4; }
+
+.faq-item.active .faq-icon-custom::after {
+  @apply rotate-90;
+}
+
+.faq-item.active .faq-header {
+  @apply text-primary bg-white/[0.01];
+}
+
+.cta-sticky-box {
+  @apply lg:sticky lg:top-32;
+}
