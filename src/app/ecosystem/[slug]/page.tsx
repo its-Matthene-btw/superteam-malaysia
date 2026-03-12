@@ -1,12 +1,11 @@
-
 'use client';
 
 import { useEffect, useState, use } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
-import { EcosystemProject, EcosystemFeature } from '@/types/ecosystem';
-import { ArrowLeft, ExternalLink, Globe, LayoutGrid, Zap, Sparkles, Twitter, Github, Copy, CheckCircle2, Loader2, MessageSquare, ShieldCheck, Code2, Box } from 'lucide-react';
+import { EcosystemProject, EcosystemFeature, EcosystemOpportunity } from '@/types/ecosystem';
+import { ArrowLeft, ExternalLink, Globe, LayoutGrid, Zap, Sparkles, Twitter, Github, Copy, CheckCircle2, Loader2, MessageSquare, ShieldCheck, Code2, Box, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
@@ -17,6 +16,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
   const [project, setProject] = useState<EcosystemProject | null>(null);
   const [features, setFeatures] = useState<EcosystemFeature[]>([]);
   const [similar, setSimilar] = useState<EcosystemProject[]>([]);
+  const [opportunities, setOpportunities] = useState<EcosystemOpportunity[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [email, setEmail] = useState('');
@@ -26,7 +26,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data: pData, error: pError } = await supabase
+        const { data: pData } = await supabase
           .from('ecosystem_projects')
           .select('*')
           .eq('slug', slug)
@@ -35,19 +35,15 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
         if (pData) {
           setProject(pData);
           
-          const { data: fData } = await supabase
-            .from('ecosystem_features')
-            .select('*')
-            .eq('project_id', pData.id);
-          setFeatures(fData || []);
+          const [fData, sData, oData] = await Promise.all([
+            supabase.from('ecosystem_features').select('*').eq('project_id', pData.id),
+            supabase.from('ecosystem_projects').select('*').eq('category', pData.category).neq('id', pData.id).limit(3),
+            supabase.from('ecosystem_opportunities').select('*').order('created_at', { ascending: false }).limit(3)
+          ]);
 
-          const { data: sData } = await supabase
-            .from('ecosystem_projects')
-            .select('*')
-            .eq('category', pData.category)
-            .neq('id', pData.id)
-            .limit(3);
-          setSimilar(sData || []);
+          setFeatures(fData.data || []);
+          setSimilar(sData.data || []);
+          setOpportunities(oData.data || []);
         }
       } catch (err) {
         console.error(err);
@@ -238,6 +234,39 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
           </div>
         </article>
       </section>
+
+      {/* OPPORTUNITIES SECTION */}
+      {opportunities.length > 0 && (
+        <section className="py-32 border-b border-white/10">
+          <div className="max-w-[1400px] mx-auto px-10">
+            <div className="mb-16">
+              <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-4">// ACTIVE_OPPORTUNITIES</div>
+              <h2 className="text-5xl font-black uppercase tracking-tighter">Get Involved</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-white/10 border border-white/10">
+              {opportunities.map(opp => (
+                <div key={opp.id} className="bg-[#0a0a0c] p-12 flex flex-col justify-between group hover:bg-white/[0.02] transition-colors h-full">
+                  <div>
+                    <div className={cn(
+                      "inline-block px-4 py-1.5 rounded-full font-code text-[10px] font-bold uppercase tracking-widest mb-8 border",
+                      opp.type === 'Grant' ? "border-[#14F195] text-[#14F195]" : 
+                      opp.type === 'Bounty' ? "border-primary text-primary" : "border-yellow-500 text-yellow-500"
+                    )}>
+                      {opp.type}
+                    </div>
+                    <h3 className="text-3xl font-black uppercase tracking-tight mb-6">{opp.title}</h3>
+                    <p className="text-muted-foreground text-lg mb-10 leading-relaxed">{opp.description}</p>
+                  </div>
+                  <a href={opp.link || '#'} target="_blank" className="font-code text-xs font-bold uppercase tracking-widest flex items-center gap-3 group-hover:text-primary transition-colors">
+                    {opp.type === 'Bounty' ? 'View Bounty' : opp.type === 'Job' ? 'Apply on Superteam' : 'Apply for Grant'} <ArrowRight className="w-4 h-4" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* SIMILAR PROTOCOLS */}
       {similar.length > 0 && (
