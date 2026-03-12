@@ -1,3 +1,4 @@
+
 "use client";
 
 import { events } from '@/lib/data';

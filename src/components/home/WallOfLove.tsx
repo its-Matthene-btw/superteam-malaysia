@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRef, useState } from 'react';
@@ -213,7 +214,7 @@ export default function WallOfLove() {
         <div className="flex flex-col gap-6 mb-24 px-10 pt-32">
           <div className="pill-badge mb-6"><span>✦</span> Wall of Love</div>
           <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
-            Community<br />Voices.
+            Community<br /><span className="text-primary">Voices</span>.
           </h2>
         </div>
 

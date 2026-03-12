@@ -18,7 +18,6 @@ export default function Hero() {
     let width: number, height: number, dpr: number, radius: number, globeCenterY: number;
     const projection = d3.geoOrthographic().clipAngle(90);
 
-    // Significantly increased star count for a more dense and immersive background
     const numStars = 80000; 
     const maxZ = 2500;
     let stars: { x: number; y: number; z: number; speed: number }[] = [];
@@ -28,7 +27,6 @@ export default function Hero() {
       stars = [];
       for (let i = 0; i < numStars; i++) {
         stars.push({
-          // Spreading stars across a massive coordinate space to fill any screen size
           x: (Math.random() - 0.5) * width * 45,
           y: (Math.random() - 0.5) * height * 45,
           z: Math.random() * maxZ,
@@ -102,17 +100,14 @@ export default function Hero() {
       const time = Date.now();
       scrollVelocity *= 0.94;
 
-      // 1. Star Rendering
       context.fillStyle = "#ffffff";
       stars.forEach(star => {
-        // Star movement logic with scroll-reactive velocity
         star.z -= (star.speed + scrollVelocity * 6.5);
         if (star.z <= 1) star.z = maxZ;
 
         const px = (width / 2) + (star.x / star.z) * 1500;
         const py = globeCenterY + (star.y / star.z) * 1500;
 
-        // Render only stars within a slightly padded viewport for efficiency
         if (px >= -500 && px <= width + 500 && py >= -500 && py <= height + 1500) {
           const alpha = 1 - (star.z / maxZ);
           context.globalAlpha = alpha;
@@ -125,7 +120,6 @@ export default function Hero() {
 
       const currentScale = projection.scale();
 
-      // 2. Globe Sphere
       context.globalAlpha = 1;
       context.beginPath();
       context.arc(width / 2, globeCenterY, currentScale, 0, 2 * Math.PI);
@@ -136,7 +130,6 @@ export default function Hero() {
       context.fillStyle = grad;
       context.fill();
 
-      // Glowing Neon Atmosphere Rim
       context.shadowBlur = 60 + (scrollVelocity * 20);
       context.shadowColor = '#9945FF';
       context.strokeStyle = 'rgba(153, 69, 255, 0.9)';
@@ -144,7 +137,6 @@ export default function Hero() {
       context.stroke();
       context.shadowBlur = 0;
 
-      // 3. World Dots
       if (landFeatures) {
         allDots.forEach(dot => {
           const projected = projection([dot.lng, dot.lat]);
@@ -172,16 +164,13 @@ export default function Hero() {
 
   return (
     <section className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden">
-      {/* Background radial gradient to fade the globe edge */}
       <div className="absolute inset-0 bg-gradient-radial from-[#1a083a] via-black to-black opacity-80" />
-
-      {/* Centered radial gradient "black box" for text focus - 75% to 0% transparency */}
       <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_center,_rgba(0,0,0,0.75)_0%,_transparent_70%)]" />
 
       <div className="relative z-20 text-center max-w-4xl px-6 pointer-events-auto">
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold mb-6 leading-[1.1] tracking-tight text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.5)]">
           Malaysia’s Home <br /> 
-          for Solana Builders
+          for Solana <span className="text-primary">Builders</span>
         </h1>
 
         <p className="max-w-xl mx-auto text-lg text-[#a1a1aa] mb-10 leading-relaxed">

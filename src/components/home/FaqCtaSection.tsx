@@ -14,7 +14,7 @@ export default function FaqCtaSection() {
       <div className="header-wrapper max-w-[1400px] mx-auto px-10 py-20 border-x border-white/10">
         <div className="pill-badge mb-6"><span>✦</span> KNOWLEDGE BASE</div>
         <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
-          Have Questions?
+          Have <span className="text-primary">Questions?</span>
         </h2>
       </div>
 

@@ -69,7 +69,7 @@ export default function CommunityCarousel() {
           <div className="flex flex-col gap-6 mb-24">
             <div className="pill-badge mb-6"><span>✦</span> THE COMMUNITY</div>
             <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none max-w-3xl text-white">
-              A Team of<br />Web3 Experts.
+              A Team of<br />Web3 <span className="text-primary">Experts</span>.
             </h2>
           </div>
 
