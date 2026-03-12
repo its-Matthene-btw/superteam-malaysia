@@ -52,17 +52,18 @@ export default function FaqCtaSection() {
           </div>
 
           {/* CTA Column */}
-          <div className="cta-column bg-[#050505] relative overflow-hidden flex flex-col min-h-[500px] lg:min-h-0">
-             <div className="cta-bg-wrapper absolute inset-0 pointer-events-none opacity-50">
+          <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0">
+             {/* Background Glow Wrapper */}
+             <div className="cta-bg-wrapper absolute inset-0 pointer-events-none overflow-hidden z-0">
                 <div className="absolute -bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px]" />
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
              </div>
              
-             <div className="cta-sticky-box p-10 lg:p-20 z-10">
-                <h2 className="text-6xl lg:text-7xl font-headline font-extrabold tracking-tighter leading-[1.1] mb-8">
+             <div className="cta-sticky-box p-10 lg:p-20 z-10 sticky top-24">
+                <h2 className="text-5xl lg:text-7xl font-headline font-extrabold tracking-tighter leading-[1.1] mb-8 uppercase">
                   BUILD<br />THE<br />FUTURE.
                 </h2>
-                <p className="text-xl text-muted-foreground mb-12 max-w-md leading-relaxed">
+                <p className="text-lg lg:text-xl text-muted-foreground mb-12 max-w-md leading-relaxed">
                   Ready to ship your next big idea on Solana? Get access to exclusive bounties, ecosystem funding, and the smartest builders in Malaysia.
                 </p>
                 <div className="flex flex-col gap-4 max-w-xs">

@@ -1,7 +1,6 @@
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/home/Hero';
 import EventSection from '@/components/home/EventSection';
-import EcosystemPartners from '@/components/home/EcosystemPartners';
 import CommunityCarousel from '@/components/home/CommunityCarousel';
 import WallOfLove from '@/components/home/WallOfLove';
 import FaqCtaSection from '@/components/home/FaqCtaSection';
@@ -149,7 +148,6 @@ export default function Home() {
       <CommunityCarousel />
       <WallOfLove />
       <FaqCtaSection />
-      <EcosystemPartners />
       <Footer />
     </main>
   );
