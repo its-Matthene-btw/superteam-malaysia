@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -68,7 +67,7 @@ export default function EventsPage() {
         <div className="relative bg-[#050505] overflow-hidden min-h-[400px] lg:min-h-full flex items-center justify-center">
           <div className="hologram-circle flex items-center justify-center relative">
              <div className="absolute inset-0 border border-dashed border-primary/40 rounded-full animate-[spin_20s_linear_infinite]" />
-             <div className="absolute w-48 h-48 border border-solana-green/40 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
+             <div className="absolute w-48 h-48 border border-dashed border-white/10 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
              <span className="font-code text-[10px] text-muted-foreground uppercase tracking-widest animate-flicker">CALENDAR_SYNC</span>
           </div>
         </div>
@@ -206,10 +205,6 @@ export default function EventsPage() {
           <p className="text-muted-foreground mb-10 leading-relaxed">Sync our entire schedule directly to your personal calendar.</p>
           
           <div className="relative aspect-video lg:flex-1 bg-black border border-white/10 rounded-xl overflow-hidden group">
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground font-code text-[10px] uppercase tracking-[4px] gap-4 bg-black/80 backdrop-blur-sm z-10 group-hover:opacity-0 transition-opacity">
-              <Calendar className="w-8 h-8 opacity-20" />
-              <span>[ LUMA_IFRAME_EMBED_PLACEHOLDER ]</span>
-            </div>
             <iframe src="https://lu.ma/embed/calendar/cal-SIn8K6uF6lXWp9n?compact=true" width="100%" height="100%" className="border-none invert grayscale" />
           </div>
         </div>
@@ -220,7 +215,6 @@ export default function EventsPage() {
           <p className="text-muted-foreground mb-10 leading-relaxed">Find the exact coordinates for our upcoming physical build stations.</p>
           
           <div className="relative aspect-video lg:flex-1 bg-black border border-white/10 rounded-xl overflow-hidden group">
-            {/* Overlay removed to make map always visible without non-hover state */}
             <iframe src="https://maps.google.com/maps?q=Kuala%20Lumpur&t=k&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" className="border-none invert grayscale" />
           </div>
         </div>
@@ -292,6 +286,12 @@ export default function EventsPage() {
         .hologram-circle { width: 300px; height: 300px; border-radius: 50%; border: 1px dashed #9945FF; box-shadow: inset 0 0 50px rgba(153,69,255,0.15), 0 0 50px rgba(153,69,255,0.15); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        
         @keyframes flicker {
           0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 1; }
           20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.4; }
