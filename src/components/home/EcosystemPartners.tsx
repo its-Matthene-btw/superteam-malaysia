@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -14,7 +15,7 @@ const partners = [
 export default function EcosystemPartners() {
   return (
     <section id="ecosystem" className="w-full bg-black border-b border-white/10">
-      <div className="max-w-[1400px] mx-auto border-x border-white/10 overflow-hidden">
+      <div className="w-full overflow-hidden">
         <div className="py-12 relative flex">
           <div className="animate-infinite-scroll flex items-center gap-12 px-6">
             {[...partners, ...partners, ...partners].map((partner, idx) => (
