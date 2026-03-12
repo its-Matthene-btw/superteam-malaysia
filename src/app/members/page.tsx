@@ -165,16 +165,16 @@ export default function MemberDirectory() {
     <main className="min-h-screen bg-black overflow-x-hidden">
       <Navbar />
       
-      {/* HERO SECTION - Now Full Width with no side borders */}
-      <section className="relative overflow-hidden bg-black border-b border-white/10 flex flex-col min-h-screen min-h-[100svh] min-[1201px]:block min-[1201px]:min-h-[750px]">
+      {/* HERO SECTION - Full Width Header */}
+      <section className="relative overflow-hidden bg-black border-b border-white/10 flex flex-col min-h-screen min-h-[100svh] min-[1201px]:block min-[1201px]:min-h-[750px] w-full">
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] bg-center [mask-image:linear-gradient(to_bottom,black_40%,transparent_100%)]" />
         <div className="absolute top-[-30%] left-[20%] w-[1000px] h-[800px] bg-[radial-gradient(circle,rgba(153,69,255,0.25)_0%,transparent_70%)] rounded-full pointer-events-none z-0" />
         
-        {/* Main Content Area - Occupies full width, responsive flex stack */}
+        {/* Main Content Area - 3 Zone Vertical Flex System for Tablet/Mobile */}
         <div className="flex flex-col flex-grow relative z-10 min-[1201px]:flex-row min-[1201px]:h-full min-[1201px]:min-h-[750px] w-full">
           
-          {/* ZONE 1: TEXT BLOCK - Centered for tablet/mobile, Left for desktop */}
-          <div className="flex-shrink-0 pt-40 pb-10 px-6 text-center min-[1201px]:pt-48 min-[1201px]:pb-32 min-[1201px]:w-3/5 min-[1201px]:text-left min-[1201px]:flex min-[1201px]:flex-col min-[1201px]:justify-center min-[1201px]:px-20 z-10">
+          {/* ZONE 1: TEXT BLOCK (TOP) */}
+          <div className="flex-shrink-0 pt-32 pb-10 px-6 text-center min-[1201px]:pt-48 min-[1201px]:pb-32 min-[1201px]:w-3/5 min-[1201px]:text-left min-[1201px]:flex min-[1201px]:flex-col min-[1201px]:justify-center min-[1201px]:px-20 z-10">
             <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md inline-flex mx-auto min-[1201px]:mx-0">
               <span>✦</span> THE DIRECTORY
             </div>
@@ -187,13 +187,13 @@ export default function MemberDirectory() {
             </p>
           </div>
           
-          {/* ZONE 2: GLOBE AREA - Flex-grow to fill remaining space between text and marquee */}
+          {/* ZONE 2: GLOBE AREA (MIDDLE - FLEX GROW) */}
           <div className="flex-grow relative w-full min-h-[400px] min-[1201px]:absolute min-[1201px]:inset-0 min-[1201px]:z-0 pointer-events-auto overflow-hidden">
             <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing opacity-80" />
           </div>
         </div>
 
-        {/* ZONE 3: MARQUEE TICKER (Locked to absolute bottom) */}
+        {/* ZONE 3: MARQUEE TICKER (BOTTOM - FLEX SHRINK 0) */}
         <div className="flex-shrink-0 w-full bg-[#9945FF] py-4 overflow-hidden relative z-20 border-y border-white/10 mt-auto">
           <div className="flex whitespace-nowrap animate-infinite-scroll">
             {Array(4).fill(null).map((_, i) => (
@@ -249,10 +249,10 @@ export default function MemberDirectory() {
         </div>
       </section>
 
-      {/* MEMBER GRID SECTION - EDGE TO EDGE */}
+      {/* MEMBER GRID SECTION - Maximum 4 cards per row */}
       <section className="bg-black w-screen max-w-none">
         <div className="w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-[1px] bg-white/10 border-b border-white/10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border-b border-white/10">
             {displayedMembers.map((member) => (
               <div 
                 key={member.id} 
