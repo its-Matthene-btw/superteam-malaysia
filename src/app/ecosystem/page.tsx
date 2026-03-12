@@ -6,7 +6,8 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
 import { EcosystemProject, EcosystemCategory, EcosystemOpportunity } from '@/types/ecosystem';
-import { ArrowRight, Loader2, Search, Zap, ExternalLink, Globe, LayoutGrid, Box } from 'lucide-react';
+import { NewsPost } from '@/types/database';
+import { ArrowRight, Loader2, Search, Zap, ExternalLink, Globe, LayoutGrid, Box, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -15,6 +16,7 @@ export default function EcosystemPage() {
   const [projects, setProjects] = useState<EcosystemProject[]>([]);
   const [categories, setCategories] = useState<EcosystemCategory[]>([]);
   const [opportunities, setOpportunities] = useState<EcosystemOpportunity[]>([]);
+  const [randomPost, setRandomPost] = useState<NewsPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,14 +25,21 @@ export default function EcosystemPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [p, c, o] = await Promise.all([
+        const [p, c, o, n] = await Promise.all([
           supabase.from('ecosystem_projects').select('*').order('name'),
           supabase.from('ecosystem_categories').select('*').order('name'),
-          supabase.from('ecosystem_opportunities').select('*').order('created_at', { ascending: false })
+          supabase.from('ecosystem_opportunities').select('*').order('created_at', { ascending: false }),
+          supabase.from('news').select('*').order('published_at', { ascending: false }).limit(5)
         ]);
+        
         setProjects(p.data || []);
         setCategories(c.data || []);
         setOpportunities(o.data || []);
+        
+        if (n.data && n.data.length > 0) {
+          const randomIndex = Math.floor(Math.random() * n.data.length);
+          setRandomPost(n.data[randomIndex]);
+        }
       } catch (err) {
         console.error(err);
       } finally {
@@ -165,38 +174,44 @@ export default function EcosystemPage() {
         </div>
       </section>
 
-      {/* DEEP DIVE SECTION (BACKPACK) */}
-      <section className="border-b border-white/10">
-        <div className="grid grid-cols-1 lg:grid-cols-2">
-          <div className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center">
-            <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-8">// DEEP_DIVE_PREVIEW</div>
-            <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-10">
-              Backpack:<br /><span className="text-primary">The xNFT Revolution</span>
-            </h2>
-            <p className="text-xl text-muted-foreground mb-12 max-w-lg leading-relaxed">
-              Backpack isn't just a wallet; it's an operating system for Web3. Discover how xNFTs allow developers to build native applications directly within the wallet interface.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link href="/news/blueprint-2026" className="px-10 py-5 bg-white text-black font-code font-bold uppercase tracking-widest text-xs hover:bg-primary hover:text-white transition-all">
-                Read Case Study
-              </Link>
-              <a href="https://backpack.app" target="_blank" className="px-10 py-5 border border-white/10 text-white font-code font-bold uppercase tracking-widest text-xs hover:bg-white/5 transition-all">
-                Visit Site
-              </a>
+      {/* RANDOM DEEP DIVE SECTION */}
+      {randomPost && (
+        <section className="border-b border-white/10">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            <div className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center">
+              <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-8">// DEEP_DIVE_PREVIEW</div>
+              <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-10">
+                {randomPost.title.split(' ').slice(0, 2).join(' ')}:<br />
+                <span className="text-primary">{randomPost.title.split(' ').slice(2).join(' ')}</span>
+              </h2>
+              <p className="text-xl text-muted-foreground mb-12 max-w-lg leading-relaxed">
+                {randomPost.excerpt || "Discover how builders in the Malaysian ecosystem are scaling world-class protocols on Solana."}
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link href={`/news/${randomPost.slug}`} className="px-10 py-5 bg-white text-black font-code font-bold uppercase tracking-widest text-xs hover:bg-primary hover:text-white transition-all">
+                  Read Dispatch
+                </Link>
+                <Link href="/news" className="px-10 py-5 border border-white/10 text-white font-code font-bold uppercase tracking-widest text-xs hover:bg-white/5 transition-all">
+                  Browse Terminal
+                </Link>
+              </div>
+            </div>
+            <div className="relative bg-[#050505] min-h-[500px] overflow-hidden group">
+              {randomPost.image_url ? (
+                <Image 
+                  src={randomPost.image_url} 
+                  alt={randomPost.title} 
+                  fill 
+                  className="object-cover grayscale opacity-40 mix-blend-screen group-hover:opacity-60 group-hover:scale-105 transition-all duration-1000"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(153,69,255,0.2)_0%,transparent_70%)]" />
+              )}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0a0a0c_100%)] pointer-events-none" />
             </div>
           </div>
-          <div className="relative bg-[#050505] min-h-[500px] overflow-hidden group">
-            <Image 
-              src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=1200" 
-              alt="Matrix Abstract" 
-              fill 
-              className="object-cover grayscale opacity-40 mix-blend-screen group-hover:opacity-60 group-hover:scale-105 transition-all duration-1000"
-              data-ai-hint="matrix code"
-            />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0a0a0c_100%)] pointer-events-none" />
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* OPPORTUNITIES */}
       <section className="py-32 border-b border-white/10">
