@@ -222,7 +222,7 @@ export default function EventsAdmin() {
             <div className="space-y-2">
               <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Event Title</Label>
               <Input 
-                value={formData.title ?? ''} 
+                value={formData.title} 
                 onChange={(e) => setFormData({...formData, title: e.target.value})} 
                 className="glass border-white/10 h-12" 
                 required 
@@ -233,7 +233,7 @@ export default function EventsAdmin() {
               <div className="space-y-2">
                 <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Location</Label>
                 <Input 
-                  value={formData.location ?? ''} 
+                  value={formData.location} 
                   onChange={(e) => setFormData({...formData, location: e.target.value})} 
                   className="glass border-white/10" 
                   placeholder="e.g. KLCC, Virtual"
@@ -289,7 +289,7 @@ export default function EventsAdmin() {
             <div className="space-y-2">
               <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Luma Link</Label>
               <Input 
-                value={formData.luma_url ?? ''} 
+                value={formData.luma_url} 
                 onChange={(e) => setFormData({...formData, luma_url: e.target.value})} 
                 className="glass border-white/10" 
                 placeholder="lu.ma/..."
@@ -316,7 +316,7 @@ export default function EventsAdmin() {
                   </Label>
                   <Input 
                     placeholder="https://images.unsplash.com/..." 
-                    value={formData.image_url ?? ''}
+                    value={formData.image_url}
                     onChange={(e) => setFormData({...formData, image_url: e.target.value})}
                     className="glass border-white/10 h-10 text-xs"
                   />
@@ -328,7 +328,7 @@ export default function EventsAdmin() {
             <div className="space-y-2">
               <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Description</Label>
               <Textarea 
-                value={formData.description ?? ''} 
+                value={formData.description} 
                 onChange={(e) => setFormData({...formData, description: e.target.value})} 
                 className="glass border-white/10 min-h-[120px]" 
               />
