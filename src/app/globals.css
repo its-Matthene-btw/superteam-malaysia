@@ -134,3 +134,8 @@
     @apply border-l-0 border-b border-white/10 min-h-0 py-5 px-4;
   }
 }
+
+/* --- Event High Fidelity Styling --- */
+.event-high-fidelity-card {
+  @apply glass rounded-[32px] overflow-hidden border-white/5 transition-all duration-500 hover:border-primary/40 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_40px_rgba(153,69,255,0.1)];
+}
