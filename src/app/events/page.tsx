@@ -51,7 +51,7 @@ export default function EventsPage() {
           <div className="relative z-10">
             <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-6">// SUPERTEAM_MY_EVENTS</div>
             <h1 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10 uppercase">
-              Discover the<br />Ecosystem.
+              Discover the<br />Events.
             </h1>
             <p className="text-xl text-muted-foreground max-w-lg leading-relaxed font-medium mb-12">
               Find hackathons, technical workshops, and builder meetups happening across the Solana ecosystem in Malaysia.
@@ -69,7 +69,7 @@ export default function EventsPage() {
           <div className="hologram-circle flex items-center justify-center relative">
              <div className="absolute inset-0 border border-dashed border-primary/40 rounded-full animate-[spin_20s_linear_infinite]" />
              <div className="absolute w-48 h-48 border border-solana-green/40 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
-             <span className="font-code text-[10px] text-muted-foreground uppercase tracking-widest">CALENDAR_SYNC</span>
+             <span className="font-code text-[10px] text-muted-foreground uppercase tracking-widest animate-flicker">CALENDAR_SYNC</span>
           </div>
         </div>
       </section>
@@ -220,10 +220,7 @@ export default function EventsPage() {
           <p className="text-muted-foreground mb-10 leading-relaxed">Find the exact coordinates for our upcoming physical build stations.</p>
           
           <div className="relative aspect-video lg:flex-1 bg-black border border-white/10 rounded-xl overflow-hidden group">
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground font-code text-[10px] uppercase tracking-[4px] gap-4 bg-black/80 z-10 group-hover:opacity-0 transition-opacity">
-              <MapPin className="w-8 h-8 opacity-20" />
-              <span>[ GOOGLE_MAPS_IFRAME_PLACEHOLDER ]</span>
-            </div>
+            {/* Overlay removed to make map always visible without non-hover state */}
             <iframe src="https://maps.google.com/maps?q=Kuala%20Lumpur&t=k&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" className="border-none invert grayscale" />
           </div>
         </div>
@@ -295,6 +292,13 @@ export default function EventsPage() {
         .hologram-circle { width: 300px; height: 300px; border-radius: 50%; border: 1px dashed #9945FF; box-shadow: inset 0 0 50px rgba(153,69,255,0.15), 0 0 50px rgba(153,69,255,0.15); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes flicker {
+          0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 1; }
+          20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.4; }
+        }
+        .animate-flicker {
+          animation: flicker 3s linear infinite;
+        }
       `}</style>
     </main>
   );
