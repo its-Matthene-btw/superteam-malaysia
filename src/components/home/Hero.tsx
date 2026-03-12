@@ -18,7 +18,7 @@ export default function Hero() {
     let width: number, height: number, dpr: number, radius: number, globeCenterY: number, globeCenterX: number;
     const projection = d3.geoOrthographic().clipAngle(90);
 
-    const numStars = 80000; 
+    const numStars = 12000; 
     const maxZ = 2500;
     let stars: { x: number; y: number; z: number; speed: number }[] = [];
     let scrollVelocity = 0;
@@ -43,19 +43,13 @@ export default function Hero() {
       height = container.clientHeight;
       dpr = window.devicePixelRatio || 1;
 
-      // Responsive logic matching the vertical flex system
-      if (window.innerWidth <= 768) {
-        // MOBILE: Center fully visible
-        globeCenterX = width / 2;
-        globeCenterY = height / 2;
-        radius = Math.min(width, height) * 0.45;
-      } else if (window.innerWidth <= 1200) {
-        // TABLET: Rising planet from bottom
+      // STABILITY RULE (768px - 1200px): Rising planet from bottom
+      if (window.innerWidth <= 1200) {
         globeCenterX = width / 2;
         globeCenterY = height;
         radius = Math.min(width * 0.5, height * 0.8);
       } else {
-        // DESKTOP: Half globe from right
+        // DESKTOP (>1200px): Half globe from right
         globeCenterX = width;
         globeCenterY = height * 0.5;
         radius = Math.max(width * 0.5, height) / 1.3;
@@ -182,9 +176,7 @@ export default function Hero() {
     <section className="relative w-full min-h-[100svh] flex flex-col bg-black overflow-hidden">
       <div className="absolute inset-0 bg-gradient-radial from-[#1a083a] via-black to-black opacity-80 z-0" />
       
-      {/* 3 Zone Vertical Flex System */}
       <div className="flex flex-col flex-grow relative z-10 w-full min-[1201px]:flex-row min-[1201px]:min-h-[750px]">
-        
         {/* ZONE 1: TEXT BLOCK */}
         <div className="flex-shrink-0 pt-32 pb-10 px-6 text-center min-[1201px]:pt-48 min-[1201px]:pb-32 min-[1201px]:w-3/5 min-[1201px]:text-left min-[1201px]:flex min-[1201px]:flex-col min-[1201px]:justify-center min-[1201px]:px-20 z-20">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold mb-6 leading-[1.1] tracking-tight text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.5)]">

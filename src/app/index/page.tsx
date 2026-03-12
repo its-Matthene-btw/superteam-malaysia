@@ -1,6 +1,3 @@
 
-import { redirect } from 'next/navigation';
-
-export default function IndexPage() {
-  redirect('/');
-}
+// This file is empty to resolve module conflict errors.
+export default function Deprecated() { return null; }
