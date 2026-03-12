@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -79,15 +80,23 @@ CREATE TABLE IF NOT EXISTS newsletter_subscribers (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 4. Enable RLS
+-- 4. Create Site Settings Table
+CREATE TABLE IF NOT EXISTS site_settings (
+  id text PRIMARY KEY,
+  value text,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+-- 5. Enable RLS
 ALTER TABLE ecosystem_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 
--- 5. Create Policies (Idempotent using DROP IF EXISTS)
+-- 6. Create Policies (Idempotent using DROP IF EXISTS)
 DROP POLICY IF EXISTS "Public Read Ecosystem" ON ecosystem_projects;
 CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
 
@@ -123,6 +132,12 @@ CREATE POLICY "Public Write News" ON newsletter_subscribers FOR INSERT WITH CHEC
 
 DROP POLICY IF EXISTS "Admin All News" ON newsletter_subscribers;
 CREATE POLICY "Admin All News" ON newsletter_subscribers FOR ALL TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Public Read Settings" ON site_settings;
+CREATE POLICY "Public Read Settings" ON site_settings FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin All Settings" ON site_settings;
+CREATE POLICY "Admin All Settings" ON site_settings FOR ALL TO authenticated USING (true);
 `;
 
   const copySql = () => {

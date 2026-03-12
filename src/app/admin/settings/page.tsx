@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
@@ -24,11 +25,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { getFAQs, createFAQ, updateFAQ, deleteFAQ } from '@/services/faqs';
 import { getSubscribers, deleteSubscriber } from '@/services/newsletter';
 import { FAQ, NewsletterSubscriber } from '@/types/database';
-import { Settings, Plus, Edit2, Trash2, HelpCircle, Mail, Download, Search, ArrowUpDown } from 'lucide-react';
+import { Settings, Plus, Edit2, Trash2, HelpCircle, Mail, Download, Search, Calendar, Save } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
+import { createClient } from '@/lib/supabase/client';
 
 export default function SettingsAdmin() {
+  const supabase = createClient();
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [subscribers, setSubscribers] = useState<NewsletterSubscriber[]>([]);
   const [loading, setLoading] = useState(true);
@@ -40,13 +42,36 @@ export default function SettingsAdmin() {
     order_index: 0
   });
 
+  // Global Settings
+  const [lumaCalendarUrl, setLumaCalendarUrl] = useState('');
+  const [savingSettings, setSavingSettings] = useState(false);
+
   // Newsletter states
   const [subscriberSearch, setSubscriberSearch] = useState('');
   const [subscriberSort, setSubscriberSort] = useState<'newest' | 'oldest' | 'email'>('newest');
 
   useEffect(() => {
     fetchData();
+    fetchGlobalSettings();
   }, []);
+
+  async function fetchGlobalSettings() {
+    const { data } = await supabase.from('site_settings').select('*').eq('id', 'luma_calendar_url').single();
+    if (data) setLumaCalendarUrl(data.value);
+  }
+
+  async function saveGlobalSettings() {
+    setSavingSettings(true);
+    try {
+      const { error } = await supabase.from('site_settings').upsert({ id: 'luma_calendar_url', value: lumaCalendarUrl });
+      if (error) throw error;
+      toast({ title: 'Success', description: 'Global settings updated.' });
+    } catch (e) {
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to save settings.' });
+    } finally {
+      setSavingSettings(false);
+    }
+  }
 
   async function fetchData() {
     try {
@@ -151,6 +176,37 @@ export default function SettingsAdmin() {
       </div>
 
       <div className="grid grid-cols-1 gap-16">
+        {/* Global Directory Config */}
+        <div className="space-y-8">
+          <div className="flex items-center gap-4 pb-6 border-b border-white/10">
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20 text-primary">
+              <Calendar className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold uppercase tracking-tight text-white">Directory <span className="text-muted-foreground">Config</span></h3>
+              <p className="text-xs text-muted-foreground uppercase tracking-widest font-code mt-1">Luma Calendar & Integrations</p>
+            </div>
+          </div>
+          
+          <div className="glass border-white/10 rounded-xl p-8 space-y-6">
+            <div className="space-y-2">
+              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Luma Calendar Embed URL</Label>
+              <div className="flex gap-4">
+                <Input 
+                  value={lumaCalendarUrl} 
+                  onChange={(e) => setLumaCalendarUrl(e.target.value)} 
+                  placeholder="https://lu.ma/embed/calendar/..."
+                  className="glass border-white/10 h-12 flex-1"
+                />
+                <Button onClick={saveGlobalSettings} disabled={savingSettings} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
+                  <Save className="w-4 h-4 mr-2" /> {savingSettings ? 'Saving...' : 'Save Settings'}
+                </Button>
+              </div>
+              <p className="text-[10px] text-muted-foreground italic mt-2">This URL will be used to generate the iframe on the Events page.</p>
+            </div>
+          </div>
+        </div>
+
         {/* Newsletter Section */}
         <div className="space-y-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-white/10">
@@ -276,25 +332,6 @@ export default function SettingsAdmin() {
               </TableBody>
             </Table>
           </div>
-        </div>
-        
-        {/* Advanced Config Section (Disabled) */}
-        <div className="p-10 border border-white/10 glass rounded-3xl bg-white/[0.02] opacity-50">
-           <div className="flex items-center gap-4 mb-8">
-              <Settings className="w-6 h-6 text-muted-foreground" />
-              <h3 className="text-xl font-bold uppercase tracking-tight text-white">Advanced <span className="text-muted-foreground">Configuration</span></h3>
-           </div>
-           <p className="text-sm text-muted-foreground mb-10 italic">Global SEO and metadata settings are currently locked for core maintenance.</p>
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pointer-events-none">
-              <div className="space-y-2">
-                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Site Title</Label>
-                <Input value="Superteam Connect Malaysia" disabled className="bg-white/5 border-white/10" />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Primary Accent</Label>
-                <Input value="#9945FF" disabled className="bg-white/5 border-white/10" />
-              </div>
-           </div>
         </div>
       </div>
 

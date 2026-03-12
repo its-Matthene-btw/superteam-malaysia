@@ -19,8 +19,10 @@ export interface Event {
   location: string | null;
   event_date: string;
   luma_url: string | null;
+  image_url: string | null;
   status: 'upcoming' | 'past';
   featured: boolean;
+  category: string | null;
   created_at: string;
 }
 

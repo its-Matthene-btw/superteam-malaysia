@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -35,8 +36,7 @@ export default function EventsPage() {
 
   const filteredUpcoming = upcoming.filter(e => {
     if (activeFilter === 'all') return true;
-    return e.description?.toLowerCase().includes(activeFilter.toLowerCase()) || 
-           e.title.toLowerCase().includes(activeFilter.toLowerCase());
+    return e.category === activeFilter;
   });
 
   return (
@@ -103,7 +103,7 @@ export default function EventsPage() {
             </div>
             <div className="relative bg-zinc-900 overflow-hidden min-h-[400px] lg:min-h-full group">
               <Image 
-                src={`https://picsum.photos/seed/${featured.id}/1200/800`} 
+                src={featured.image_url || `https://picsum.photos/seed/${featured.id}/1200/800`} 
                 alt={featured.title} 
                 fill 
                 className="object-cover grayscale contrast-125 opacity-60 mix-blend-screen group-hover:scale-105 transition-all duration-1000"
@@ -159,13 +159,13 @@ export default function EventsPage() {
               <div key={event.id} className="bg-[#0a0a0c] flex flex-col group hover:bg-[#050505] transition-all duration-500 relative overflow-hidden">
                 <div className="relative h-56 overflow-hidden border-b border-white/10">
                   <Image 
-                    src={`https://picsum.photos/seed/${event.id}/800/600`} 
+                    src={event.image_url || `https://picsum.photos/seed/${event.id}/800/600`} 
                     alt={event.title} 
                     fill 
                     className="object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
                   />
                   <div className="absolute top-4 right-4 bg-black/80 border border-white/10 px-3 py-1 font-code text-[9px] text-primary uppercase tracking-widest">
-                    {event.status}
+                    {event.category || 'EVENT'}
                   </div>
                 </div>
                 <div className="p-8 flex flex-col flex-1">
@@ -246,7 +246,7 @@ export default function EventsPage() {
               <div key={event.id} className="bg-[#0a0a0c] flex flex-col opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500">
                 <div className="relative h-40 overflow-hidden border-b border-white/10">
                   <Image 
-                    src={`https://picsum.photos/seed/${event.id}/600/400`} 
+                    src={event.image_url || `https://picsum.photos/seed/${event.id}/600/400`} 
                     alt={event.title} 
                     fill 
                     className="object-cover" 

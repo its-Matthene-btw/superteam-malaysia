@@ -24,10 +24,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getEvents, createEvent, updateEvent, deleteEvent } from '@/services/events';
 import { Event } from '@/types/database';
-import { Plus, Edit2, Trash2, Calendar, MapPin, Star } from 'lucide-react';
+import { Plus, Edit2, Trash2, Calendar, MapPin, Star, Image as ImageIcon } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function EventsAdmin() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -40,7 +41,9 @@ export default function EventsAdmin() {
     location: '',
     event_date: '',
     luma_url: '',
+    image_url: '',
     status: 'upcoming',
+    category: 'Meetup',
     featured: false
   });
 
@@ -62,7 +65,17 @@ export default function EventsAdmin() {
   const handleOpenModal = (event?: Event) => {
     if (event) {
       setEditingEvent(event);
-      setFormData(event);
+      setFormData({
+        title: event.title ?? '',
+        description: event.description ?? '',
+        location: event.location ?? '',
+        event_date: event.event_date ?? '',
+        luma_url: event.luma_url ?? '',
+        image_url: event.image_url ?? '',
+        status: event.status ?? 'upcoming',
+        category: event.category ?? 'Meetup',
+        featured: event.featured ?? false
+      });
     } else {
       setEditingEvent(null);
       setFormData({
@@ -71,7 +84,9 @@ export default function EventsAdmin() {
         location: '',
         event_date: '',
         luma_url: '',
+        image_url: '',
         status: 'upcoming',
+        category: 'Meetup',
         featured: false
       });
     }
@@ -140,13 +155,22 @@ export default function EventsAdmin() {
             ) : events.map((event) => (
               <TableRow key={event.id} className="border-white/5 hover:bg-white/[0.02] transition-colors">
                 <TableCell className="py-6 pl-8">
-                  <div className="flex flex-col">
-                    <span className="font-bold text-white uppercase tracking-tight text-lg">{event.title}</span>
-                    {event.featured && (
-                      <span className="text-[9px] text-secondary font-bold uppercase tracking-widest mt-1 flex items-center gap-1">
-                        <Star className="w-2.5 h-2.5 fill-secondary" /> Spotlight Event
-                      </span>
-                    )}
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-12 h-12 rounded bg-white/5 overflow-hidden border border-white/10 flex-shrink-0">
+                      {event.image_url ? (
+                        <Image src={event.image_url} alt="" fill className="object-cover grayscale" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-white/20"><ImageIcon className="w-5 h-5" /></div>
+                      )}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white uppercase tracking-tight text-lg">{event.title}</span>
+                      {event.featured && (
+                        <span className="text-[9px] text-secondary font-bold uppercase tracking-widest mt-1 flex items-center gap-1">
+                          <Star className="w-2.5 h-2.5 fill-secondary" /> Spotlight Event
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -194,7 +218,7 @@ export default function EventsAdmin() {
             <div className="space-y-2">
               <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Event Title</Label>
               <Input 
-                value={formData.title} 
+                value={formData.title ?? ''} 
                 onChange={(e) => setFormData({...formData, title: e.target.value})} 
                 className="glass border-white/10 h-12" 
                 required 
@@ -205,7 +229,7 @@ export default function EventsAdmin() {
               <div className="space-y-2">
                 <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Location</Label>
                 <Input 
-                  value={formData.location || ''} 
+                  value={formData.location ?? ''} 
                   onChange={(e) => setFormData({...formData, location: e.target.value})} 
                   className="glass border-white/10" 
                   placeholder="e.g. KLCC, Virtual"
@@ -225,18 +249,26 @@ export default function EventsAdmin() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Luma Link</Label>
-                <Input 
-                  value={formData.luma_url || ''} 
-                  onChange={(e) => setFormData({...formData, luma_url: e.target.value})} 
-                  className="glass border-white/10" 
-                  placeholder="lu.ma/..."
-                />
+                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Category</Label>
+                <Select 
+                  value={formData.category ?? 'Meetup'} 
+                  onValueChange={(val: any) => setFormData({...formData, category: val})}
+                >
+                  <SelectTrigger className="glass border-white/10">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="glass border-white/10">
+                    <SelectItem value="Hackathon">Hackathon</SelectItem>
+                    <SelectItem value="Workshop">Workshop</SelectItem>
+                    <SelectItem value="Meetup">Meetup</SelectItem>
+                    <SelectItem value="Community">Community</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
                 <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Status</Label>
                 <Select 
-                  value={formData.status} 
+                  value={formData.status ?? 'upcoming'} 
                   onValueChange={(val: any) => setFormData({...formData, status: val})}
                 >
                   <SelectTrigger className="glass border-white/10">
@@ -251,9 +283,29 @@ export default function EventsAdmin() {
             </div>
 
             <div className="space-y-2">
+              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Luma Link</Label>
+              <Input 
+                value={formData.luma_url ?? ''} 
+                onChange={(e) => setFormData({...formData, luma_url: e.target.value})} 
+                className="glass border-white/10" 
+                placeholder="lu.ma/..."
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Image URL</Label>
+              <Input 
+                value={formData.image_url ?? ''} 
+                onChange={(e) => setFormData({...formData, image_url: e.target.value})} 
+                className="glass border-white/10" 
+                placeholder="https://picsum.photos/..."
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Description</Label>
               <Textarea 
-                value={formData.description || ''} 
+                value={formData.description ?? ''} 
                 onChange={(e) => setFormData({...formData, description: e.target.value})} 
                 className="glass border-white/10 min-h-[120px]" 
               />
@@ -262,7 +314,7 @@ export default function EventsAdmin() {
             <div className="flex items-center space-x-2">
               <Checkbox 
                 id="featured-event" 
-                checked={formData.featured} 
+                checked={formData.featured ?? false} 
                 onCheckedChange={(checked) => setFormData({...formData, featured: !!checked})}
                 className="border-white/20 data-[state=checked]:bg-primary"
               />

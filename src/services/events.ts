@@ -1,3 +1,4 @@
+
 import { createClient } from '@/lib/supabase/client';
 import { Event } from '@/types/database';
 
