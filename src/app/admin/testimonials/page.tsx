@@ -2,7 +2,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import AdminLayout from '@/components/admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { 
   Table, 
@@ -106,153 +105,151 @@ export default function TestimonialsAdmin() {
   };
 
   return (
-    <AdminLayout>
-      <div className="space-y-10 animate-fade-up">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <div className="pill-badge mb-6"><span>✦</span> WALL OF LOVE</div>
-            <h1 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-white">
-              MANAGE <span className="text-primary">FEEDBACK</span>
-            </h1>
-            <p className="text-muted-foreground mt-2">Manage testimonials from X, Discord, and core partners.</p>
-          </div>
-          <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
-            <Plus className="w-4 h-4 mr-2" /> Add Feedback
-          </Button>
+    <div className="space-y-10 animate-fade-up">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <div className="pill-badge mb-6"><span>✦</span> WALL OF LOVE</div>
+          <h1 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-white">
+            MANAGE <span className="text-primary">FEEDBACK</span>
+          </h1>
+          <p className="text-muted-foreground mt-2">Manage testimonials from X, Discord, and core partners.</p>
         </div>
+        <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
+          <Plus className="w-4 h-4 mr-2" /> Add Feedback
+        </Button>
+      </div>
 
-        <div className="glass border-white/10 rounded-xl overflow-hidden">
-          <Table>
-            <TableHeader className="bg-white/5">
-              <TableRow className="border-white/5">
-                <TableHead className="text-xs font-code uppercase tracking-widest py-6 pl-8">Author</TableHead>
-                <TableHead className="text-xs font-code uppercase tracking-widest">Type</TableHead>
-                <TableHead className="text-xs font-code uppercase tracking-widest">Content Preview</TableHead>
-                <TableHead className="text-xs font-code uppercase tracking-widest text-right pr-8">Actions</TableHead>
+      <div className="glass border-white/10 rounded-xl overflow-hidden">
+        <Table>
+          <TableHeader className="bg-white/5">
+            <TableRow className="border-white/5">
+              <TableHead className="text-xs font-code uppercase tracking-widest py-6 pl-8">Author</TableHead>
+              <TableHead className="text-xs font-code uppercase tracking-widest">Type</TableHead>
+              <TableHead className="text-xs font-code uppercase tracking-widest">Content Preview</TableHead>
+              <TableHead className="text-xs font-code uppercase tracking-widest text-right pr-8">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              <TableRow><TableCell colSpan={4} className="text-center py-20 text-muted-foreground uppercase font-code text-xs tracking-widest">Loading testimonials...</TableCell></TableRow>
+            ) : testimonials.length === 0 ? (
+              <TableRow><TableCell colSpan={4} className="text-center py-20 text-muted-foreground uppercase font-code text-xs tracking-widest">No feedback records found.</TableCell></TableRow>
+            ) : testimonials.map((t) => (
+              <TableRow key={t.id} className="border-white/5 hover:bg-white/[0.02] transition-colors">
+                <TableCell className="py-6 pl-8">
+                  <div className="flex items-center gap-3">
+                    <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/10 grayscale">
+                      {t.avatar_url ? <Image src={t.avatar_url} alt={t.name} fill className="object-cover" /> : <div className="bg-white/10 w-full h-full" />}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-bold text-white uppercase tracking-tight text-sm">{t.name}</span>
+                      <span className="text-[10px] text-muted-foreground">{t.role}</span>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className={cn(
+                    "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest",
+                    t.type === 'twitter' ? "bg-white/10 text-white border border-white/20" : 
+                    t.type === 'discord' ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20" : 
+                    "bg-primary/10 text-primary border border-primary/20"
+                  )}>
+                    {t.type === 'twitter' && <XIcon className="w-2.5 h-2.5" />}
+                    {t.type === 'twitter' ? 'X' : t.type}
+                  </div>
+                </TableCell>
+                <TableCell className="max-w-md truncate text-muted-foreground text-xs italic">
+                  "{t.content}"
+                </TableCell>
+                <TableCell className="text-right pr-8">
+                  <div className="flex justify-end gap-2">
+                    <Button variant="ghost" size="icon" onClick={() => handleOpenModal(t)} className="hover:bg-primary/20 hover:text-primary">
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                    <Button variant="ghost" size="icon" onClick={() => handleDelete(t.id)} className="hover:bg-destructive/20 hover:text-destructive">
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow><TableCell colSpan={4} className="text-center py-20 text-muted-foreground uppercase font-code text-xs tracking-widest">Loading testimonials...</TableCell></TableRow>
-              ) : testimonials.length === 0 ? (
-                <TableRow><TableCell colSpan={4} className="text-center py-20 text-muted-foreground uppercase font-code text-xs tracking-widest">No feedback records found.</TableCell></TableRow>
-              ) : testimonials.map((t) => (
-                <TableRow key={t.id} className="border-white/5 hover:bg-white/[0.02] transition-colors">
-                  <TableCell className="py-6 pl-8">
-                    <div className="flex items-center gap-3">
-                      <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/10 grayscale">
-                        {t.avatar_url ? <Image src={t.avatar_url} alt={t.name} fill className="object-cover" /> : <div className="bg-white/10 w-full h-full" />}
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-bold text-white uppercase tracking-tight text-sm">{t.name}</span>
-                        <span className="text-[10px] text-muted-foreground">{t.role}</span>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className={cn(
-                      "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest",
-                      t.type === 'twitter' ? "bg-white/10 text-white border border-white/20" : 
-                      t.type === 'discord' ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20" : 
-                      "bg-primary/10 text-primary border border-primary/20"
-                    )}>
-                      {t.type === 'twitter' && <XIcon className="w-2.5 h-2.5" />}
-                      {t.type === 'twitter' ? 'X' : t.type}
-                    </div>
-                  </TableCell>
-                  <TableCell className="max-w-md truncate text-muted-foreground text-xs italic">
-                    "{t.content}"
-                  </TableCell>
-                  <TableCell className="text-right pr-8">
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" onClick={() => handleOpenModal(t)} className="hover:bg-primary/20 hover:text-primary">
-                        <Edit2 className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" onClick={() => handleDelete(t.id)} className="hover:bg-destructive/20 hover:text-destructive">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
-        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogContent className="glass border-white/10 text-white sm:max-w-[600px]">
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-black uppercase tracking-tighter">
-                {editingTestimonial ? 'Edit' : 'Add'} <span className="text-primary">Feedback</span>
-              </DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-6 pt-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Author Name</Label>
-                  <Input 
-                    value={formData.name} 
-                    onChange={(e) => setFormData({...formData, name: e.target.value})} 
-                    className="glass border-white/10 h-12" 
-                    required 
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Type</Label>
-                  <Select 
-                    value={formData.type} 
-                    onValueChange={(val: any) => setFormData({...formData, type: val})}
-                  >
-                    <SelectTrigger className="glass border-white/10 h-12">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="glass border-white/10">
-                      <SelectItem value="official">Official Testimonial</SelectItem>
-                      <SelectItem value="twitter">X Post</SelectItem>
-                      <SelectItem value="discord">Discord Message</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="glass border-white/10 text-white sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-black uppercase tracking-tighter">
+              {editingTestimonial ? 'Edit' : 'Add'} <span className="text-primary">Feedback</span>
+            </DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-6 pt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Content</Label>
-                <Textarea 
-                  value={formData.content} 
-                  onChange={(e) => setFormData({...formData, content: e.target.value})} 
-                  className="glass border-white/10 min-h-[120px]" 
-                  required
+                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Author Name</Label>
+                <Input 
+                  value={formData.name} 
+                  onChange={(e) => setFormData({...formData, name: e.target.value})} 
+                  className="glass border-white/10 h-12" 
+                  required 
                 />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Role / Description</Label>
-                  <Input 
-                    value={formData.role || ''} 
-                    onChange={(e) => setFormData({...formData, role: e.target.value})} 
-                    className="glass border-white/10" 
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Avatar URL (External)</Label>
-                  <Input 
-                    value={formData.avatar_url || ''} 
-                    onChange={(e) => setFormData({...formData, avatar_url: e.target.value})} 
-                    className="glass border-white/10" 
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Type</Label>
+                <Select 
+                  value={formData.type} 
+                  onValueChange={(val: any) => setFormData({...formData, type: val})}
+                >
+                  <SelectTrigger className="glass border-white/10 h-12">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="glass border-white/10">
+                    <SelectItem value="official">Official Testimonial</SelectItem>
+                    <SelectItem value="twitter">X Post</SelectItem>
+                    <SelectItem value="discord">Discord Message</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
+            </div>
 
-              <DialogFooter className="mt-8">
-                <Button type="submit" className="w-full solana-gradient h-14 font-bold uppercase tracking-widest text-xs">
-                  {editingTestimonial ? 'Update Feedback' : 'Post Feedback'}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
-    </AdminLayout>
+            <div className="space-y-2">
+              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Content</Label>
+              <Textarea 
+                value={formData.content} 
+                onChange={(e) => setFormData({...formData, content: e.target.value})} 
+                className="glass border-white/10 min-h-[120px]" 
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Role / Description</Label>
+                <Input 
+                  value={formData.role || ''} 
+                  onChange={(e) => setFormData({...formData, role: e.target.value})} 
+                  className="glass border-white/10" 
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Avatar URL (External)</Label>
+                <Input 
+                  value={formData.avatar_url || ''} 
+                  onChange={(e) => setFormData({...formData, avatar_url: e.target.value})} 
+                  className="glass border-white/10" 
+                />
+              </div>
+            </div>
+
+            <DialogFooter className="mt-8">
+              <Button type="submit" className="w-full solana-gradient h-14 font-bold uppercase tracking-widest text-xs">
+                {editingTestimonial ? 'Update Feedback' : 'Post Feedback'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }

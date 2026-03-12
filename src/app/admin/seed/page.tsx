@@ -79,6 +79,65 @@ CREATE TABLE IF NOT EXISTS ecosystem_opportunities (
 ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public Read Opportunities" ON ecosystem_opportunities FOR SELECT USING (true);
 CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO authenticated USING (true);
+
+-- Core tables for news, faqs, etc.
+CREATE TABLE IF NOT EXISTS news (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  slug text UNIQUE NOT NULL,
+  excerpt text,
+  content text,
+  image_url text,
+  published_at timestamp WITH TIME ZONE DEFAULT now(),
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS faqs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  question text UNIQUE NOT NULL,
+  answer text,
+  order_index integer DEFAULT 0,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS members (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text UNIQUE NOT NULL,
+  role text,
+  company text,
+  skills text[],
+  bio text,
+  avatar_url text,
+  twitter_url text,
+  featured boolean DEFAULT false,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS stats (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  label text UNIQUE NOT NULL,
+  value text,
+  order_index integer DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS testimonials (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text UNIQUE NOT NULL,
+  role text,
+  content text,
+  avatar_url text,
+  type text,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS partners (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text UNIQUE NOT NULL,
+  logo_url text,
+  website_url text,
+  featured boolean DEFAULT false,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
 `;
 
   const copySql = () => {
@@ -91,7 +150,7 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
   const handleSeed = async () => {
     setLoading(true);
     try {
-      const results = await seedDatabase();
+      await seedDatabase();
       toast({ title: "System Seeded", description: "Main system data updated." });
     } catch (err: any) {
       toast({ variant: "destructive", title: "Error", description: err.message });
@@ -176,7 +235,7 @@ CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO au
                 </Button>
               </div>
             </CardContent>
-          </div>
+          </Card>
         </div>
       </div>
     </div>
