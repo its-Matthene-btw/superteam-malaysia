@@ -161,7 +161,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                       <Input {...field} placeholder="JUPy..." className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
-                  </StatItem>
+                  </FormItem>
                 )}
               />
             </div>

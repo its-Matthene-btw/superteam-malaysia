@@ -19,6 +19,8 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
   const [similar, setSimilar] = useState<EcosystemProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
@@ -64,6 +66,12 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
     }
   };
 
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubscribed(true);
+    setEmail('');
+  };
+
   if (loading) return (
     <div className="min-h-screen bg-black flex flex-col items-center justify-center">
       <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
@@ -103,7 +111,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
             )}
           </div>
           <div className="font-code text-[#14F195] text-xs font-bold tracking-[3px] mb-6 uppercase">
-            // {project.category ? project.category.replace(/ /g, '_') : 'GENERAL'}
+            // {project.category ? project.category.replace(/ /g, '_').toUpperCase() : 'GENERAL'}
           </div>
           <h1 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-8 uppercase">
             {project.name}
@@ -223,12 +231,15 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
               <p className="text-xl text-white/80 leading-relaxed font-medium">
                 Builders in the Superteam Malaysia network frequently utilize {project.name}'s architecture. The {project.name} API and SDK allow developers to natively embed world-class capabilities directly into their own applications.
               </p>
+              <p className="text-lg text-white/60 mt-6 italic">
+                If you are building a project that requires deep {project.category} capabilities, utilizing the {project.name} stack is the recommended standard for the Malaysian ecosystem.
+              </p>
             </div>
           </div>
         </article>
       </section>
 
-      {/* discovery footer */}
+      {/* SIMILAR PROTOCOLS */}
       {similar.length > 0 && (
         <section className="py-32 bg-[#050505] border-b border-white/10">
           <div className="max-w-[1400px] mx-auto px-10">
@@ -261,7 +272,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
       )}
 
       {/* CTA */}
-      <section className="py-40 text-center relative overflow-hidden">
+      <section className="py-40 text-center relative overflow-hidden bg-black">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_top,rgba(153,69,255,0.1)_0%,transparent_60%)] pointer-events-none" />
         <div className="max-w-2xl mx-auto px-10 relative z-10">
           <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-6">// STAY_UPDATED</div>
@@ -270,20 +281,29 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
           </h2>
           <p className="text-xl text-muted-foreground mb-12">Get notified about new protocol launches, airdrops, and developer bounties in the region.</p>
           
-          <div className="max-w-md mx-auto flex border border-white/10 bg-black p-1">
-            <input 
-              type="email" 
-              placeholder="ENTER_EMAIL_ADDRESS" 
-              className="flex-1 bg-transparent border-none text-white px-6 py-4 outline-none font-code text-sm uppercase"
-              required
-            />
-            <button 
-              type="submit"
-              className="bg-primary text-black font-black uppercase px-10 hover:bg-white transition-colors text-xs tracking-widest"
-            >
-              JOIN
-            </button>
-          </div>
+          <form onSubmit={handleSubscribe} className="max-w-md mx-auto space-y-6">
+            <div className="flex border border-white/10 bg-black p-1">
+              <input 
+                type="email" 
+                placeholder="ENTER_EMAIL_ADDRESS" 
+                className="flex-1 bg-transparent border-none text-white px-6 py-4 outline-none font-code text-sm uppercase"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              <button 
+                type="submit"
+                className="bg-primary text-black font-black uppercase px-10 hover:bg-white transition-colors text-xs tracking-widest"
+              >
+                JOIN
+              </button>
+            </div>
+            {subscribed && (
+              <p className="font-code text-[10px] text-[#14F195] uppercase tracking-widest flex items-center justify-center gap-2">
+                <CheckCircle2 className="w-3 h-3" /> SYSTEM_UPDATE: CREDENTIALS_ACCEPTED
+              </p>
+            )}
+          </form>
         </div>
       </section>
 
