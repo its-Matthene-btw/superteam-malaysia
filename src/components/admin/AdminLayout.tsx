@@ -32,6 +32,7 @@ const navItems = [
   { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote },
   { name: 'News', href: '/admin/news', icon: Newspaper },
   { name: 'Messages', href: '/admin/messages', icon: Inbox },
+  { name: 'Ecosystem', href: '/admin/ecosystem', icon: Database },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
   { name: 'Seed', href: '/admin/seed', icon: Database },
 ];
