@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
@@ -7,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 import { getFAQs } from '@/services/faqs';
 import { FAQ } from '@/types/database';
 import { cn } from '@/lib/utils';
-import { Loader2, Search, Plus, Send, ChevronLeft } from 'lucide-react';
+import { Loader2, Search, Plus, Send } from 'lucide-react';
 import Link from 'next/link';
 
 export default function FAQPage() {
@@ -23,8 +22,10 @@ export default function FAQPage() {
       try {
         const data = await getFAQs();
         setFaqs(data);
-        if (data.length > 0) {
-          setActiveCategory(data[0].category);
+        if (data && data.length > 0) {
+          // Set default category to the first one available
+          const uniqueCats = Array.from(new Set(data.map(f => f.category)));
+          if (uniqueCats.length > 0) setActiveCategory(uniqueCats[0]);
         }
       } catch (e: any) {
         console.error('FAQ Fetch Failure:', e);
@@ -70,16 +71,8 @@ export default function FAQPage() {
     <main className="min-h-screen bg-black text-white font-body selection:bg-primary/30">
       <Navbar />
 
-      {/* TOP NAV BAR - Static Terminal Mode */}
-      <nav className="relative pt-20 px-10 h-20 border-b border-white/10 flex items-center justify-between bg-[#050505] z-50">
-        <Link href="/" className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] hover:text-primary transition-colors flex items-center gap-2">
-          <ChevronLeft className="w-3 h-3" /> SYSTEM_ROOT
-        </Link>
-        <span className="font-code text-[10px] text-[#14F195] uppercase tracking-[3px] hidden sm:block">// DATA_RETRIEVAL_MODE</span>
-      </nav>
-
-      {/* TERMINAL HEADER */}
-      <header className="relative border-b border-white/10 grid grid-cols-1 lg:grid-cols-2 min-h-[50vh] bg-black">
+      {/* TERMINAL HEADER - Adjusted with pt-20 to clear global Navbar */}
+      <header className="relative pt-20 border-b border-white/10 grid grid-cols-1 lg:grid-cols-2 min-h-[50vh] bg-black">
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:linear-gradient(to_right,black:0%,transparent:100%)] pointer-events-none" />
         
         <div className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center relative z-10">
