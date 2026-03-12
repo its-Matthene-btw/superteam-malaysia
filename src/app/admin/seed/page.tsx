@@ -4,15 +4,16 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { seedDatabase, seedFAQsOnly } from '@/lib/supabase/seed';
+import { seedDatabase, seedFAQsOnly, seedSiteSettings } from '@/lib/supabase/seed';
 import { seedEcosystemData } from '@/lib/supabase/ecosystem-seed';
-import { Database, CheckCircle2, Copy, ShieldCheck, Trash2, HelpCircle } from 'lucide-react';
+import { Database, CheckCircle2, Copy, ShieldCheck, Trash2, HelpCircle, Globe } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 export default function SeedPage() {
   const [loading, setLoading] = useState(false);
   const [ecoLoading, setEcoLoading] = useState(false);
   const [faqLoading, setFaqLoading] = useState(false);
+  const [settingsLoading, setSettingsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const sqlSchema = `-- MASTER MIGRATION SQL
@@ -198,6 +199,18 @@ CREATE POLICY "Admin All Events" ON events FOR ALL TO authenticated USING (true)
     }
   };
 
+  const handleSettingsSeed = async () => {
+    setSettingsLoading(true);
+    try {
+      await seedSiteSettings();
+      toast({ title: "Settings Seeded", description: "Global configuration initialized." });
+    } catch (err: any) {
+      toast({ variant: "destructive", title: "Error", description: err.message });
+    } finally {
+      setSettingsLoading(false);
+    }
+  };
+
   const handleEcosystemSeed = async () => {
     if (!confirm('WIPE ALL ecosystem data and re-seed blueprints?')) return;
     setEcoLoading(true);
@@ -274,23 +287,39 @@ CREATE POLICY "Admin All Events" ON events FOR ALL TO authenticated USING (true)
           <Card className="glass border-white/10 flex flex-col">
             <CardHeader className="border-b border-white/5 bg-white/5">
               <CardTitle className="flex items-center gap-2 text-white uppercase tracking-widest text-xs">
-                <HelpCircle className="w-4 h-4 text-primary" /> 3. FAQ Hub
+                <Globe className="w-4 h-4 text-primary" /> 3. Global Configuration
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
+              <p className="text-xs text-muted-foreground">Initialize all hardcoded links, headlines, and SEO mesh parameters.</p>
+              <div className="mt-auto">
+                <Button onClick={handleSettingsSeed} disabled={settingsLoading} className="w-full bg-white text-black hover:bg-white/80 font-bold h-12 text-xs uppercase">
+                  {settingsLoading ? 'Syncing...' : 'Seed Global Settings'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="glass border-white/10 flex flex-col">
+            <CardHeader className="border-b border-white/5 bg-white/5">
+              <CardTitle className="flex items-center gap-2 text-white uppercase tracking-widest text-xs">
+                <HelpCircle className="w-4 h-4 text-primary" /> 4. FAQ Hub
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
               <p className="text-xs text-muted-foreground">Populate technical FAQ parameters for Grants, Bounties, and Build Stations.</p>
               <div className="mt-auto">
-                <Button onClick={handleFaqSeed} disabled={faqLoading} className="w-full bg-primary text-black hover:bg-primary/80 font-bold h-12 text-xs uppercase">
+                <Button onClick={handleFaqSeed} disabled={faqLoading} className="w-full border border-white/10 hover:bg-white/5 font-bold h-12 text-xs uppercase">
                   {faqLoading ? 'Seeding...' : 'Seed Knowledge Base'}
                 </Button>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="glass border-white/10 border-red-500/20 flex flex-col bg-red-500/5 col-span-1 md:col-span-2">
+          <Card className="glass border-white/10 border-red-500/20 flex flex-col bg-red-500/5">
             <CardHeader className="border-b border-white/5 bg-white/5">
               <CardTitle className="flex items-center gap-2 text-red-400 uppercase tracking-widest text-xs">
-                <Trash2 className="w-4 h-4" /> 4. Wipe & Seed Ecosystem
+                <Trash2 className="w-4 h-4" /> 5. Wipe & Seed Ecosystem
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">

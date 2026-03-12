@@ -101,7 +101,7 @@ export async function seedDatabase() {
         status: 'upcoming', 
         featured: false,
         category: 'Meetup',
-        image_url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80',
+        image_url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=w=600&q=80',
         luma_url: 'https://lu.ma/superteammy'
       }
     ];
@@ -114,6 +114,50 @@ export async function seedDatabase() {
   }
 
   return results;
+}
+
+export async function seedSiteSettings() {
+  const settings = [
+    { id: 'site_title', value: 'Superteam Connect Malaysia | Solana Ecosystem Hub' },
+    { id: 'site_description', value: 'The premier community for developers, designers, and creators building on Solana in Malaysia.' },
+    { id: 'site_og_image', value: 'https://picsum.photos/seed/stmyog/1200/630' },
+    
+    { id: 'hero_headline', value: 'Malaysia’s Home for Solana Builders' },
+    { id: 'hero_subheadline', value: 'Discover bounties, grants, events, and opportunities while building with the fastest growing Web3 ecosystem.' },
+    { id: 'hero_primary_btn_text', value: 'JOIN NETWORK' },
+    { id: 'hero_primary_btn_link', value: '/contact' },
+    { id: 'hero_secondary_btn_text', value: 'OPPORTUNITIES' },
+    { id: 'hero_secondary_btn_link', value: '/ecosystem' },
+    
+    { id: 'cta_headline', value: 'BUILD THE FUTURE.' },
+    { id: 'cta_subtext', value: 'Ready to ship your next big idea on Solana? Get access to exclusive bounties, ecosystem funding, and the smartest builders in Malaysia.' },
+    { id: 'cta_discord_url', value: 'https://discord.gg/superteammy' },
+    { id: 'cta_grant_url', value: 'https://earn.superteam.fun' },
+    
+    { id: 'social_x', value: 'https://x.com/superteammy' },
+    { id: 'social_discord', value: 'https://discord.gg/superteammy' },
+    { id: 'social_github', value: 'https://github.com/superteam-my' },
+    { id: 'social_linkedin', value: 'https://linkedin.com/company/superteammy' },
+    
+    { id: 'qa_1_title', value: 'Looking for Grants?' },
+    { id: 'qa_1_desc', value: 'We offer equity-free funding up to $25k for builders in the region. Check our grant criteria before applying.' },
+    { id: 'qa_1_link', value: '/ecosystem' },
+    { id: 'qa_1_label', value: 'READ_GUIDELINES' },
+    
+    { id: 'qa_2_title', value: 'Want to earn Bounties?' },
+    { id: 'qa_2_desc', value: 'Check the Superteam Earn platform. We post new technical and non-technical bounties every week.' },
+    { id: 'qa_2_link', value: 'https://earn.superteam.fun' },
+    { id: 'qa_2_label', value: 'EXPLORE_EARN' },
+    
+    { id: 'qa_3_title', value: 'Need Dev Support?' },
+    { id: 'qa_3_desc', value: "Don't use the contact form for code issues. Drop your Anchor/Rust questions in the #dev-support Discord channel." },
+    { id: 'qa_3_link', value: 'https://discord.gg/superteammy' },
+    { id: 'qa_3_label', value: 'JOIN_DISCORD' }
+  ];
+
+  const { error } = await supabase.from('site_settings').upsert(settings);
+  if (error) throw error;
+  return settings.length;
 }
 
 export async function seedFAQsOnly() {
