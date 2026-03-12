@@ -142,12 +142,12 @@ function WallCard({ testimonial }: { testimonial: Testimonial }) {
       >
         <div className="card-header flex justify-between items-start mb-6 translate-z-20">
           <div className="author-info flex items-center gap-4">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/10 grayscale group-hover:grayscale-0 group-hover:border-primary transition-all duration-300">
+            <div className="relative w-12 h-12 rounded-full overflow-hidden border border-white/10 grayscale group-hover:grayscale-0 group-hover:border-[#9945FF] transition-all duration-300">
               <Image src={testimonial.avatar} alt={testimonial.author} fill className="object-cover object-[center_15%]" />
             </div>
             <div className="author-details flex flex-col">
               <span className="author-name font-bold text-lg text-white">{testimonial.author}</span>
-              <span className="author-handle font-code text-xs text-muted-foreground group-hover:text-primary transition-colors">
+              <span className="author-handle font-code text-xs text-muted-foreground group-hover:text-[#9945FF] transition-colors">
                 {testimonial.handle}
               </span>
             </div>
@@ -167,7 +167,7 @@ function WallCard({ testimonial }: { testimonial: Testimonial }) {
         </div>
 
         {testimonial.image && (
-          <div className="post-media relative w-full h-[280px] rounded-xl overflow-hidden border border-white/10 grayscale contrast-[1.1] group-hover:grayscale-0 group-hover:contrast-100 group-hover:border-primary/40 transition-all duration-500 mb-6 translate-z-25">
+          <div className="post-media relative w-full h-[280px] rounded-xl overflow-hidden border border-white/10 grayscale contrast-[1.1] group-hover:grayscale-0 group-hover:contrast-100 group-hover:border-[#9945FF]/40 transition-all duration-500 mb-6 translate-z-25">
             <Image src={testimonial.image} alt="Post content" fill className="object-cover" />
           </div>
         )}
@@ -214,7 +214,7 @@ export default function WallOfLove() {
         <div className="flex flex-col gap-6 mb-24 px-10 pt-32 lg:pt-48">
           <div className="pill-badge mb-6"><span>✦</span> Wall of Love</div>
           <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
-            Community <span className="text-primary">Voices</span>
+            Community <span className="text-[#9945FF]">Voices</span>
           </h2>
         </div>
 
@@ -222,7 +222,7 @@ export default function WallOfLove() {
           <div className="uppercase font-bold text-sm tracking-wider leading-relaxed text-white max-w-sm">
             REAL BUILDERS. REAL STORIES. THE ALPHA SITS IN OUR CHATS.
           </div>
-          <div className="flex flex-col gap-6 text-muted-foreground text-lg leading-relaxed max-w-2xl">
+          <div className="flex flex-col gap-6 text-white text-lg leading-relaxed max-w-2xl">
             <p>Don't just take our word for it. See what founders, developers, and ecosystem participants are saying about their experience building with Superteam Malaysia.</p>
           </div>
         </div>

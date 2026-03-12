@@ -14,7 +14,7 @@ export default function FaqCtaSection() {
       <div className="header-wrapper max-w-[1400px] mx-auto px-10 py-20 border-x border-white/10">
         <div className="pill-badge mb-6"><span>✦</span> KNOWLEDGE BASE</div>
         <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
-          Have <span className="text-primary">Questions?</span>
+          Have <span className="text-[#9945FF]">Questions?</span>
         </h2>
       </div>
 
@@ -32,7 +32,7 @@ export default function FaqCtaSection() {
                     <span className="font-code text-xs text-muted-foreground mt-1.5 hidden md:block">
                       {(idx + 1).toString().padStart(2, '0')} //
                     </span>
-                    <h3 className="text-2xl lg:text-3xl font-headline font-bold group-hover:text-primary transition-colors text-left text-white">
+                    <h3 className="text-2xl lg:text-3xl font-headline font-bold group-hover:text-[#9945FF] transition-colors text-left text-white">
                       {faq.question}
                     </h3>
                   </div>
@@ -42,7 +42,7 @@ export default function FaqCtaSection() {
                   className="faq-body overflow-hidden transition-all duration-500 ease-in-out"
                   style={{ maxHeight: openIndex === idx ? '500px' : '0px' }}
                 >
-                  <div className="faq-answer px-8 lg:pl-[116px] lg:pr-10 pb-10 text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                  <div className="faq-answer px-8 lg:pl-[116px] lg:pr-10 pb-10 text-lg text-white leading-relaxed max-w-2xl">
                     {faq.answer}
                   </div>
                 </div>
@@ -50,9 +50,10 @@ export default function FaqCtaSection() {
             ))}
           </div>
 
-          <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 overflow-visible items-start">
+          {/* CTA Column - Stable Content */}
+          <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 items-start overflow-hidden">
              <div className="cta-bg-wrapper absolute inset-0 pointer-events-none overflow-hidden z-0">
-                <div className="absolute -bottom-[10%] -right-[10%] w-[800px] h-[800px] bg-primary/15 rounded-full blur-[100px]" />
+                <div className="absolute -bottom-[10%] -right-[10%] w-[800px] h-[800px] bg-[#9945FF]/15 rounded-full blur-[100px]" />
                 
                 <div 
                   className="absolute inset-0 opacity-50" 
@@ -64,15 +65,16 @@ export default function FaqCtaSection() {
                 />
              </div>
              
-             <div className="p-10 lg:p-20 z-10 w-full">
+             {/* Content stays at top and is fixed relative to the column start */}
+             <div className="p-10 lg:p-20 z-10 w-full flex-shrink-0">
                 <h2 className="text-5xl lg:text-7xl font-headline font-extrabold tracking-tighter leading-[1.1] mb-8 uppercase text-white">
                   BUILD<br />THE<br />FUTURE.
                 </h2>
-                <p className="text-lg lg:text-xl text-muted-foreground mb-12 max-w-md leading-relaxed">
+                <p className="text-lg lg:text-xl text-white mb-12 max-w-md leading-relaxed">
                   Ready to ship your next big idea on Solana? Get access to exclusive bounties, ecosystem funding, and the smartest builders in Malaysia.
                 </p>
                 <div className="flex flex-col gap-4 w-full max-w-sm">
-                  <a href="#" className="group flex items-center justify-between bg-primary text-black px-8 py-5 font-code font-bold uppercase tracking-widest border border-primary hover:bg-white hover:border-white transition-all shadow-lg hover:shadow-primary/20">
+                  <a href="#" className="group flex items-center justify-between bg-[#9945FF] text-black px-8 py-5 font-code font-bold uppercase tracking-widest border border-[#9945FF] hover:bg-white hover:border-white transition-all shadow-lg hover:shadow-[#9945FF]/20">
                     Join Discord
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </a>

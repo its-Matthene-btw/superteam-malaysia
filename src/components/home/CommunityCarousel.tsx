@@ -69,7 +69,7 @@ export default function CommunityCarousel() {
           <div className="flex flex-col gap-6 mb-24 lg:mb-32">
             <div className="pill-badge mb-6"><span>✦</span> THE COMMUNITY</div>
             <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none max-w-3xl text-white">
-              A Team of<br />Web3 <span className="text-primary">Experts</span>
+              A Team of Web3 <span className="text-[#9945FF]">Experts</span>
             </h2>
           </div>
 
@@ -77,7 +77,7 @@ export default function CommunityCarousel() {
             <div className="uppercase font-bold text-sm tracking-wider leading-relaxed text-white max-w-sm">
               SUPERTEAM MALAYSIA STARTED AS A COLLECTIVE TO MANAGE WEB3 PROJECTS WITH FRIENDS AND BUILDERS.
             </div>
-            <div className="flex flex-col gap-6 text-muted-foreground text-lg leading-relaxed max-w-2xl">
+            <div className="flex flex-col gap-6 text-white text-lg leading-relaxed max-w-2xl">
               <p>We built advanced tooling and a robust network to optimize project development for passionate teams. Due to the sheer talent within the Solana ecosystem, our little community grew crazy fast.</p>
               <p>Now, network operators and developers can run their own nodes with full control. Superteam just takes the headaches away.</p>
             </div>
@@ -104,7 +104,7 @@ export default function CommunityCarousel() {
                 key={`${member.id}-${idx}`}
                 className={cn(
                   "relative flex flex-col min-w-[380px] h-[560px] border-r border-white/10 bg-[#050505] transition-all duration-300 group cursor-pointer overflow-hidden whitespace-normal",
-                  "hover:bg-primary",
+                  "hover:bg-[#9945FF]",
                   expandedId === `${member.id}-${idx}` && "expanded-card"
                 )}
                 onClick={() => handleCardClick(`${member.id}-${idx}`)}
@@ -113,7 +113,7 @@ export default function CommunityCarousel() {
                 <a 
                   href={member.social.twitter} 
                   target="_blank"
-                  className="absolute top-6 right-6 p-2.5 bg-black/50 backdrop-blur-md border border-white/10 text-white z-20 group-hover:bg-black group-hover:text-primary group-hover:border-black transition-all"
+                  className="absolute top-6 right-6 p-2.5 bg-black/50 backdrop-blur-md border border-white/10 text-white z-20 group-hover:bg-black group-hover:text-[#9945FF] group-hover:border-black transition-all"
                   onClick={(e) => e.stopPropagation()}
                 >
                    <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.005 4.223H5.078z"/></svg>

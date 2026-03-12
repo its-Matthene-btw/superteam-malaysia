@@ -1,6 +1,4 @@
 
-'use client';
-
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/home/Hero';
 import EcosystemPartners from '@/components/home/EcosystemPartners';
@@ -136,12 +134,12 @@ export default function Home() {
             {stats.map((stat, idx) => (
               <div key={idx} className="stat-cell group border-l border-white/10 p-2.5 px-8 min-h-[160px] flex flex-col justify-between">
                 <div className="flex items-start gap-3">
-                  <stat.icon className="w-5 h-5 text-white group-hover:text-primary transition-colors mt-0.5" />
+                  <stat.icon className="w-5 h-5 text-white/60 group-hover:text-primary transition-colors mt-0.5" />
                   <span className="text-sm font-medium text-white leading-tight uppercase tracking-wider">
                     {stat.label}
                   </span>
                 </div>
-                <div className="text-5xl md:text-6xl font-headline font-bold tracking-tighter mt-10 text-white group-hover:text-primary transition-all duration-300">
+                <div className="text-5xl md:text-6xl font-headline font-bold tracking-tighter mt-10 text-white group-hover:solana-text-gradient transition-all duration-300">
                   {stat.value}
                 </div>
               </div>
