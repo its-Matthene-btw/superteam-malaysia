@@ -6,21 +6,23 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { getNews } from '@/services/news';
 import { NewsPost } from '@/types/database';
-import { ArrowRight, Loader2, Calendar, Share2, Sparkles } from 'lucide-react';
+import { ArrowRight, Loader2, Calendar, Share2, Sparkles, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function NewsPage() {
   const [posts, setPosts] = useState<NewsPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetch() {
       try {
         const data = await getNews();
         setPosts(data);
-      } catch (e) {
-        console.error(e);
+      } catch (e: any) {
+        console.error('News Fetch Error:', e);
+        setError(e.message || 'Failed to sync news feed. Ensure the "news" table exists.');
       } finally {
         setLoading(false);
       }
@@ -52,6 +54,12 @@ export default function NewsPage() {
             <div className="py-40 flex flex-col items-center justify-center">
               <Loader2 className="w-12 h-12 text-[#14F195] animate-spin mb-4" />
               <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">Fetching Data Stream...</p>
+            </div>
+          ) : error ? (
+            <div className="py-40 text-center px-10">
+              <AlertCircle className="w-12 h-12 text-destructive/50 mx-auto mb-6" />
+              <p className="font-code text-destructive uppercase tracking-widest text-sm mb-2">Sync Error</p>
+              <p className="text-muted-foreground max-w-md mx-auto">{error}</p>
             </div>
           ) : posts.length === 0 ? (
             <div className="py-40 text-center">

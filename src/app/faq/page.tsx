@@ -7,11 +7,12 @@ import Footer from '@/components/layout/Footer';
 import { getFAQs } from '@/services/faqs';
 import { FAQ } from '@/types/database';
 import { cn } from '@/lib/utils';
-import { Plus, Minus, Loader2, Sparkles, HelpCircle } from 'lucide-react';
+import { Plus, Minus, Loader2, Sparkles, HelpCircle, AlertCircle } from 'lucide-react';
 
 export default function FAQPage() {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   useEffect(() => {
@@ -19,8 +20,9 @@ export default function FAQPage() {
       try {
         const data = await getFAQs();
         setFaqs(data);
-      } catch (e) {
-        console.error(e);
+      } catch (e: any) {
+        console.error('FAQ Fetch Failure:', e);
+        setError(e.message || 'Could not access the knowledge base. Ensure the "faqs" table exists.');
       } finally {
         setLoading(false);
       }
@@ -52,6 +54,13 @@ export default function FAQPage() {
             <div className="py-20 flex flex-col items-center justify-center">
               <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
               <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">Accessing Records...</p>
+            </div>
+          ) : error ? (
+            <div className="py-20 text-center border border-destructive/20 bg-destructive/5 glass rounded-3xl p-10">
+               <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
+               <p className="font-code text-destructive uppercase tracking-widest text-sm mb-4">Database Error</p>
+               <p className="text-muted-foreground">{error}</p>
+               <p className="text-xs text-muted-foreground mt-6 italic">Run the migration in /admin/seed if this is a fresh setup.</p>
             </div>
           ) : faqs.length === 0 ? (
             <div className="py-20 text-center border border-white/10 glass rounded-3xl">
