@@ -27,8 +27,12 @@ export interface Event {
 export interface Partner {
   id: string;
   name: string;
+  slug: string;
   logo_url: string | null;
   website_url: string | null;
+  description: string | null;
+  long_description: string | null;
+  case_study: string | null;
   featured: boolean;
   created_at: string;
 }
@@ -47,6 +51,32 @@ export interface Testimonial {
   content: string;
   avatar_url: string | null;
   twitter_url: string | null;
+  tweet_image_url: string | null;
   type: 'twitter' | 'discord' | 'official';
+  created_at: string;
+}
+
+export interface Contact {
+  id: string;
+  name: string;
+  email: string;
+  message: string;
+  created_at: string;
+}
+
+export interface NewsPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string | null;
+  image_url: string | null;
+  published_at: string;
+  created_at: string;
+}
+
+export interface NewsletterSubscriber {
+  id: string;
+  email: string;
   created_at: string;
 }

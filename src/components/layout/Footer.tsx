@@ -1,11 +1,35 @@
+
 "use client";
 
 import Link from 'next/link';
-import { Twitter, MessageSquare, ArrowUp } from 'lucide-react';
+import { Twitter, MessageSquare, ArrowUp, Send, Loader2, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+import { subscribeToNewsletter } from '@/services/newsletter';
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setLoading(true);
+    try {
+      await subscribeToNewsletter(email);
+      setStatus('success');
+      setEmail('');
+      setTimeout(() => setStatus('idle'), 3000);
+    } catch (e) {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -13,62 +37,70 @@ export default function Footer() {
       <div className="footer-wrapper max-w-[1400px] mx-auto border-x border-white/10 flex flex-col">
         
         {/* Main Footer Grid */}
-        <div className="footer-main-grid grid grid-cols-1 lg:grid-cols-[5fr_3fr_4fr] border-b border-white/10">
+        <div className="footer-main-grid grid grid-cols-1 lg:grid-cols-[4fr_2fr_3fr_3fr] border-b border-white/10">
           
           {/* Column 1: Brand */}
-          <div className="footer-col p-10 lg:p-20 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col">
-            <Link href="/" className="brand-logo text-4xl lg:text-6xl font-headline font-extrabold tracking-tighter uppercase leading-none mb-8 hover:opacity-80 transition-opacity text-white">
+          <div className="footer-col p-10 lg:p-16 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col">
+            <Link href="/" className="brand-logo text-4xl font-headline font-extrabold tracking-tighter uppercase leading-none mb-8 hover:opacity-80 transition-opacity text-white">
               Superteam<br /><span className="text-primary">Malaysia</span>
             </Link>
-            <p className="brand-desc text-lg text-muted-foreground leading-relaxed max-w-sm">
+            <p className="brand-desc text-base text-muted-foreground leading-relaxed max-w-sm mb-10">
               A decentralized community of founders, developers, and creatives building the future of the Solana ecosystem.
             </p>
+            <div className="flex gap-4">
+              <a href="https://x.com/superteammy" target="_blank" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-white/5 transition-colors"><Twitter className="w-4 h-4" /></a>
+              <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-white/5 transition-colors"><MessageSquare className="w-4 h-4" /></a>
+            </div>
           </div>
 
           {/* Column 2: Directory */}
-          <div className="footer-col p-10 lg:p-20 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col">
-            <span className="col-title font-code text-xs text-primary uppercase tracking-[2px] mb-8 block">[ DIRECTORY ]</span>
+          <div className="footer-col p-10 lg:p-16 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col">
+            <span className="col-title font-code text-[10px] text-primary uppercase tracking-[2px] mb-8 block">DIRECTORY</span>
             <ul className="nav-list flex flex-col gap-4">
-              <FooterNavLink href="/" label="Home" />
-              <FooterNavLink href="#mission" label="About Us" />
-              <FooterNavLink href="#events" label="Events" />
-              <FooterNavLink href="#" label="Grants" />
-              <FooterNavLink href="#" label="Bounties" />
+              <FooterNavLink href="/news" label="News" />
+              <FooterNavLink href="/events" label="Events" />
+              <FooterNavLink href="/ecosystem" label="Ecosystem" />
+              <FooterNavLink href="/members" label="Members" />
+              <FooterNavLink href="/contact" label="Contact" />
             </ul>
           </div>
 
-          {/* Column 3: Network */}
-          <div className="footer-col p-10 lg:p-20 flex flex-col">
-            <span className="col-title font-code text-xs text-primary uppercase tracking-[2px] mb-8 block">[ NETWORK ]</span>
-            <div className="social-list flex flex-col gap-3 max-w-[300px]">
-              <SocialBrutalistButton 
-                href="https://x.com/superteammy" 
-                label="Twitter / X" 
-                icon={<Twitter className="w-5 h-5" />} 
+          {/* Column 3: Newsletter */}
+          <div className="footer-col p-10 lg:p-16 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col col-span-2">
+            <span className="col-title font-code text-[10px] text-secondary uppercase tracking-[2px] mb-8 block">DISPATCH</span>
+            <h3 className="text-3xl font-black uppercase tracking-tighter text-white mb-6">Stay ahead of the <span className="text-secondary">curve.</span></h3>
+            <p className="text-muted-foreground mb-10 max-w-sm">Get ecosystem updates, bounty alerts, and funding opportunities delivered weekly.</p>
+            
+            <form onSubmit={handleSubscribe} className="relative w-full max-w-md">
+              <input 
+                type="email" 
+                placeholder="builder@ecosystem.com" 
+                className="w-full bg-white/5 border border-white/10 p-5 pr-16 text-white outline-none focus:border-secondary transition-all"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
               />
-              <SocialBrutalistButton 
-                href="#" 
-                label="Telegram" 
-                icon={<svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.19-.08-.05-.19-.02-.27 0-.12.03-1.98 1.25-5.6 3.68-.53.36-1.01.54-1.44.53-.47-.01-1.38-.27-2.06-.49-.83-.27-1.49-.42-1.43-.89.03-.25.38-.51 1.03-.78 4.04-1.76 6.74-2.92 8.09-3.48 3.85-1.6 4.64-1.88 5.17-1.89.11 0 .37.03.54.17.14.12.18.28.2.43.02.09.02.19.01.21z"/></svg>} 
-              />
-              <SocialBrutalistButton 
-                href="#" 
-                label="Discord" 
-                icon={<MessageSquare className="w-5 h-5" />} 
-              />
-            </div>
+              <button 
+                type="submit" 
+                disabled={loading}
+                className="absolute right-2 top-2 bottom-2 aspect-square bg-secondary text-black flex items-center justify-center hover:bg-white transition-all disabled:opacity-50"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : status === 'success' ? <CheckCircle2 className="w-5 h-5" /> : <Send className="w-5 h-5" />}
+              </button>
+            </form>
+            {status === 'success' && <p className="text-[10px] font-bold text-secondary uppercase tracking-widest mt-4">Welcome to the dispatch.</p>}
           </div>
 
         </div>
 
         {/* Footer Bottom Bar */}
         <div className="footer-bottom flex flex-col md:flex-row justify-between items-center p-8 lg:px-10 bg-black">
-          <div className="copyright font-code text-[10px] lg:text-xs text-muted-foreground uppercase tracking-[1px] mb-4 md:mb-0">
-            © 2026 Superteam Malaysia. All Rights Reserved.
+          <div className="copyright font-code text-[10px] text-muted-foreground uppercase tracking-[1px] mb-4 md:mb-0">
+            © 2026 Superteam Malaysia. Built on Solana.
           </div>
           <button 
             onClick={scrollToTop}
-            className="back-to-top font-code text-[10px] lg:text-xs text-white uppercase tracking-[2px] font-bold hover:text-primary transition-colors flex items-center gap-2 group"
+            className="back-to-top font-code text-[10px] text-white uppercase tracking-[2px] font-bold hover:text-primary transition-colors flex items-center gap-2 group"
           >
             Back To Top
             <ArrowUp className="w-4 h-4 group-hover:-translate-y-1 transition-transform" />
@@ -85,28 +117,11 @@ function FooterNavLink({ href, label }: { href: string; label: string }) {
     <li>
       <Link 
         href={href} 
-        className="nav-link text-lg font-bold text-muted-foreground uppercase tracking-[1px] hover:text-white transition-all flex items-center group"
+        className="nav-link text-sm font-bold text-muted-foreground uppercase tracking-[1px] hover:text-white transition-all flex items-center group"
       >
-        <span className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all font-code text-primary mr-2 font-black">&gt;</span>
+        <span className="opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all font-code text-primary mr-2">/</span>
         {label}
       </Link>
     </li>
-  );
-}
-
-function SocialBrutalistButton({ href, label, icon }: { href: string; label: string; icon: React.ReactNode }) {
-  return (
-    <a 
-      href={href} 
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="social-btn flex items-center justify-between p-4 border border-white/10 text-white font-code text-[11px] font-bold uppercase tracking-[1px] hover:bg-primary hover:text-black hover:border-primary transition-all group"
-    >
-      <div className="flex items-center gap-3">
-        {icon}
-        {label}
-      </div>
-      <span className="social-arrow text-base group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
-    </a>
   );
 }
