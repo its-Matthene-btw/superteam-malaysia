@@ -47,15 +47,14 @@ export default function MemberDirectory() {
       width = container.clientWidth;
       height = container.clientHeight;
       
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 1200) {
+        // Tablet & Mobile: Three-zone centered system
         centerX = width / 2;
         centerY = height / 2;
-        radius = Math.min(width, height) * 0.45;
-      } else if (window.innerWidth <= 1200) {
-        centerX = width / 2;
-        centerY = height;
-        radius = Math.min(width * 0.5, height * 0.8);
+        // Ensure globe never touches text/ticker by using a safe multiplier
+        radius = Math.min(width, height) * 0.42;
       } else {
+        // Desktop: Half-visible planet emerging from right
         centerX = width;
         centerY = height * 0.5;
         radius = Math.max(width * 0.5, height) / 1.3;
@@ -98,9 +97,9 @@ export default function MemberDirectory() {
     const render = () => {
       context.clearRect(0, 0, width, height);
       const currentScale = projection.scale();
-      const scaleFactor = currentScale / radius;
+      const scaleFactor = currentScale / (radius || 1);
 
-      // Ocean
+      // Ocean Base
       context.beginPath();
       context.arc(centerX, centerY, currentScale, 0, 2 * Math.PI);
       context.fillStyle = "#050505";
@@ -163,42 +162,49 @@ export default function MemberDirectory() {
     <main className="min-h-screen bg-black">
       <Navbar />
       
-      {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-white/10 bg-black">
+      {/* Hero Section - STRICT RESPONSIVE SYSTEM */}
+      <section className="relative overflow-hidden bg-black border-b border-white/10">
+        {/* Background Layer */}
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] bg-center [mask-image:linear-gradient(to_bottom,black_40%,transparent_100%)]" />
         <div className="absolute top-[-30%] left-[20%] w-[1000px] h-[800px] bg-[radial-gradient(circle,rgba(153,69,255,0.25)_0%,transparent_70%)] rounded-full pointer-events-none z-0" />
         
-        <div className="max-w-[1400px] mx-auto border-x border-white/10 relative min-h-screen flex flex-col">
-          <div className="flex-1 flex flex-col lg:flex-row items-center px-10 py-32 relative">
-            <div className="w-full lg:w-3/5 z-10 relative pointer-events-auto">
-              <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md"><span>✦</span> THE DIRECTORY</div>
-              <h1 className="text-7xl md:text-8xl lg:text-[120px] font-black uppercase tracking-tighter leading-[0.9] mb-10 flex flex-col">
+        <div className="max-w-[1400px] mx-auto border-x border-white/10 relative">
+          <div className="flex flex-col min-h-screen min-h-[100svh] lg:min-h-[750px]">
+            
+            {/* Zone 1: Text Block (Top on mobile, Left on Desktop) */}
+            <div className="hero-top-content flex-shrink-0 pt-32 pb-10 px-10 lg:pt-48 lg:pb-32 lg:w-3/5 z-10 text-center lg:text-left">
+              <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md inline-flex mx-auto lg:mx-0">
+                <span>✦</span> THE DIRECTORY
+              </div>
+              <h1 className="text-6xl md:text-8xl lg:text-[120px] font-black uppercase tracking-tighter leading-[0.9] mb-10 flex flex-col">
                 <span className="text-white">BUILDER</span>
                 <span className="text-transparent" style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.4)' }}>NETWORK</span>
               </h1>
-              <p className="text-xl text-muted-foreground max-w-md leading-relaxed">
+              <p className="text-xl text-muted-foreground max-w-md mx-auto lg:mx-0 leading-relaxed">
                 Discover the top developers, designers, and founders scaling the Solana ecosystem across Malaysia.
               </p>
             </div>
             
-            <div className="absolute inset-0 w-full h-full lg:w-full pointer-events-auto z-0 flex justify-center items-center">
+            {/* Zone 2: Globe Area (Middle on mobile, Fills Background on Desktop) */}
+            <div className="flex-grow relative w-full lg:absolute lg:inset-0 z-0">
               <canvas ref={canvasRef} id="globeCanvas" className="w-full h-full cursor-grab active:cursor-grabbing opacity-80" />
             </div>
-          </div>
 
-          {/* Marquee Ticker */}
-          <div className="w-full bg-primary py-4 overflow-hidden relative z-10 border-y border-white/10">
-            <div className="flex whitespace-nowrap animate-infinite-scroll">
-              {Array(4).fill(null).map((_, i) => (
-                <div key={i} className="flex items-center gap-12 px-6">
-                  {['RUST', 'SOLANA', 'ANCHOR', 'REACT', 'TYPESCRIPT', 'DEFI', 'WEB3.JS', 'SMART CONTRACTS'].map(item => (
-                    <span key={item} className="font-code font-bold text-black tracking-[2px] flex items-center gap-12">
-                      {item} <span className="text-[10px]">✦</span>
-                    </span>
-                  ))}
-                </div>
-              ))}
+            {/* Zone 3: Marquee Ticker (Bottom Zone) */}
+            <div className="flex-shrink-0 w-full bg-primary py-4 overflow-hidden relative z-10 border-y border-white/10">
+              <div className="flex whitespace-nowrap animate-infinite-scroll">
+                {Array(4).fill(null).map((_, i) => (
+                  <div key={i} className="flex items-center gap-12 px-6">
+                    {['RUST', 'SOLANA', 'ANCHOR', 'REACT', 'TYPESCRIPT', 'DEFI', 'WEB3.JS', 'SMART CONTRACTS'].map(item => (
+                      <span key={item} className="font-code font-bold text-black tracking-[2px] flex items-center gap-12">
+                        {item} <span className="text-[10px]">✦</span>
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
+
           </div>
         </div>
       </section>
