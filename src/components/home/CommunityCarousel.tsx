@@ -147,7 +147,7 @@ export default function CommunityCarousel() {
                     
                     {/* Expanded Description */}
                     <div className={cn(
-                      "text-muted-foreground leading-relaxed text-base font-medium max-h-0 opacity-0 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
+                      "text-muted-foreground leading-relaxed text-base font-medium max-h-0 opacity-0 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] whitespace-normal",
                       expandedId === `${member.id}-${idx}` && "max-h-[300px] opacity-100 mt-8 group-hover:text-black"
                     )}>
                       {member.description}
