@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -25,9 +24,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getEvents, createEvent, updateEvent, deleteEvent } from '@/services/events';
 import { Event } from '@/types/database';
-import { Plus, Edit2, Trash2, Calendar, MapPin, Link as LinkIcon, Star } from 'lucide-react';
+import { Plus, Edit2, Trash2, Calendar, MapPin, Star } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
+import { cn } from '@/lib/utils';
 
 export default function EventsAdmin() {
   const [events, setEvents] = useState<Event[]>([]);

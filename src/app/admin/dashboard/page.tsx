@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -9,6 +8,7 @@ import { getEvents } from '@/services/events';
 import { getPartners } from '@/services/partners';
 import { getTestimonials } from '@/services/testimonials';
 import { Users, Calendar, Handshake, MessageSquareQuote, Sparkles } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({

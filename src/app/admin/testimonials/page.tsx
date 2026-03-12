@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -25,9 +24,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '@/services/testimonials';
 import { Testimonial } from '@/types/database';
-import { Plus, Edit2, Trash2, MessageSquareQuote, Twitter, User } from 'lucide-react';
+import { Plus, Edit2, Trash2, Twitter } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 export default function TestimonialsAdmin() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
