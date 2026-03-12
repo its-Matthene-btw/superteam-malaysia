@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 
 import Link from 'next/link';
 import { MessageSquare, ArrowUp, Send, Loader2, CheckCircle2 } from 'lucide-react';

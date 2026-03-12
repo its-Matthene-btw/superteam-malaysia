@@ -90,7 +90,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
       router.push('/admin/ecosystem/projects');
       router.refresh();
     } catch (error) {
-      toast({ variant: 'destructive', title: 'Error saving project' });
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to save project' });
     }
   };
 
