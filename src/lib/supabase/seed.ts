@@ -60,6 +60,22 @@ export async function seedDatabase() {
     if (newsErr) results.errors.push(`News: ${newsErr.message}`);
     else results.news = news.length;
 
+    // 5. Seed Testimonials
+    const testimonials = [
+      { name: 'Raj Patel', role: 'Founder, SolFlow', content: 'Superteam Malaysia provided the initial spark we needed to move from ideation to a fully functional DeFi protocol. The support mesh is unmatched.', type: 'official', created_at: new Date().toISOString() },
+      { name: 'Sarah Chen', role: 'UI/UX Designer', content: 'The residency program at the KL Build Station was a game changer for my career. Building alongside the best engineers in the region is priceless.', type: 'twitter', created_at: new Date().toISOString() }
+    ];
+    await supabase.from('testimonials').upsert(testimonials, { onConflict: 'name' });
+    results.testimonials = testimonials.length;
+
+    // 6. Seed Events
+    const events = [
+      { title: 'Solana Hacker House KL', description: '3 days of building, workshops, and high-stakes networking.', location: 'Kuala Lumpur', event_date: new Date(Date.now() + 86400000 * 30).toISOString(), status: 'upcoming', featured: true },
+      { title: 'Founders Breakfast', description: 'Exclusive gathering for Web3 founders.', location: 'Bangsar South', event_date: new Date(Date.now() + 86400000 * 15).toISOString(), status: 'upcoming', featured: false }
+    ];
+    await supabase.from('events').upsert(events, { onConflict: 'title' });
+    results.events = events.length;
+
   } catch (err: any) {
     results.errors.push(err.message);
   }
@@ -77,10 +93,30 @@ export async function seedEcosystemData() {
   ];
 
   const projects = [
-    { name: 'Phantom', slug: 'phantom', category: 'Wallets', short_description: 'The friendly crypto wallet for DeFi & NFTs. Safe and easy to use.', logo_url: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=150&q=80', featured: true },
-    { name: 'Jupiter', slug: 'jupiter', category: 'DeFi', short_description: 'The best swap aggregator on Solana. Built for smart traders.', logo_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=150&q=80', featured: true },
-    { name: 'Backpack', slug: 'backpack', category: 'Wallets', short_description: 'Next-gen wallet acting as an operating system for xNFTs.', logo_url: 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=150&q=80', featured: true },
-    { name: 'Helius', slug: 'helius', category: 'Dev Tools', short_description: 'Powerful APIs and webhooks for Solana developers to build faster.', logo_url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=150&q=80' }
+    { 
+      name: 'Jupiter Exchange', 
+      slug: 'jupiter', 
+      category: 'DeFi', 
+      short_description: 'The premier liquidity aggregator for Solana. Delivering the best swap rates and decentralized perpetual trading.', 
+      long_description: 'Jupiter brings world-class routing algorithms to the Solana network. By aggregating liquidity from multiple decentralized exchanges (DEXs), Jupiter ensures that users always receive the most optimal price execution for their token swaps.\n\nFor the Malaysian Web3 ecosystem, Jupiter serves as the primary gateway for retail traders and institutional players alike.',
+      logo_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=200&q=80', 
+      hero_image_url: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=1200',
+      network: 'Solana Mainnet',
+      token_symbol: 'JUP',
+      status: 'Live & Audited',
+      contract_address: 'JUPyiwrYJFskUPiHa7hkeR8VUT...',
+      featured: true 
+    },
+    { 
+      name: 'Phantom', 
+      slug: 'phantom', 
+      category: 'Wallets', 
+      short_description: 'The friendly crypto wallet for DeFi & NFTs. Safe and easy to use.', 
+      logo_url: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&w=200&q=80',
+      network: 'Solana, ETH, BTC',
+      status: 'Live',
+      featured: true 
+    }
   ];
 
   const opportunities = [
@@ -88,9 +124,21 @@ export async function seedEcosystemData() {
     { title: 'Solana Pay Integration', description: 'Build an open-source plugin for local e-commerce. Reward: 2,000 USDC.', type: 'Bounty', link: 'https://earn.superteam.fun' }
   ];
 
-  await supabase.from('ecosystem_categories').upsert(categories, { onConflict: 'slug' });
-  await supabase.from('ecosystem_projects').upsert(projects, { onConflict: 'slug' });
+  const { data: catData } = await supabase.from('ecosystem_categories').upsert(categories, { onConflict: 'slug' }).select();
+  const { data: projData } = await supabase.from('ecosystem_projects').upsert(projects, { onConflict: 'slug' }).select();
   await supabase.from('ecosystem_opportunities').upsert(opportunities, { onConflict: 'title' });
+
+  // Seed some features for Jupiter
+  if (projData) {
+    const jup = projData.find(p => p.slug === 'jupiter');
+    if (jup) {
+      const features = [
+        { project_id: jup.id, title: 'Smart Routing', description: 'Proprietary algorithm splits trades across multiple liquidity pools.' },
+        { project_id: jup.id, title: 'Limit Orders', description: 'Place decentralized limit orders that execute automatically.' }
+      ];
+      await supabase.from('ecosystem_features').upsert(features, { onConflict: 'title' });
+    }
+  }
 
   return { categories: categories.length, projects: projects.length, opportunities: opportunities.length };
 }

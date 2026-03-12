@@ -13,6 +13,9 @@ export type EcosystemProject = {
   twitter_url: string;
   discord_url: string;
   github_url: string;
+  contract_address: string;
+  network: string;
+  token_symbol: string;
   status: string;
   featured: boolean;
   created_at: string;
@@ -32,4 +35,11 @@ export type EcosystemOpportunity = {
   type: string;
   link: string;
   created_at: string;
+};
+
+export type EcosystemFeature = {
+  id: string;
+  project_id: string;
+  title: string;
+  description: string;
 };
