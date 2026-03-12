@@ -49,9 +49,19 @@ export default function EventSection({ events }: { events: Event[] }) {
         </div>
 
         {/* RIGHT COLUMN - SCROLLING CARDS */}
-        <div className="p-10 lg:p-20 bg-[#0f0f13] relative flex flex-col gap-12 lg:gap-20 overflow-hidden">
-          {/* PURPLE GRID BACKGROUND */}
-          <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(153,69,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(153,69,255,0.05)_1px,transparent_1px)] bg-[size:60px:60px] pointer-events-none" />
+        <div className="p-10 lg:p-20 bg-[#050505] relative flex flex-col gap-12 lg:gap-20 overflow-hidden">
+          {/* CTA-STYLE BACKGROUND PATTERN */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            <div className="absolute -bottom-[10%] -right-[10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[100px]" />
+            <div 
+              className="absolute inset-0 opacity-50" 
+              style={{ 
+                backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', 
+                backgroundSize: '40px 40px',
+                backgroundPosition: 'center center'
+              }} 
+            />
+          </div>
 
           {sortedEvents.length > 0 ? sortedEvents.map((event) => (
             <Link 
