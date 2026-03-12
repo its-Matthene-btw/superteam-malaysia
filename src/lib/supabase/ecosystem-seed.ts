@@ -66,16 +66,15 @@ const opportunities = [
 ];
 
 export async function seedEcosystemData() {
-  // 1. Wipe Existing Data (Destructive only for ecosystem tables)
-  // We use neq id 000... to delete all rows
+  // 1. Wipe Existing Data (Strictly Ecosystem only)
   await supabase.from('ecosystem_opportunities').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('ecosystem_features').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('ecosystem_projects').delete().neq('id', '00000000-0000-0000-0000-000000000000');
   await supabase.from('ecosystem_categories').delete().neq('id', '00000000-0000-0000-0000-000000000000');
 
   // 2. Seed Fresh Data
-  const { data: catData } = await supabase.from('ecosystem_categories').insert(categories).select();
   const { data: projData } = await supabase.from('ecosystem_projects').insert(projects).select();
+  await supabase.from('ecosystem_categories').insert(categories);
   await supabase.from('ecosystem_opportunities').insert(opportunities);
 
   // 3. Seed features for Jupiter

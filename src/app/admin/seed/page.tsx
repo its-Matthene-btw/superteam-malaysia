@@ -235,7 +235,7 @@ CREATE TABLE IF NOT EXISTS partners (
                 </Button>
               </div>
             </CardContent>
-          </Card>
+          </div>
         </div>
       </div>
     </div>
