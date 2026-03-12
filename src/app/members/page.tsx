@@ -7,12 +7,18 @@ import Footer from '@/components/layout/Footer';
 import FaqCtaSection from '@/components/home/FaqCtaSection';
 import { getMembers } from '@/services/members';
 import { Member } from '@/types/database';
-import { Search, X, Briefcase, Twitter, Github, Linkedin, Building2, ArrowRight, Loader2 } from 'lucide-react';
+import { Search, X, Briefcase, Github, Linkedin, Building2, ArrowRight, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 
 const Globe = dynamic(() => import('@/components/members/Globe'), { ssr: false });
+
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
 
 export default function MemberDirectory() {
   const [members, setMembers] = useState<Member[]>([]);
@@ -167,7 +173,7 @@ export default function MemberDirectory() {
                       <span className="font-code text-[10px] uppercase tracking-[2px] text-primary group-hover:text-black font-bold transition-colors">
                         [{member.role}]
                       </span>
-                      {member.twitter_url && <Twitter className="w-4 h-4 text-muted-foreground group-hover:text-black transition-colors" />}
+                      {member.twitter_url && <XIcon className="w-4 h-4 text-muted-foreground group-hover:text-black transition-colors" />}
                     </div>
                     <h3 className="text-2xl font-black uppercase tracking-tighter text-white group-hover:text-black transition-colors mb-2">
                       {member.name}
@@ -248,7 +254,7 @@ export default function MemberDirectory() {
                 <div className="p-6 border border-white/10 bg-white/5">
                   <span className="block font-code text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Social Network</span>
                   <div className="flex gap-4">
-                    {selectedMember.twitter_url && <a href={selectedMember.twitter_url} target="_blank" className="text-white hover:text-primary transition-colors"><Twitter /></a>}
+                    {selectedMember.twitter_url && <a href={selectedMember.twitter_url} target="_blank" className="text-white hover:text-primary transition-colors"><XIcon className="w-5 h-5" /></a>}
                     <a href="#" className="text-white hover:text-primary transition-colors"><Github /></a>
                     <a href="#" className="text-white hover:text-primary transition-colors"><Linkedin /></a>
                   </div>

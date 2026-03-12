@@ -3,9 +3,15 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Twitter } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,9 +39,9 @@ export default function Navbar() {
   }, [lastScrollY]);
 
   const links = [
-    { name: 'Mission', href: '/#mission' },
-    { name: 'Events', href: '/#events' },
-    { name: 'Ecosystem', href: '/#ecosystem' },
+    { name: 'News', href: '/news' },
+    { name: 'Events', href: '/events' },
+    { name: 'Ecosystem', href: '/ecosystem' },
     { name: 'Members', href: '/members' },
   ];
 
@@ -52,7 +58,7 @@ export default function Navbar() {
           <span className="font-headline font-bold text-xl lg:text-2xl tracking-tighter text-white uppercase">SUPERTEAM</span>
         </Link>
 
-        {/* Desktop Links - Adjusted spacing and scaling for better tablet responsiveness (768px-1200px) */}
+        {/* Desktop Links */}
         <div className="hidden md:flex items-center lg:space-x-10 space-x-4">
           {links.map((link) => (
             <Link key={link.name} href={link.href} className="text-[11px] lg:text-sm font-semibold uppercase tracking-wider text-muted-foreground hover:text-white transition-colors whitespace-nowrap">
@@ -67,11 +73,11 @@ export default function Navbar() {
               className="w-8 h-8 lg:w-10 lg:h-10 bg-white rounded-full flex items-center justify-center hover:bg-white/90 transition-all group"
               title="Follow us on X"
             >
-              <Twitter className="w-4 h-4 lg:w-5 lg:h-5 text-black" />
+              <XIcon className="w-4 h-4 lg:w-5 lg:h-5 text-black" />
             </a>
-            <Link href="/#mission">
+            <Link href="/contact">
               <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold px-3 lg:px-8 h-9 lg:h-12 rounded-none uppercase tracking-widest text-[9px] lg:text-xs">
-                EXPLORE MORE
+                CONTACT
               </Button>
             </Link>
           </div>
@@ -98,10 +104,15 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="w-12 h-12 bg-white rounded-full flex items-center justify-center"
             >
-              <Twitter className="w-6 h-6 text-black" />
+              <XIcon className="w-6 h-6 text-black" />
             </a>
             <span className="text-white font-bold">Follow us on X</span>
           </div>
+          <Link href="/contact" onClick={() => setIsOpen(false)}>
+            <Button className="w-full bg-primary font-bold rounded-none uppercase tracking-widest">
+              CONTACT
+            </Button>
+          </Link>
         </div>
       )}
     </nav>

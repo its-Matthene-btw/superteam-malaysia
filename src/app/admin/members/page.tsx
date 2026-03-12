@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -28,6 +29,12 @@ import { Plus, Edit2, Trash2, User, Star, Link as LinkIcon } from 'lucide-react'
 import Image from 'next/image';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
 
 export default function MembersAdmin() {
   const [members, setMembers] = useState<Member[]>([]);
@@ -221,7 +228,7 @@ export default function MembersAdmin() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Twitter URL</Label>
+                  <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">X (Twitter) URL</Label>
                   <Input 
                     value={formData.twitter_url || ''} 
                     onChange={(e) => setFormData({...formData, twitter_url: e.target.value})} 

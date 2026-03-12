@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -24,10 +25,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '@/services/testimonials';
 import { Testimonial } from '@/types/database';
-import { Plus, Edit2, Trash2, Twitter } from 'lucide-react';
+import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
 
 export default function TestimonialsAdmin() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -107,7 +114,7 @@ export default function TestimonialsAdmin() {
             <h1 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-white">
               MANAGE <span className="text-primary">FEEDBACK</span>
             </h1>
-            <p className="text-muted-foreground mt-2">Manage testimonials from Twitter, Discord, and core partners.</p>
+            <p className="text-muted-foreground mt-2">Manage testimonials from X, Discord, and core partners.</p>
           </div>
           <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
             <Plus className="w-4 h-4 mr-2" /> Add Feedback
@@ -145,12 +152,12 @@ export default function TestimonialsAdmin() {
                   <TableCell>
                     <div className={cn(
                       "inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest",
-                      t.type === 'twitter' ? "bg-blue-500/10 text-blue-400 border border-blue-500/20" : 
+                      t.type === 'twitter' ? "bg-white/10 text-white border border-white/20" : 
                       t.type === 'discord' ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20" : 
                       "bg-primary/10 text-primary border border-primary/20"
                     )}>
-                      {t.type === 'twitter' && <Twitter className="w-2.5 h-2.5" />}
-                      {t.type}
+                      {t.type === 'twitter' && <XIcon className="w-2.5 h-2.5" />}
+                      {t.type === 'twitter' ? 'X' : t.type}
                     </div>
                   </TableCell>
                   <TableCell className="max-w-md truncate text-muted-foreground text-xs italic">
@@ -201,7 +208,7 @@ export default function TestimonialsAdmin() {
                     </SelectTrigger>
                     <SelectContent className="glass border-white/10">
                       <SelectItem value="official">Official Testimonial</SelectItem>
-                      <SelectItem value="twitter">Twitter Post</SelectItem>
+                      <SelectItem value="twitter">X Post</SelectItem>
                       <SelectItem value="discord">Discord Message</SelectItem>
                     </SelectContent>
                   </Select>

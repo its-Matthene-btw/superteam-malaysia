@@ -2,9 +2,15 @@
 "use client";
 
 import Link from 'next/link';
-import { Twitter, MessageSquare, ArrowUp, Send, Loader2, CheckCircle2 } from 'lucide-react';
+import { MessageSquare, ArrowUp, Send, Loader2, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import { subscribeToNewsletter } from '@/services/newsletter';
+
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
+  </svg>
+);
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -44,12 +50,16 @@ export default function Footer() {
             <Link href="/" className="brand-logo text-4xl font-headline font-extrabold tracking-tighter uppercase leading-none mb-8 hover:opacity-80 transition-opacity text-white">
               Superteam<br /><span className="text-primary">Malaysia</span>
             </Link>
-            <p className="brand-desc text-base text-muted-foreground leading-relaxed max-w-sm mb-10">
+            <p className="brand-desc text-base text-muted-foreground leading-relaxed max-sm:max-w-xs mb-10">
               A decentralized community of founders, developers, and creatives building the future of the Solana ecosystem.
             </p>
             <div className="flex gap-4">
-              <a href="https://x.com/superteammy" target="_blank" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-white/5 transition-colors"><Twitter className="w-4 h-4" /></a>
-              <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-white/5 transition-colors"><MessageSquare className="w-4 h-4" /></a>
+              <a href="https://x.com/superteammy" target="_blank" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-white/5 transition-colors text-white">
+                <XIcon className="w-4 h-4" />
+              </a>
+              <a href="https://discord.gg/superteammy" target="_blank" className="w-10 h-10 border border-white/10 flex items-center justify-center hover:bg-white/5 transition-colors text-white">
+                <MessageSquare className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
