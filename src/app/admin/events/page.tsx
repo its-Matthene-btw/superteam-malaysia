@@ -121,6 +121,11 @@ export default function EventsAdmin() {
     }
   };
 
+  const isValidUrl = (url?: string | null) => {
+    if (!url) return false;
+    return (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/')) && !url.includes('\n');
+  };
+
   return (
     <div className="space-y-10 animate-fade-up">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -156,8 +161,8 @@ export default function EventsAdmin() {
                 <TableCell className="py-6 pl-8">
                   <div className="flex items-center gap-4">
                     <div className="relative w-12 h-12 rounded bg-white/5 overflow-hidden border border-white/10 flex-shrink-0">
-                      {event.image_url ? (
-                        <Image src={event.image_url} alt="" fill className="object-cover grayscale" />
+                      {isValidUrl(event.image_url) ? (
+                        <Image src={event.image_url!} alt="" fill className="object-cover grayscale" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-white/20"><ImageIcon className="w-5 h-5" /></div>
                       )}
@@ -295,12 +300,12 @@ export default function EventsAdmin() {
               <Label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-2">Event Graphic</Label>
               <div className="flex flex-col gap-4">
                 <div className="relative w-full h-40 rounded-lg overflow-hidden border border-white/10 bg-black flex items-center justify-center">
-                  {formData.image_url ? (
-                    <Image src={formData.image_url} alt="Preview" fill className="object-cover grayscale" />
+                  {isValidUrl(formData.image_url) ? (
+                    <Image src={formData.image_url!} alt="Preview" fill className="object-cover grayscale" />
                   ) : (
                     <div className="text-center">
                       <ImageIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-[9px] text-muted-foreground font-code">PREVIEW_UNAVAILABLE</p>
+                      <p className="text-[9px] text-muted-foreground font-code uppercase">Invalid_or_Missing_URL</p>
                     </div>
                   )}
                 </div>
