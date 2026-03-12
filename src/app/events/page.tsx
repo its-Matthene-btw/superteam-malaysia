@@ -50,7 +50,7 @@ export default function EventsPage() {
           <div className="relative z-10">
             <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-6">// SUPERTEAM_MY_EVENTS</div>
             <h1 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10 uppercase">
-              Discover the<br />Events.
+              Discover the<br /><span className="text-primary">Events.</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-lg leading-relaxed font-medium mb-12">
               Find hackathons, technical workshops, and builder meetups happening across the Solana ecosystem in Malaysia.

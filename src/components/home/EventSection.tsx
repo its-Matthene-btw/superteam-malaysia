@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 
 import { Event } from '@/types/database';
 import { ArrowRight, MapPin } from 'lucide-react';
@@ -15,10 +14,10 @@ export default function EventSection({ events }: { events: Event[] }) {
 
   return (
     <section id="events" className="w-full border-b border-white/10 bg-black">
-      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[4.5fr_5.5fr] border-x border-white/10 bg-white/5 gap-[1px]">
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[4fr_6fr] border-x border-white/10 bg-white/5 gap-[1px]">
         
         {/* LEFT COLUMN - STICKY */}
-        <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center p-10 lg:p-20 bg-black relative overflow-hidden border-r border-white/10">
+        <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center p-10 lg:p-24 bg-black relative overflow-hidden border-r border-white/10">
           {/* Abstract Grid Background */}
           <div 
             className="absolute inset-0 z-0 opacity-50"
@@ -32,8 +31,8 @@ export default function EventSection({ events }: { events: Event[] }) {
           
           <div className="relative z-10">
             <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-6">// EVENTS_RADAR</div>
-            <h2 className="text-6xl lg:text-7xl font-black leading-[0.9] tracking-tighter mb-10 uppercase text-white">
-              Upcoming<br />Schedule.
+            <h2 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10 uppercase text-white">
+              Upcoming<br /><span className="text-primary">Schedule.</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-md leading-relaxed font-medium mb-12">
               Sync with the Malaysian Web3 community. We host technical workshops, global hackathons, and exclusive networking sessions.
@@ -49,10 +48,10 @@ export default function EventSection({ events }: { events: Event[] }) {
         </div>
 
         {/* RIGHT COLUMN - SCROLLING CARDS */}
-        <div className="p-10 lg:p-20 bg-[#050505] relative flex flex-col gap-12 lg:gap-20 overflow-hidden">
+        <div className="p-10 lg:p-24 bg-[#0f0f13] relative flex flex-col gap-16 overflow-hidden">
           {/* CTA-STYLE BACKGROUND PATTERN */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-            <div className="absolute -bottom-[10%] -right-[10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[100px]" />
+            <div className="absolute -bottom-[10%] -right-[10%] w-[800px] h-[800px] bg-primary/15 rounded-full blur-[100px]" />
             <div 
               className="absolute inset-0 opacity-50" 
               style={{ 
@@ -92,7 +91,7 @@ export default function EventSection({ events }: { events: Event[] }) {
               {/* Card Body */}
               <div className="p-10 lg:p-12 flex flex-col">
                 <div className="font-code text-sm text-primary font-bold tracking-[4px] uppercase mb-6">
-                  {new Date(event.event_date).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' }).replace(/ /g, '_')}
+                  {new Date(event.event_date).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' }).toUpperCase().replace(/ /g, '_')}
                 </div>
                 
                 <h3 className="text-3xl lg:text-4xl font-black mb-10 leading-none tracking-tight text-white group-hover:text-primary transition-colors">
@@ -109,10 +108,7 @@ export default function EventSection({ events }: { events: Event[] }) {
                   </div>
                   <div className="flex flex-col gap-2">
                     <span className="font-code text-[9px] text-muted-foreground uppercase tracking-widest">ADMISSION</span>
-                    <span className={cn(
-                      "font-bold text-sm uppercase",
-                      event.featured ? "text-secondary" : "text-white"
-                    )}>
+                    <span className="font-bold text-white text-sm uppercase">
                       {event.featured ? 'Invite_Only' : 'Public_Access'}
                     </span>
                   </div>
