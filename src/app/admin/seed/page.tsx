@@ -99,7 +99,6 @@ CREATE POLICY "Allow auth all" ON testimonials FOR ALL TO authenticated USING (t
   };
 
   const handleSeed = async () => {
-    if (!confirm('Ensure you have run the UPDATED SQL schema first. Continue?')) return;
     setLoading(true);
     try {
       const data = await seedDatabase();

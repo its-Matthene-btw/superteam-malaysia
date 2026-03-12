@@ -40,7 +40,7 @@ export default function DashboardPage() {
         });
       } catch (err: any) {
         console.error('Error fetching dashboard stats:', err);
-        setError('Database error. Ensure your Supabase tables exist.');
+        setError('Database error. Ensure your Supabase tables exist and RLS policies are applied.');
       } finally {
         setLoading(false);
       }
