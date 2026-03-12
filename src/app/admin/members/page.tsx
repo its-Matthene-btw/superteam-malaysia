@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -17,7 +16,6 @@ import {
   DialogContent, 
   DialogHeader, 
   DialogTitle, 
-  DialogTrigger,
   DialogFooter
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -26,9 +24,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { getMembers, createMember, updateMember, deleteMember, uploadAvatar } from '@/services/members';
 import { Member } from '@/types/database';
-import { Plus, Edit2, Trash2, User, Globe, Github, Twitter, Linkedin, Building2, Star } from 'lucide-react';
+import { Plus, Edit2, Trash2, User, Star, Upload, Link as LinkIcon } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 
 export default function MembersAdmin() {
   const [members, setMembers] = useState<Member[]>([]);
@@ -42,7 +41,8 @@ export default function MembersAdmin() {
     skills: [],
     bio: '',
     featured: false,
-    twitter_url: ''
+    twitter_url: '',
+    avatar_url: ''
   });
 
   useEffect(() => {
@@ -73,7 +73,8 @@ export default function MembersAdmin() {
         skills: [],
         bio: '',
         featured: false,
-        twitter_url: ''
+        twitter_url: '',
+        avatar_url: ''
       });
     }
     setIsModalOpen(true);
@@ -114,9 +115,14 @@ export default function MembersAdmin() {
       try {
         const url = await uploadAvatar(file);
         setFormData({ ...formData, avatar_url: url });
-        toast({ title: 'Success', description: 'Avatar uploaded.' });
-      } catch (error) {
-        toast({ variant: 'destructive', title: 'Error', description: 'Failed to upload avatar.' });
+        toast({ title: 'Success', description: 'Avatar uploaded to storage.' });
+      } catch (error: any) {
+        console.error(error);
+        toast({ 
+          variant: 'destructive', 
+          title: 'Upload Failed', 
+          description: error.message || 'Check if Storage RLS is configured in Supabase.' 
+        });
       }
     }
   };
@@ -261,17 +267,42 @@ export default function MembersAdmin() {
                 <Label htmlFor="featured" className="text-xs uppercase tracking-widest font-code cursor-pointer">Featured on spotlight</Label>
               </div>
 
-              <div className="space-y-2">
-                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Avatar Image</Label>
-                <div className="flex items-center gap-4">
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden border border-white/10 bg-white/5">
+              <div className="space-y-4 p-4 rounded-lg bg-white/5 border border-white/10">
+                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-2">Avatar Source</Label>
+                <div className="flex items-center gap-6">
+                  <div className="relative w-20 h-20 rounded-full overflow-hidden border border-white/10 bg-black flex-shrink-0">
                     {formData.avatar_url ? (
                       <Image src={formData.avatar_url} alt="Preview" fill className="object-cover" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-muted-foreground"><User className="w-8 h-8" /></div>
                     )}
                   </div>
-                  <Input type="file" accept="image/*" onChange={handleImageUpload} className="glass border-white/10 cursor-pointer text-xs" />
+                  
+                  <div className="flex-1 space-y-4">
+                    <div className="space-y-1">
+                      <Label className="text-[9px] uppercase tracking-tighter text-muted-foreground flex items-center gap-1">
+                        <LinkIcon className="w-2 h-2" /> Direct URL
+                      </Label>
+                      <Input 
+                        placeholder="https://picsum.photos/..." 
+                        value={formData.avatar_url || ''}
+                        onChange={(e) => setFormData({...formData, avatar_url: e.target.value})}
+                        className="glass border-white/10 h-8 text-xs"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <Label className="text-[9px] uppercase tracking-tighter text-muted-foreground flex items-center gap-1">
+                        <Upload className="w-2 h-2" /> Upload to Supabase
+                      </Label>
+                      <Input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handleImageUpload} 
+                        className="glass border-white/10 cursor-pointer text-[10px] h-8 file:bg-white/10 file:text-white file:border-0" 
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
 

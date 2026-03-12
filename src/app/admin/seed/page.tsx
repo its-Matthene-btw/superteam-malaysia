@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -6,7 +5,7 @@ import AdminLayout from '@/components/admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { seedDatabase } from '@/lib/supabase/seed';
-import { Database, AlertCircle, CheckCircle2, Copy, Terminal } from 'lucide-react';
+import { Database, AlertCircle, CheckCircle2, Copy, Terminal, ShieldCheck } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 export default function SeedPage() {
@@ -74,27 +73,31 @@ ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE partners ENABLE ROW LEVEL SECURITY;
 ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
 
--- 3. Create Public Read Policies (For the website)
+-- 3. Create Public Read Policies
 CREATE POLICY "Allow public select" ON stats FOR SELECT USING (true);
 CREATE POLICY "Allow public select" ON members FOR SELECT USING (true);
 CREATE POLICY "Allow public select" ON events FOR SELECT USING (true);
 CREATE POLICY "Allow public select" ON partners FOR SELECT USING (true);
 CREATE POLICY "Allow public select" ON testimonials FOR SELECT USING (true);
 
--- 4. Create Authenticated Write Policies (For the Admin Panel)
+-- 4. Create Authenticated Write Policies
 CREATE POLICY "Allow auth all" ON stats FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Allow auth all" ON members FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Allow auth all" ON events FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Allow auth all" ON partners FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Allow auth all" ON testimonials FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
--- 5. Storage Buckets (Create these in the Storage UI)
--- Bucket names: "avatars", "logos"`;
+-- 5. UNLOCK STORAGE BUCKETS (Run this to fix Upload Errors)
+-- Make sure buckets 'avatars' and 'logos' are created in the Storage tab first.
+CREATE POLICY "Public Access" ON storage.objects FOR SELECT USING ( bucket_id IN ('avatars', 'logos') );
+CREATE POLICY "Authenticated Upload" ON storage.objects FOR INSERT TO authenticated WITH CHECK ( bucket_id IN ('avatars', 'logos') );
+CREATE POLICY "Authenticated Update" ON storage.objects FOR UPDATE TO authenticated USING ( bucket_id IN ('avatars', 'logos') );
+CREATE POLICY "Authenticated Delete" ON storage.objects FOR DELETE TO authenticated USING ( bucket_id IN ('avatars', 'logos') );`;
 
   const copySql = () => {
     navigator.clipboard.writeText(sqlSchema);
     setCopied(true);
-    toast({ title: "Copied!", description: "SQL Schema & RLS Policies copied." });
+    toast({ title: "Copied!", description: "SQL Schema & Security Policies copied." });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -123,22 +126,22 @@ CREATE POLICY "Allow auth all" ON testimonials FOR ALL TO authenticated USING (t
           <h1 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-white">
             DATABASE <span className="text-primary">SETUP</span>
           </h1>
-          <p className="text-muted-foreground mt-2">Activate your CMS with proper security policies.</p>
+          <p className="text-muted-foreground mt-2">Unlock your CMS tables and Storage buckets with proper security policies.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <Card className="glass border-white/10 flex flex-col">
             <CardHeader className="border-b border-white/5 bg-white/5">
               <CardTitle className="flex items-center gap-2 text-white uppercase tracking-widest text-xs">
-                <Terminal className="w-4 h-4 text-primary" /> Step 1: SQL & RLS
+                <ShieldCheck className="w-4 h-4 text-primary" /> Step 1: SQL & RLS
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-4 flex-1 flex flex-col">
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Run this script in your **Supabase SQL Editor** to create tables and set permissions.
+                Run this in your **Supabase SQL Editor** to create tables and **fix upload permissions**.
               </p>
               <div className="relative flex-1 group">
-                <pre className="p-4 rounded bg-black/50 border border-white/5 text-[10px] font-code text-primary h-[350px] overflow-y-auto whitespace-pre-wrap">
+                <pre className="p-4 rounded bg-black/50 border border-white/5 text-[10px] font-code text-primary h-[400px] overflow-y-auto whitespace-pre-wrap">
                   {sqlSchema}
                 </pre>
                 <Button 
