@@ -264,7 +264,7 @@ export default function MemberDirectory() {
                     src={member.image} 
                     alt={member.name} 
                     fill 
-                    className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                    className="object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-40 transition-opacity" />
                 </div>
@@ -329,7 +329,7 @@ export default function MemberDirectory() {
             </button>
             
             <div className="lg:w-2/5 relative min-h-[400px] border-r border-white/10">
-              <Image src={selectedMember.image} alt={selectedMember.name} fill className="object-cover grayscale" />
+              <Image src={selectedMember.image} alt={selectedMember.name} fill className="object-cover object-top grayscale" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
             </div>
             
