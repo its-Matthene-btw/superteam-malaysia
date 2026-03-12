@@ -6,7 +6,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import FaqCtaSection from '@/components/home/FaqCtaSection';
 import { members } from '@/lib/data';
-import { Search, X, Briefcase, Twitter, Github, Linkedin, Globe, ArrowRight } from 'lucide-react';
+import { Search, X, Briefcase, Twitter, Github, Linkedin, Globe, ArrowRight, Building2 } from 'lucide-react';
 import Image from 'next/image';
 import * as d3 from 'd3';
 import { cn } from '@/lib/utils';
@@ -42,13 +42,15 @@ export default function MemberDirectory() {
     let width: number, height: number, centerX: number, centerY: number, radius: number;
 
     const calculateLayout = () => {
-      width = canvas.parentElement?.clientWidth || 800;
-      height = canvas.parentElement?.clientHeight || 600;
+      const container = canvas.parentElement;
+      if (!container) return;
+      width = container.clientWidth;
+      height = container.clientHeight;
       
       if (window.innerWidth <= 768) {
         centerX = width / 2;
         centerY = height / 2;
-        radius = Math.min(width, height) * 0.4;
+        radius = Math.min(width, height) * 0.45;
       } else if (window.innerWidth <= 1200) {
         centerX = width / 2;
         centerY = height;
@@ -76,48 +78,68 @@ export default function MemberDirectory() {
 
     const path = d3.geoPath().projection(projection).context(context);
     let landFeatures: any;
-    const rotation = [0, 0];
+    const allDots: any[] = [];
+
+    const generateDotsInPolygon = (feature: any, dotSpacing = 16) => {
+      const dots: any[] = [];
+      const bounds = d3.geoBounds(feature);
+      const stepSize = dotSpacing * 0.08;
+
+      for (let lng = bounds[0][0]; lng <= bounds[1][0]; lng += stepSize) {
+        for (let lat = bounds[0][1]; lat <= bounds[1][1]; lat += stepSize) {
+          if (d3.geoContains(feature, [lng, lat])) {
+            dots.push([lng, lat]);
+          }
+        }
+      }
+      return dots;
+    };
 
     const render = () => {
       context.clearRect(0, 0, width, height);
       const currentScale = projection.scale();
+      const scaleFactor = currentScale / radius;
 
       // Ocean
       context.beginPath();
       context.arc(centerX, centerY, currentScale, 0, 2 * Math.PI);
       context.fillStyle = "#050505";
       context.fill();
-      context.strokeStyle = "rgba(255, 255, 255, 0.1)";
-      context.lineWidth = 1;
+      context.strokeStyle = "rgba(255, 255, 255, 0.15)";
+      context.lineWidth = 1.5 * scaleFactor;
       context.stroke();
 
       if (landFeatures) {
-        // Graticule
         const graticule = d3.geoGraticule();
         context.beginPath();
         path(graticule());
         context.strokeStyle = "rgba(255, 255, 255, 0.03)";
+        context.lineWidth = 1 * scaleFactor;
         context.stroke();
 
-        // Land
-        context.beginPath();
-        landFeatures.features.forEach((f: any) => path(featureToDots(f)));
         context.fillStyle = "#9945FF";
-        context.globalAlpha = 0.6;
-        context.fill();
-        context.globalAlpha = 1;
+        allDots.forEach((dot) => {
+          const projected = projection([dot.lng, dot.lat]);
+          if (projected && projected[0] >= 0 && projected[0] <= width && projected[1] >= 0 && projected[1] <= height) {
+            context.beginPath();
+            context.arc(projected[0], projected[1], 1.5 * scaleFactor, 0, 2 * Math.PI);
+            context.fill();
+          }
+        });
       }
     };
-
-    // Placeholder for dots (simplified for React performance)
-    const featureToDots = (feature: any) => feature;
 
     d3.json("https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json")
       .then(data => {
         landFeatures = data;
+        (landFeatures as any).features.forEach((feature: any) => {
+          const dots = generateDotsInPolygon(feature, 16);
+          dots.forEach(([lng, lat]) => allDots.push({ lng, lat }));
+        });
         render();
       });
 
+    const rotation = [0, 0];
     const timer = d3.timer(() => {
       rotation[0] += 0.2;
       projection.rotate(rotation as [number, number]);
@@ -142,14 +164,14 @@ export default function MemberDirectory() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden border-b border-white/10 pt-20">
+      <section className="relative overflow-hidden border-b border-white/10 bg-black">
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] bg-center [mask-image:linear-gradient(to_bottom,black_40%,transparent_100%)]" />
         <div className="absolute top-[-30%] left-[20%] w-[1000px] h-[800px] bg-[radial-gradient(circle,rgba(153,69,255,0.25)_0%,transparent_70%)] rounded-full pointer-events-none z-0" />
         
-        <div className="max-w-[1400px] mx-auto border-x border-white/10 relative min-h-[70vh] flex flex-col">
-          <div className="flex-1 flex items-center px-10 py-32">
-            <div className="w-full lg:w-3/5 z-10 relative">
-              <div className="pill-badge mb-8"><span>✦</span> THE DIRECTORY</div>
+        <div className="max-w-[1400px] mx-auto border-x border-white/10 relative min-h-screen flex flex-col">
+          <div className="flex-1 flex flex-col lg:flex-row items-center px-10 py-32 relative">
+            <div className="w-full lg:w-3/5 z-10 relative pointer-events-auto">
+              <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md"><span>✦</span> THE DIRECTORY</div>
               <h1 className="text-7xl md:text-8xl lg:text-[120px] font-black uppercase tracking-tighter leading-[0.9] mb-10 flex flex-col">
                 <span className="text-white">BUILDER</span>
                 <span className="text-transparent" style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.4)' }}>NETWORK</span>
@@ -159,17 +181,17 @@ export default function MemberDirectory() {
               </p>
             </div>
             
-            <div className="absolute top-0 right-0 w-full h-full lg:w-1/2 pointer-events-auto">
-              <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing opacity-80" />
+            <div className="absolute inset-0 w-full h-full lg:w-full pointer-events-auto z-0 flex justify-center items-center">
+              <canvas ref={canvasRef} id="globeCanvas" className="w-full h-full cursor-grab active:cursor-grabbing opacity-80" />
             </div>
           </div>
 
           {/* Marquee Ticker */}
-          <div className="w-full bg-primary py-4 overflow-hidden relative z-10">
+          <div className="w-full bg-primary py-4 overflow-hidden relative z-10 border-y border-white/10">
             <div className="flex whitespace-nowrap animate-infinite-scroll">
               {Array(4).fill(null).map((_, i) => (
                 <div key={i} className="flex items-center gap-12 px-6">
-                  {['RUST', 'SOLANA', 'ANCHOR', 'REACT', 'TYPESCRIPT', 'DEFI', 'WEB3.JS'].map(item => (
+                  {['RUST', 'SOLANA', 'ANCHOR', 'REACT', 'TYPESCRIPT', 'DEFI', 'WEB3.JS', 'SMART CONTRACTS'].map(item => (
                     <span key={item} className="font-code font-bold text-black tracking-[2px] flex items-center gap-12">
                       {item} <span className="text-[10px]">✦</span>
                     </span>
@@ -251,7 +273,7 @@ export default function MemberDirectory() {
                     {member.name}
                   </h3>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-black/70 transition-colors mb-8">
-                    <Briefcase className="w-4 h-4" />
+                    <Building2 className="w-4 h-4" />
                     {member.company}
                   </div>
                   <div className="flex flex-wrap gap-2 mt-auto">
@@ -315,11 +337,11 @@ export default function MemberDirectory() {
                 {selectedMember.company}
               </div>
               
-              <p className="text-lg text-muted-foreground leading-relaxed mb-12">
+              <p className="text-lg text-muted-foreground leading-relaxed mb-12 whitespace-normal">
                 {selectedMember.description}
               </p>
               
-              <div className="grid grid-cols-2 gap-6 mb-12">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
                 <div className="p-6 border border-white/10 bg-white/5">
                   <span className="block font-code text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Social Network</span>
                   <div className="flex gap-4">
