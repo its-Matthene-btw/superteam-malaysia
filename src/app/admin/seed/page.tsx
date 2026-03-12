@@ -101,7 +101,24 @@ CREATE TABLE IF NOT EXISTS events (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 6. Enable RLS
+-- 6. Ensure missing columns exist (for existing tables)
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='events' AND COLUMN_NAME='image_url') THEN
+        ALTER TABLE events ADD COLUMN image_url text;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='events' AND COLUMN_NAME='status') THEN
+        ALTER TABLE events ADD COLUMN status text DEFAULT 'upcoming';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='events' AND COLUMN_NAME='featured') THEN
+        ALTER TABLE events ADD COLUMN featured boolean DEFAULT false;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='events' AND COLUMN_NAME='category') THEN
+        ALTER TABLE events ADD COLUMN category text;
+    END IF;
+END $$;
+
+-- 7. Enable RLS
 ALTER TABLE ecosystem_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
@@ -111,7 +128,7 @@ ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 
--- 7. Create Policies (Idempotent using DROP IF EXISTS)
+-- 8. Create Policies (Idempotent using DROP IF EXISTS)
 DROP POLICY IF EXISTS "Public Read Ecosystem" ON ecosystem_projects;
 CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
 
@@ -256,7 +273,7 @@ CREATE POLICY "Admin All Events" ON events FOR ALL TO authenticated USING (true)
           <Card className="glass border-white/10 flex flex-col">
             <CardHeader className="border-b border-white/5 bg-white/5">
               <CardTitle className="flex items-center gap-2 text-white uppercase tracking-widest text-xs">
-                <HelpCircle className="w-4 h-4 text-[#14F195]" /> 3. FAQ / Knowledge Base
+                <HelpCircle className="w-4 h-4 text-[#14F195]" /> 3. FAQ Hub
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">

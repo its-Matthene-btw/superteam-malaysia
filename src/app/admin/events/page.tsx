@@ -94,18 +94,33 @@ export default function EventsAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Sanitize payload: only send fields that exist in the database schema
+    const payload = {
+      title: formData.title,
+      description: formData.description || null,
+      location: formData.location || null,
+      event_date: formData.event_date || new Date().toISOString(),
+      luma_url: formData.luma_url || null,
+      image_url: formData.image_url || null,
+      status: formData.status || 'upcoming',
+      category: formData.category || 'Meetup',
+      featured: !!formData.featured
+    };
+
     try {
       if (editingEvent?.id) {
-        await updateEvent(editingEvent.id, formData);
+        await updateEvent(editingEvent.id, payload);
         toast({ title: 'Success', description: 'Event updated.' });
       } else {
-        await createEvent(formData);
+        await createEvent(payload);
         toast({ title: 'Success', description: 'Event created.' });
       }
       setIsModalOpen(false);
       fetchEvents();
-    } catch (error) {
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to save event.' });
+    } catch (error: any) {
+      console.error('Submit error:', error);
+      toast({ variant: 'destructive', title: 'Error', description: error.message || 'Failed to save event.' });
     }
   };
 
@@ -123,7 +138,12 @@ export default function EventsAdmin() {
 
   const isValidUrl = (url?: string | null) => {
     if (!url) return false;
-    return (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/')) && !url.includes('\n');
+    try {
+      new URL(url);
+      return (url.startsWith('http://') || url.startsWith('https://'));
+    } catch {
+      return false;
+    }
   };
 
   return (
@@ -305,7 +325,7 @@ export default function EventsAdmin() {
                   ) : (
                     <div className="text-center">
                       <ImageIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-[9px] text-muted-foreground font-code uppercase">Invalid_or_Missing_URL</p>
+                      <p className="text-[9px] text-muted-foreground font-code uppercase">Preview Unavailable</p>
                     </div>
                   )}
                 </div>
