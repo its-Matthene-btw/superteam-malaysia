@@ -67,9 +67,7 @@ export default function CommunityCarousel() {
       <div className="max-w-[1400px] mx-auto border-x border-white/10">
         <div className="px-10 pt-20">
           <div className="flex flex-col gap-6 mb-16">
-            <div className="inline-flex items-center gap-2 border border-white/10 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[2px] text-muted-foreground uppercase w-fit">
-              <span className="text-primary text-base">✦</span> THE COMMUNITY
-            </div>
+            <div className="pill-badge mb-6"><span>✦</span> THE COMMUNITY</div>
             <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none max-w-3xl text-white">
               A Team of<br />Web3 Experts.
             </h2>

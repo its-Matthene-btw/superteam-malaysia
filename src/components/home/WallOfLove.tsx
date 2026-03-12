@@ -128,7 +128,7 @@ function WallCard({ testimonial }: { testimonial: Testimonial }) {
     <div
       ref={cardRef}
       className={cn(
-        "wall-card relative flex flex-col bg-[#050505] overflow-hidden transition-colors duration-400 group min-w-[320px]",
+        "wall-card relative flex flex-col bg-[#050505] overflow-hidden transition-all duration-400 group min-w-[320px] border border-white/10 -ml-[1px] -mt-[1px]",
         testimonial.isWide ? "flex-[2_1_calc(66.666%-2px)]" : "flex-[1_1_calc(33.333%-2px)]",
         "max-md:flex-[1_1:100%] max-md:min-w-full"
       )}
@@ -211,9 +211,7 @@ export default function WallOfLove() {
     <section className="wall-section w-full bg-black border-t border-white/10">
       <div className="header-wrapper max-w-[1400px] mx-auto pt-20 border-x border-white/10">
         <div className="flex flex-col gap-6 mb-10 px-10">
-          <div className="inline-flex items-center gap-2 border border-white/10 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[2px] text-muted-foreground uppercase w-fit">
-            <span className="text-primary text-base">✦</span> Wall of Love
-          </div>
+          <div className="pill-badge mb-6"><span>✦</span> Wall of Love</div>
           <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
             Community<br />Voices.
           </h2>
@@ -229,8 +227,8 @@ export default function WallOfLove() {
         </div>
       </div>
 
-      <div className="grid-full-width w-full border-y border-white/10">
-        <div className="wall-grid max-w-[1400px] mx-auto flex flex-wrap gap-[1px] bg-white/10 border-x border-white/10">
+      <div className="grid-full-width w-full border-y border-white/10 overflow-hidden">
+        <div className="wall-grid max-w-[1400px] mx-auto flex flex-wrap bg-transparent border-x border-white/10">
           {testimonials.map((testimonial) => (
             <WallCard key={testimonial.id} testimonial={testimonial} />
           ))}
