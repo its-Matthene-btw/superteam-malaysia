@@ -1,149 +1,357 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import FaqCtaSection from '@/components/home/FaqCtaSection';
 import { members } from '@/lib/data';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger 
-} from "@/components/ui/dialog";
-import { Search, Twitter, Github, Linkedin, Award, Briefcase } from 'lucide-react';
+import { Search, X, Briefcase, Twitter, Github, Linkedin, Globe, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import * as d3 from 'd3';
+import { cn } from '@/lib/utils';
 
 export default function MemberDirectory() {
   const [search, setSearch] = useState('');
-  const [activeTrack, setActiveTrack] = useState('All');
-  
-  const tracks = ['All', 'Developer', 'Designer', 'Writer', 'Growth'];
+  const [activeFilter, setActiveFilter] = useState('All');
+  const [visibleCount, setVisibleCount] = useState(8);
+  const [selectedMember, setSelectedMember] = useState<any>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const filteredMembers = members.filter(m => {
-    const matchesSearch = m.name.toLowerCase().includes(search.toLowerCase()) || 
-                          m.skills.some(s => s.toLowerCase().includes(search.toLowerCase()));
-    const matchesTrack = activeTrack === 'All' || m.track === activeTrack;
-    return matchesSearch && matchesTrack;
-  });
+  const categories = ['All', 'Developer', 'Designer', 'Writer', 'Growth'];
+
+  const filteredMembers = useMemo(() => {
+    return members.filter(m => {
+      const matchesSearch = m.name.toLowerCase().includes(search.toLowerCase()) || 
+                            m.skills.some(s => s.toLowerCase().includes(search.toLowerCase())) ||
+                            m.company.toLowerCase().includes(search.toLowerCase());
+      const matchesFilter = activeFilter === 'All' || m.track === activeFilter;
+      return matchesSearch && matchesFilter;
+    });
+  }, [search, activeFilter]);
+
+  const displayedMembers = filteredMembers.slice(0, visibleCount);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    let width: number, height: number, centerX: number, centerY: number, radius: number;
+
+    const calculateLayout = () => {
+      width = canvas.parentElement?.clientWidth || 800;
+      height = canvas.parentElement?.clientHeight || 600;
+      
+      if (window.innerWidth <= 768) {
+        centerX = width / 2;
+        centerY = height / 2;
+        radius = Math.min(width, height) * 0.4;
+      } else if (window.innerWidth <= 1200) {
+        centerX = width / 2;
+        centerY = height;
+        radius = Math.min(width * 0.5, height * 0.8);
+      } else {
+        centerX = width;
+        centerY = height * 0.5;
+        radius = Math.max(width * 0.5, height) / 1.3;
+      }
+
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      context.scale(dpr, dpr);
+    };
+
+    calculateLayout();
+
+    const projection = d3.geoOrthographic()
+      .scale(radius)
+      .translate([centerX, centerY])
+      .clipAngle(90);
+
+    const path = d3.geoPath().projection(projection).context(context);
+    let landFeatures: any;
+    const rotation = [0, 0];
+
+    const render = () => {
+      context.clearRect(0, 0, width, height);
+      const currentScale = projection.scale();
+
+      // Ocean
+      context.beginPath();
+      context.arc(centerX, centerY, currentScale, 0, 2 * Math.PI);
+      context.fillStyle = "#050505";
+      context.fill();
+      context.strokeStyle = "rgba(255, 255, 255, 0.1)";
+      context.lineWidth = 1;
+      context.stroke();
+
+      if (landFeatures) {
+        // Graticule
+        const graticule = d3.geoGraticule();
+        context.beginPath();
+        path(graticule());
+        context.strokeStyle = "rgba(255, 255, 255, 0.03)";
+        context.stroke();
+
+        // Land
+        context.beginPath();
+        landFeatures.features.forEach((f: any) => path(featureToDots(f)));
+        context.fillStyle = "#9945FF";
+        context.globalAlpha = 0.6;
+        context.fill();
+        context.globalAlpha = 1;
+      }
+    };
+
+    // Placeholder for dots (simplified for React performance)
+    const featureToDots = (feature: any) => feature;
+
+    d3.json("https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/physical/ne_110m_land.json")
+      .then(data => {
+        landFeatures = data;
+        render();
+      });
+
+    const timer = d3.timer(() => {
+      rotation[0] += 0.2;
+      projection.rotate(rotation as [number, number]);
+      render();
+    });
+
+    const handleResize = () => {
+      calculateLayout();
+      projection.scale(radius).translate([centerX, centerY]);
+      render();
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      timer.stop();
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
-    <main className="min-h-screen pt-32 pb-20 px-4">
+    <main className="min-h-screen bg-black">
       <Navbar />
       
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-headline font-bold mb-6">Talent <span className="solana-text-gradient">Directory</span></h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Discover the founders, builders, and contributors who make up the Superteam Malaysia ecosystem.
-          </p>
-        </div>
-
-        {/* Search & Filters */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
-          <div className="relative w-full md:max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
-            <Input 
-              placeholder="Search by name or skill..." 
-              className="pl-10 glass border-white/10"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+      {/* Hero Section */}
+      <section className="relative overflow-hidden border-b border-white/10 pt-20">
+        <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] bg-center [mask-image:linear-gradient(to_bottom,black_40%,transparent_100%)]" />
+        <div className="absolute top-[-30%] left-[20%] w-[1000px] h-[800px] bg-[radial-gradient(circle,rgba(153,69,255,0.25)_0%,transparent_70%)] rounded-full pointer-events-none z-0" />
+        
+        <div className="max-w-[1400px] mx-auto border-x border-white/10 relative min-h-[70vh] flex flex-col">
+          <div className="flex-1 flex items-center px-10 py-32">
+            <div className="w-full lg:w-3/5 z-10 relative">
+              <div className="pill-badge mb-8"><span>✦</span> THE DIRECTORY</div>
+              <h1 className="text-7xl md:text-8xl lg:text-[120px] font-black uppercase tracking-tighter leading-[0.9] mb-10 flex flex-col">
+                <span className="text-white">BUILDER</span>
+                <span className="text-transparent" style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.4)' }}>NETWORK</span>
+              </h1>
+              <p className="text-xl text-muted-foreground max-w-md leading-relaxed">
+                Discover the top developers, designers, and founders scaling the Solana ecosystem across Malaysia.
+              </p>
+            </div>
+            
+            <div className="absolute top-0 right-0 w-full h-full lg:w-1/2 pointer-events-auto">
+              <canvas ref={canvasRef} className="w-full h-full cursor-grab active:cursor-grabbing opacity-80" />
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {tracks.map(track => (
-              <Button 
-                key={track}
-                variant={activeTrack === track ? 'default' : 'outline'}
-                size="sm"
-                className={activeTrack === track ? 'solana-gradient border-none' : 'glass border-white/10'}
-                onClick={() => setActiveTrack(track)}
+
+          {/* Marquee Ticker */}
+          <div className="w-full bg-primary py-4 overflow-hidden relative z-10">
+            <div className="flex whitespace-nowrap animate-infinite-scroll">
+              {Array(4).fill(null).map((_, i) => (
+                <div key={i} className="flex items-center gap-12 px-6">
+                  {['RUST', 'SOLANA', 'ANCHOR', 'REACT', 'TYPESCRIPT', 'DEFI', 'WEB3.JS'].map(item => (
+                    <span key={item} className="font-code font-bold text-black tracking-[2px] flex items-center gap-12">
+                      {item} <span className="text-[10px]">✦</span>
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Controls Section */}
+      <section className="bg-black border-b border-white/10">
+        <div className="max-w-[1400px] mx-auto border-x border-white/10 p-10">
+          <div className="flex flex-col gap-8">
+            <div className="relative group">
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" />
+              <input 
+                type="text" 
+                placeholder="Search developers, designers, or protocols..."
+                className="w-full bg-white/5 border border-white/10 text-white p-6 pl-16 text-xl outline-none focus:border-primary transition-all rounded-none"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setVisibleCount(8);
+                }}
+              />
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {categories.map(cat => (
+                <button 
+                  key={cat}
+                  className={cn(
+                    "px-8 py-3 font-code text-xs uppercase tracking-widest border transition-all",
+                    activeFilter === cat 
+                      ? "bg-primary border-primary text-black font-bold" 
+                      : "bg-white/5 border-white/10 text-muted-foreground hover:border-white/40 hover:text-white"
+                  )}
+                  onClick={() => {
+                    setActiveFilter(cat);
+                    setVisibleCount(8);
+                  }}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Grid Section */}
+      <section className="bg-black">
+        <div className="max-w-[1400px] mx-auto border-x border-white/10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border-b border-white/10">
+            {displayedMembers.map((member) => (
+              <div 
+                key={member.id} 
+                className="bg-[#050505] flex flex-col cursor-pointer group transition-all duration-500 hover:bg-primary"
+                onClick={() => setSelectedMember(member)}
               >
-                {track}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Members Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredMembers.map((member) => (
-            <Dialog key={member.id}>
-              <DialogTrigger asChild>
-                <div className="glass rounded-2xl border-white/5 p-6 hover:border-primary/50 transition-all cursor-pointer group">
-                  <div className="relative w-20 h-20 rounded-full overflow-hidden mb-6 border-2 border-white/10 group-hover:border-secondary">
-                    <Image src={member.image} alt={member.name} fill className="object-cover" />
+                <div className="relative h-[320px] overflow-hidden border-b border-white/10">
+                  <Image 
+                    src={member.image} 
+                    alt={member.name} 
+                    fill 
+                    className="object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-40 transition-opacity" />
+                </div>
+                <div className="p-8 flex flex-col flex-1">
+                  <div className="flex justify-between items-start mb-4">
+                    <span className="font-code text-[10px] uppercase tracking-[2px] text-primary group-hover:text-black font-bold transition-colors">
+                      [{member.track}]
+                    </span>
+                    <Twitter className="w-4 h-4 text-muted-foreground group-hover:text-black transition-colors" />
                   </div>
-                  <h3 className="text-xl font-headline font-bold mb-1">{member.name}</h3>
-                  <p className="text-sm text-secondary mb-4">{member.title}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <h3 className="text-2xl font-black uppercase tracking-tighter text-white group-hover:text-black transition-colors mb-2">
+                    {member.name}
+                  </h3>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-black/70 transition-colors mb-8">
+                    <Briefcase className="w-4 h-4" />
+                    {member.company}
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-auto">
                     {member.skills.slice(0, 3).map(skill => (
-                      <Badge key={skill} variant="secondary" className="bg-white/5 text-[10px] uppercase font-bold tracking-wider">
+                      <span key={skill} className="font-code text-[9px] px-2 py-1 border border-white/10 text-muted-foreground group-hover:text-black group-hover:border-black/20 transition-colors">
                         {skill}
-                      </Badge>
+                      </span>
                     ))}
                   </div>
-                  <div className="flex items-center text-xs text-muted-foreground">
-                    <Briefcase className="w-3 h-3 mr-1" /> {member.company}
-                  </div>
                 </div>
-              </DialogTrigger>
-              <DialogContent className="glass border-white/10 text-foreground max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle className="hidden">Member Profile</DialogTitle>
-                </DialogHeader>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
-                  <div className="col-span-1">
-                    <div className="relative aspect-square rounded-2xl overflow-hidden mb-6">
-                      <Image src={member.image} alt={member.name} fill className="object-cover" />
-                    </div>
-                    <div className="flex justify-center space-x-4">
-                      {member.social.twitter && <a href={member.social.twitter} className="text-muted-foreground hover:text-primary"><Twitter className="w-5 h-5" /></a>}
-                      {member.social.github && <a href={member.social.github} className="text-muted-foreground hover:text-primary"><Github className="w-5 h-5" /></a>}
-                      {member.social.linkedin && <a href={member.social.linkedin} className="text-muted-foreground hover:text-primary"><Linkedin className="w-5 h-5" /></a>}
-                    </div>
-                  </div>
-                  <div className="col-span-1 md:col-span-2">
-                    <div className="flex items-center justify-between mb-2">
-                      <h2 className="text-3xl font-headline font-bold">{member.name}</h2>
-                      <Badge className="bg-secondary text-black">{member.track}</Badge>
-                    </div>
-                    <p className="text-primary font-medium mb-6">{member.title} @ {member.company}</p>
-                    
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-3">Skills</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {member.skills.map(skill => (
-                            <Badge key={skill} variant="outline" className="border-white/10">{skill}</Badge>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <h4 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-3">Achievements</h4>
-                        <ul className="space-y-2">
-                          {member.achievements.map((ach, idx) => (
-                            <li key={idx} className="flex items-center text-sm">
-                              <Award className="w-4 h-4 text-secondary mr-2" />
-                              {ach}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          ))}
-        </div>
-      </div>
+              </div>
+            ))}
+          </div>
 
+          {displayedMembers.length === 0 && (
+            <div className="py-32 text-center border-b border-white/10">
+              <p className="font-code text-muted-foreground uppercase tracking-widest">No builders found matching your criteria.</p>
+            </div>
+          )}
+
+          {filteredMembers.length > visibleCount && (
+            <div className="py-20 flex justify-center border-b border-white/10">
+              <button 
+                className="px-12 py-5 border border-white/10 text-white font-code font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all"
+                onClick={() => setVisibleCount(prev => prev + 8)}
+              >
+                Load More Builders
+              </button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Modal View */}
+      {selectedMember && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 lg:p-10">
+          <div 
+            className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+            onClick={() => setSelectedMember(null)}
+          />
+          <div className="relative w-full max-w-5xl bg-[#050505] border border-white/10 flex flex-col lg:flex-row max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-300">
+            <button 
+              className="absolute top-6 right-6 z-10 w-12 h-12 bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-primary hover:text-black hover:border-primary transition-all"
+              onClick={() => setSelectedMember(null)}
+            >
+              <X />
+            </button>
+            
+            <div className="lg:w-2/5 relative min-h-[400px] border-r border-white/10">
+              <Image src={selectedMember.image} alt={selectedMember.name} fill className="object-cover grayscale" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+            </div>
+            
+            <div className="lg:w-3/5 p-10 lg:p-16 flex flex-col">
+              <span className="font-code text-primary uppercase tracking-[3px] mb-4">[{selectedMember.track}]</span>
+              <h2 className="text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white mb-6">
+                {selectedMember.name}
+              </h2>
+              <div className="flex items-center gap-3 text-xl text-muted-foreground mb-10">
+                <Briefcase className="w-6 h-6" />
+                {selectedMember.company}
+              </div>
+              
+              <p className="text-lg text-muted-foreground leading-relaxed mb-12">
+                {selectedMember.description}
+              </p>
+              
+              <div className="grid grid-cols-2 gap-6 mb-12">
+                <div className="p-6 border border-white/10 bg-white/5">
+                  <span className="block font-code text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Social Network</span>
+                  <div className="flex gap-4">
+                    <a href="#" className="text-white hover:text-primary transition-colors"><Twitter /></a>
+                    <a href="#" className="text-white hover:text-primary transition-colors"><Github /></a>
+                    <a href="#" className="text-white hover:text-primary transition-colors"><Linkedin /></a>
+                  </div>
+                </div>
+                <div className="p-6 border border-white/10 bg-white/5">
+                  <span className="block font-code text-[10px] text-muted-foreground uppercase tracking-widest mb-2">Core Skills</span>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedMember.skills.map((s: string) => (
+                      <span key={s} className="text-xs font-bold text-primary">{s}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <a 
+                href={selectedMember.social.twitter} 
+                target="_blank"
+                className="mt-auto inline-flex items-center justify-between w-full p-6 border border-white/10 text-white font-code font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all group"
+              >
+                Connect on X
+                <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <FaqCtaSection />
       <Footer />
     </main>
   );
