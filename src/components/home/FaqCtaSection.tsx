@@ -11,17 +11,33 @@ import { FAQ } from '@/types/database';
 
 export default function FaqCtaSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [faqs, setFaqs] = useState<any[]>([]);
   const [settings, setSettings] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [f, s] = await Promise.all([getFAQs(), getSettings()]);
-        setFaqs(f);
+        const [f, s] = await Promise.all([
+          getFAQs().catch(() => []), 
+          getSettings().catch(() => ({}))
+        ]);
+        
+        const sourceFaqs = f.length > 0 ? f : defaultFaqs;
+        
+        // Randomly pick any 6 using a simple shuffle
+        const shuffled = [...sourceFaqs].sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 6);
+        
+        setFaqs(selected);
         setSettings(s);
       } catch (e) {
-        console.error(e);
+        console.error('FAQ Section Data Load Error:', e);
+        // Fallback to shuffled defaults
+        const shuffled = [...defaultFaqs].sort(() => 0.5 - Math.random());
+        setFaqs(shuffled.slice(0, 6));
+      } finally {
+        setLoading(false);
       }
     }
     loadData();
@@ -44,33 +60,43 @@ export default function FaqCtaSection() {
       <div className="grid-full-width w-full border-y border-white/10">
         <div className="faq-cta-grid max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[6fr_4fr] border-x border-white/10 items-stretch">
           
-          <div className="faq-column border-b lg:border-b-0 lg:border-r border-white/10 bg-black flex flex-col">
-            {(faqs.length > 0 ? faqs : defaultFaqs).map((faq, idx) => (
-              <div key={idx} className={cn("faq-item border-b border-white/10 last:border-b-0", openIndex === idx && "active")}>
-                <button 
-                  className="faq-header w-full flex items-center justify-between p-8 lg:p-10 hover:bg-white/[0.02] group transition-all"
-                  onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                >
-                  <div className="flex items-start gap-6">
-                    <span className="font-code text-xs text-muted-foreground mt-1.5 hidden md:block">
-                      {(idx + 1).toString().padStart(2, '0')} //
-                    </span>
-                    <h3 className="text-2xl lg:text-3xl font-headline font-bold group-hover:text-primary transition-colors text-left text-white">
-                      {faq.question}
-                    </h3>
-                  </div>
-                  <div className="faq-icon-custom"></div>
-                </button>
-                <div 
-                  className="faq-body overflow-hidden transition-all duration-500 ease-in-out"
-                  style={{ maxHeight: openIndex === idx ? '500px' : '0px' }}
-                >
-                  <div className="faq-answer px-8 lg:pl-[116px] lg:pr-10 pb-10 text-lg text-white/80 leading-relaxed max-w-2xl font-medium">
-                    {faq.answer}
+          <div className="faq-column border-b lg:border-b-0 lg:border-r border-white/10 bg-black flex flex-col min-h-[400px]">
+            {loading ? (
+              <div className="p-20 text-center text-muted-foreground font-code uppercase text-xs tracking-widest animate-pulse">
+                Synchronizing Nodes...
+              </div>
+            ) : faqs.length > 0 ? (
+              faqs.map((faq, idx) => (
+                <div key={idx} className={cn("faq-item border-b border-white/10 last:border-b-0", openIndex === idx && "active")}>
+                  <button 
+                    className="faq-header w-full flex items-center justify-between p-8 lg:p-10 hover:bg-white/[0.02] group transition-all"
+                    onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
+                  >
+                    <div className="flex items-start gap-6">
+                      <span className="font-code text-xs text-muted-foreground mt-1.5 hidden md:block">
+                        {(idx + 1).toString().padStart(2, '0')} //
+                      </span>
+                      <h3 className="text-2xl lg:text-3xl font-headline font-bold group-hover:text-primary transition-colors text-left text-white">
+                        {faq.question}
+                      </h3>
+                    </div>
+                    <div className="faq-icon-custom"></div>
+                  </button>
+                  <div 
+                    className="faq-body overflow-hidden transition-all duration-500 ease-in-out"
+                    style={{ maxHeight: openIndex === idx ? '500px' : '0px' }}
+                  >
+                    <div className="faq-answer px-8 lg:pl-[116px] lg:pr-10 pb-10 text-lg text-white/80 leading-relaxed max-w-2xl font-medium">
+                      {faq.answer}
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="p-20 text-center text-muted-foreground font-code uppercase text-xs tracking-widest">
+                No active FAQ nodes found.
               </div>
-            ))}
+            )}
           </div>
 
           <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 items-start overflow-hidden border-l border-white/10">
