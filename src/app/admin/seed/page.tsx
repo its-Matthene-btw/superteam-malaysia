@@ -16,6 +16,7 @@ export default function SeedPage() {
   const sqlSchema = `-- MASTER MIGRATION SQL
 -- Run this in Supabase SQL Editor.
 
+-- 1. Create Tables
 CREATE TABLE IF NOT EXISTS ecosystem_projects (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
@@ -38,11 +39,6 @@ CREATE TABLE IF NOT EXISTS ecosystem_projects (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
-ALTER TABLE ecosystem_projects ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
-CREATE POLICY "Admin Full Access Ecosystem" ON ecosystem_projects FOR ALL TO authenticated USING (true);
-
 CREATE TABLE IF NOT EXISTS ecosystem_features (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id uuid REFERENCES ecosystem_projects(id) ON DELETE CASCADE,
@@ -51,20 +47,11 @@ CREATE TABLE IF NOT EXISTS ecosystem_features (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
-ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Public Read Features" ON ecosystem_features FOR SELECT USING (true);
-CREATE POLICY "Admin All Features" ON ecosystem_features FOR ALL TO authenticated USING (true);
-
 CREATE TABLE IF NOT EXISTS ecosystem_categories (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text UNIQUE NOT NULL,
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
-
-ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Public Read Categories" ON ecosystem_categories FOR SELECT USING (true);
-CREATE POLICY "Admin All Categories" ON ecosystem_categories FOR ALL TO authenticated USING (true);
 
 CREATE TABLE IF NOT EXISTS ecosystem_opportunities (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -75,68 +62,36 @@ CREATE TABLE IF NOT EXISTS ecosystem_opportunities (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
+-- 2. Enable RLS
+ALTER TABLE ecosystem_projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
+
+-- 3. Create Policies (Idempotent)
+DROP POLICY IF EXISTS "Public Read Ecosystem" ON ecosystem_projects;
+CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin Full Access Ecosystem" ON ecosystem_projects;
+CREATE POLICY "Admin Full Access Ecosystem" ON ecosystem_projects FOR ALL TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Public Read Features" ON ecosystem_features;
+CREATE POLICY "Public Read Features" ON ecosystem_features FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin All Features" ON ecosystem_features;
+CREATE POLICY "Admin All Features" ON ecosystem_features FOR ALL TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Public Read Categories" ON ecosystem_categories;
+CREATE POLICY "Public Read Categories" ON ecosystem_categories FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin All Categories" ON ecosystem_categories;
+CREATE POLICY "Admin All Categories" ON ecosystem_categories FOR ALL TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Public Read Opportunities" ON ecosystem_opportunities;
 CREATE POLICY "Public Read Opportunities" ON ecosystem_opportunities FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin All Opportunities" ON ecosystem_opportunities;
 CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO authenticated USING (true);
-
--- Core tables for news, faqs, etc.
-CREATE TABLE IF NOT EXISTS news (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  title text NOT NULL,
-  slug text UNIQUE NOT NULL,
-  excerpt text,
-  content text,
-  image_url text,
-  published_at timestamp WITH TIME ZONE DEFAULT now(),
-  created_at timestamp WITH TIME ZONE DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS faqs (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  question text UNIQUE NOT NULL,
-  answer text,
-  order_index integer DEFAULT 0,
-  created_at timestamp WITH TIME ZONE DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS members (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text UNIQUE NOT NULL,
-  role text,
-  company text,
-  skills text[],
-  bio text,
-  avatar_url text,
-  twitter_url text,
-  featured boolean DEFAULT false,
-  created_at timestamp WITH TIME ZONE DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS stats (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  label text UNIQUE NOT NULL,
-  value text,
-  order_index integer DEFAULT 0
-);
-
-CREATE TABLE IF NOT EXISTS testimonials (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text UNIQUE NOT NULL,
-  role text,
-  content text,
-  avatar_url text,
-  type text,
-  created_at timestamp WITH TIME ZONE DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS partners (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  name text UNIQUE NOT NULL,
-  logo_url text,
-  website_url text,
-  featured boolean DEFAULT false,
-  created_at timestamp WITH TIME ZONE DEFAULT now()
-);
 `;
 
   const copySql = () => {
