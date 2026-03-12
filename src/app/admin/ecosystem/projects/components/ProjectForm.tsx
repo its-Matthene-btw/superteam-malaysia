@@ -1,4 +1,3 @@
-
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -41,23 +40,23 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
   
   // NORMALIZE NULLS TO EMPTY STRINGS to prevent React controlled input warnings
   const defaultValues = project ? {
-    name: project.name || '',
-    slug: project.slug || '',
-    category: project.category || '',
-    short_description: project.short_description || '',
-    long_description: project.long_description || '',
-    logo_url: project.logo_url || '',
-    hero_image_url: project.hero_image_url || '',
-    website_url: project.website_url || '',
-    twitter_url: project.twitter_url || '',
-    discord_url: project.discord_url || '',
-    github_url: project.github_url || '',
-    docs_url: project.docs_url || '',
-    network: project.network || '',
-    token_symbol: project.token_symbol || '',
-    contract_address: project.contract_address || '',
-    status: project.status || '',
-    featured: project.featured || false,
+    name: project.name ?? '',
+    slug: project.slug ?? '',
+    category: project.category ?? '',
+    short_description: project.short_description ?? '',
+    long_description: project.long_description ?? '',
+    logo_url: project.logo_url ?? '',
+    hero_image_url: project.hero_image_url ?? '',
+    website_url: project.website_url ?? '',
+    twitter_url: project.twitter_url ?? '',
+    discord_url: project.discord_url ?? '',
+    github_url: project.github_url ?? '',
+    docs_url: project.docs_url ?? '',
+    network: project.network ?? '',
+    token_symbol: project.token_symbol ?? '',
+    contract_address: project.contract_address ?? '',
+    status: project.status ?? '',
+    featured: project.featured ?? false,
   } : { 
     featured: false,
     name: '',
@@ -108,7 +107,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Protocol Name</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -121,7 +120,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Slug (URL)</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -156,7 +155,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Deployment Status</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder="e.g. Live & Audited" className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} placeholder="e.g. Live & Audited" className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -172,7 +171,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Network</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder="Solana Mainnet" className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} placeholder="Solana Mainnet" className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -185,7 +184,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Token Symbol</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder="JUP" className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} placeholder="JUP" className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -198,7 +197,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Contract Address</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} placeholder="JUPy..." className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} placeholder="JUPy..." className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -213,7 +212,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                 <FormItem>
                   <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Summary</FormLabel>
                   <FormControl>
-                    <Textarea {...field} value={field.value || ''} className="glass border-white/10" />
+                    <Textarea {...field} value={field.value ?? ''} className="glass border-white/10" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -227,7 +226,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                 <FormItem>
                   <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Full Narrative</FormLabel>
                   <FormControl>
-                    <Textarea {...field} value={field.value || ''} rows={8} className="glass border-white/10 font-body" />
+                    <Textarea {...field} value={field.value ?? ''} rows={8} className="glass border-white/10 font-body" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -242,7 +241,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Logo URL</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -255,7 +254,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Hero Image URL</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -271,7 +270,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground text-primary">Website</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -284,7 +283,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground text-primary">Twitter / X</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -297,7 +296,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground text-primary">Discord</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -310,7 +309,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground text-secondary">GitHub</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -323,7 +322,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                   <FormItem>
                     <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground text-secondary">Documentation</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value || ''} className="glass border-white/10" />
+                      <Input {...field} value={field.value ?? ''} className="glass border-white/10" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
