@@ -133,7 +133,7 @@ CREATE POLICY "Allow auth all newsletter" ON newsletter_subscribers FOR ALL TO a
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Wipes all tables and re-inserts fresh ecosystem content, including news and FAQs.
+                Wipes all tables and re-inserts fresh ecosystem content, including events, news, FAQs, and testimonials.
               </p>
               
               <div className="mt-auto">
@@ -152,6 +152,8 @@ CREATE POLICY "Allow auth all newsletter" ON newsletter_subscribers FOR ALL TO a
                   <ul className="text-[10px] font-code space-y-1 text-muted-foreground">
                     <li>News: {result.news || 0} posts</li>
                     <li>FAQs: {result.faqs || 0} entries</li>
+                    <li>Events: {result.events || 0} scheduled</li>
+                    <li>Wall of Love: {result.testimonials || 0} records</li>
                     <li>Partners: {result.partners || 0} updated</li>
                   </ul>
                 </div>
