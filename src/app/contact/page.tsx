@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -49,13 +48,6 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-[#0a0a0c] text-white selection:bg-primary/30 font-body">
       <Navbar />
-
-      <nav className="fixed top-0 left-0 right-0 z-[100] px-10 h-20 border-b border-white/10 flex items-center justify-between bg-[#0a0a0c]/85 backdrop-blur-xl">
-        <Link href="/" className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] hover:text-primary transition-colors flex items-center gap-2">
-          <ChevronLeft className="w-3 h-3" /> SYSTEM_ROOT
-        </Link>
-        <span className="font-code text-[10px] text-[#14F195] uppercase tracking-[3px] whitespace-nowrap hidden sm:block">// SECURE_CONNECTION</span>
-      </nav>
 
       {/* HERO SECTION - CONTROL PANEL */}
       <section className="relative mt-20 border-b border-white/10 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] bg-white/10 gap-[1px]">
