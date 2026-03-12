@@ -48,13 +48,10 @@ export default function MemberDirectory() {
       height = container.clientHeight;
       
       if (window.innerWidth <= 1200) {
-        // Tablet & Mobile: Three-zone centered system
         centerX = width / 2;
         centerY = height / 2;
-        // Ensure globe never touches text/ticker by using a safe multiplier
         radius = Math.min(width, height) * 0.42;
       } else {
-        // Desktop: Half-visible planet emerging from right
         centerX = width;
         centerY = height * 0.5;
         radius = Math.max(width * 0.5, height) / 1.3;
@@ -99,7 +96,6 @@ export default function MemberDirectory() {
       const currentScale = projection.scale();
       const scaleFactor = currentScale / (radius || 1);
 
-      // Ocean Base
       context.beginPath();
       context.arc(centerX, centerY, currentScale, 0, 2 * Math.PI);
       context.fillStyle = "#050505";
@@ -162,16 +158,12 @@ export default function MemberDirectory() {
     <main className="min-h-screen bg-black">
       <Navbar />
       
-      {/* Hero Section - STRICT RESPONSIVE SYSTEM */}
       <section className="relative overflow-hidden bg-black border-b border-white/10">
-        {/* Background Layer */}
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] bg-center [mask-image:linear-gradient(to_bottom,black_40%,transparent_100%)]" />
         <div className="absolute top-[-30%] left-[20%] w-[1000px] h-[800px] bg-[radial-gradient(circle,rgba(153,69,255,0.25)_0%,transparent_70%)] rounded-full pointer-events-none z-0" />
         
         <div className="max-w-[1400px] mx-auto border-x border-white/10 relative">
           <div className="flex flex-col min-h-screen min-h-[100svh] lg:min-h-[750px]">
-            
-            {/* Zone 1: Text Block (Top on mobile, Left on Desktop) */}
             <div className="hero-top-content flex-shrink-0 pt-32 pb-10 px-10 lg:pt-48 lg:pb-32 lg:w-3/5 z-10 text-center lg:text-left">
               <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md inline-flex mx-auto lg:mx-0">
                 <span>✦</span> THE DIRECTORY
@@ -185,12 +177,10 @@ export default function MemberDirectory() {
               </p>
             </div>
             
-            {/* Zone 2: Globe Area (Middle on mobile, Fills Background on Desktop) */}
             <div className="flex-grow relative w-full lg:absolute lg:inset-0 z-0">
               <canvas ref={canvasRef} id="globeCanvas" className="w-full h-full cursor-grab active:cursor-grabbing opacity-80" />
             </div>
 
-            {/* Zone 3: Marquee Ticker (Bottom Zone) */}
             <div className="flex-shrink-0 w-full bg-primary py-4 overflow-hidden relative z-10 border-y border-white/10">
               <div className="flex whitespace-nowrap animate-infinite-scroll">
                 {Array(4).fill(null).map((_, i) => (
@@ -204,12 +194,10 @@ export default function MemberDirectory() {
                 ))}
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* Controls Section */}
       <section className="bg-black border-b border-white/10">
         <div className="max-w-[1400px] mx-auto border-x border-white/10 p-10">
           <div className="flex flex-col gap-8">
@@ -249,7 +237,6 @@ export default function MemberDirectory() {
         </div>
       </section>
 
-      {/* Grid Section */}
       <section className="bg-black">
         <div className="max-w-[1400px] mx-auto border-x border-white/10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border-b border-white/10">
@@ -264,7 +251,7 @@ export default function MemberDirectory() {
                     src={member.image} 
                     alt={member.name} 
                     fill 
-                    className="object-cover object-top grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                    className="object-cover object-[center_15%] grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-40 transition-opacity" />
                 </div>
@@ -313,7 +300,6 @@ export default function MemberDirectory() {
         </div>
       </section>
 
-      {/* Modal View */}
       {selectedMember && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 lg:p-10">
           <div 
@@ -328,8 +314,8 @@ export default function MemberDirectory() {
               <X />
             </button>
             
-            <div className="lg:w-2/5 relative min-h-[400px] border-r border-white/10">
-              <Image src={selectedMember.image} alt={selectedMember.name} fill className="object-cover object-top grayscale" />
+            <div className="lg:w-2/5 relative min-h-[400px] lg:min-h-full border-r border-white/10">
+              <Image src={selectedMember.image} alt={selectedMember.name} fill className="object-cover object-[center_15%] grayscale" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
             </div>
             

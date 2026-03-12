@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useRef, useEffect, useState } from 'react';
@@ -15,7 +16,6 @@ export default function CommunityCarousel() {
   const [isDragging, setIsDragging] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  // Double the members for seamless infinite scroll
   const displayMembers = [...members, ...members];
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function CommunityCarousel() {
   return (
     <section className="w-full bg-black border-t border-white/10">
       <div className="max-w-[1400px] mx-auto border-x border-white/10">
-        <div className="px-10 pt-32">
+        <div className="px-10 py-32">
           <div className="flex flex-col gap-6 mb-24">
             <div className="pill-badge mb-6"><span>✦</span> THE COMMUNITY</div>
             <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none max-w-3xl text-white">
@@ -110,7 +110,6 @@ export default function CommunityCarousel() {
                 onClick={() => handleCardClick(`${member.id}-${idx}`)}
                 onMouseLeave={() => setExpandedId(null)}
               >
-                {/* X Link */}
                 <a 
                   href={member.social.twitter} 
                   target="_blank"
@@ -120,16 +119,14 @@ export default function CommunityCarousel() {
                    <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.005 4.223H5.078z"/></svg>
                 </a>
 
-                {/* Card Image */}
                 <div className={cn(
                   "relative w-full h-[360px] border-b border-white/10 filter grayscale contrast-[1.1] transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden",
                   "group-hover:grayscale-0 group-hover:contrast-100",
                   expandedId === `${member.id}-${idx}` && "h-0 border-b-0 opacity-0"
                 )}>
-                  <Image src={member.image} alt={member.name} fill className="object-cover" />
+                  <Image src={member.image} alt={member.name} fill className="object-cover object-[center_15%]" />
                 </div>
 
-                {/* Card Info */}
                 <div className="flex-1 p-8 flex flex-col">
                   <span className="font-code text-[10px] uppercase tracking-[2px] text-muted-foreground group-hover:text-black transition-colors">
                     [{member.track}]
@@ -142,7 +139,6 @@ export default function CommunityCarousel() {
                     {member.skills.join(' • ')}
                   </div>
                   
-                  {/* Expanded Description */}
                   <div className={cn(
                     "text-muted-foreground leading-relaxed text-base font-medium max-h-0 opacity-0 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] whitespace-normal",
                     expandedId === `${member.id}-${idx}` && "max-h-[300px] opacity-100 mt-8 group-hover:text-black"

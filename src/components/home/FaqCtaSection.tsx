@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -10,7 +11,6 @@ export default function FaqCtaSection() {
 
   return (
     <section className="faq-section w-full border-t border-white/10 bg-black">
-      {/* Header */}
       <div className="header-wrapper max-w-[1400px] mx-auto px-10 py-20 border-x border-white/10">
         <div className="pill-badge mb-6"><span>✦</span> KNOWLEDGE BASE</div>
         <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
@@ -21,7 +21,6 @@ export default function FaqCtaSection() {
       <div className="grid-full-width w-full border-y border-white/10">
         <div className="faq-cta-grid max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[6fr_4fr] border-x border-white/10">
           
-          {/* FAQ Column */}
           <div className="faq-column border-b lg:border-b-0 lg:border-r border-white/10 bg-black flex flex-col">
             {faqs.map((faq, idx) => (
               <div key={idx} className={cn("faq-item border-b border-white/10 last:border-b-0", openIndex === idx && "active")}>
@@ -51,14 +50,10 @@ export default function FaqCtaSection() {
             ))}
           </div>
 
-          {/* CTA Column */}
           <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 overflow-visible">
-             {/* Dedicated Background Layer for Glow and Grid */}
              <div className="cta-bg-wrapper absolute inset-0 pointer-events-none overflow-hidden z-0">
-                {/* Purple Glow */}
                 <div className="absolute -bottom-[10%] -right-[10%] w-[800px] h-[800px] bg-primary/15 rounded-full blur-[100px]" />
                 
-                {/* Grid Pattern */}
                 <div 
                   className="absolute inset-0 opacity-50" 
                   style={{ 
@@ -69,7 +64,6 @@ export default function FaqCtaSection() {
                 />
              </div>
              
-             {/* Sticky Content */}
              <div className="cta-sticky-box p-10 lg:p-20 z-10 lg:sticky lg:top-[100px]">
                 <h2 className="text-5xl lg:text-7xl font-headline font-extrabold tracking-tighter leading-[1.1] mb-8 uppercase text-white">
                   BUILD<br />THE<br />FUTURE.
