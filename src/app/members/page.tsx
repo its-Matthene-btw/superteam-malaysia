@@ -6,7 +6,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import FaqCtaSection from '@/components/home/FaqCtaSection';
 import { members } from '@/lib/data';
-import { Search, X, Briefcase, Twitter, Github, Linkedin, Globe, ArrowRight, Building2 } from 'lucide-react';
+import { Search, X, Briefcase, Twitter, Github, Linkedin, Building2, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import * as d3 from 'd3';
 import { cn } from '@/lib/utils';
@@ -47,11 +47,18 @@ export default function MemberDirectory() {
       width = container.clientWidth;
       height = container.clientHeight;
       
-      if (window.innerWidth <= 1200) {
+      if (window.innerWidth <= 768) {
+        // MOBILE: Fully visible centered globe
         centerX = width / 2;
         centerY = height / 2;
-        radius = Math.min(width, height) * 0.42;
+        radius = Math.min(width, height) * 0.45;
+      } else if (window.innerWidth <= 1200) {
+        // TABLET: Rising planet from bottom (only top half visible)
+        centerX = width / 2;
+        centerY = height; 
+        radius = Math.min(width * 0.5, height * 0.8);
       } else {
+        // DESKTOP: Half globe emerging from right edge
         centerX = width;
         centerY = height * 0.5;
         radius = Math.max(width * 0.5, height) / 1.3;
@@ -158,13 +165,16 @@ export default function MemberDirectory() {
     <main className="min-h-screen bg-black">
       <Navbar />
       
+      {/* HERO SECTION - Strictly Managed Flex for Tablet/Mobile */}
       <section className="relative overflow-hidden bg-black border-b border-white/10">
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] bg-center [mask-image:linear-gradient(to_bottom,black_40%,transparent_100%)]" />
         <div className="absolute top-[-30%] left-[20%] w-[1000px] h-[800px] bg-[radial-gradient(circle,rgba(153,69,255,0.25)_0%,transparent_70%)] rounded-full pointer-events-none z-0" />
         
         <div className="max-w-[1400px] mx-auto border-x border-white/10 relative">
-          <div className="flex flex-col min-h-screen min-h-[100svh] lg:min-h-[750px]">
-            <div className="hero-top-content flex-shrink-0 pt-32 pb-10 px-10 lg:pt-48 lg:pb-32 lg:w-3/5 z-10 text-center lg:text-left">
+          <div className="flex flex-col min-h-screen min-h-[100svh] lg:min-h-[750px] lg:flex-row">
+            
+            {/* ZONE 1: TEXT BLOCK (Top on Mobile/Tablet, Left on Desktop) */}
+            <div className="flex-shrink-0 pt-32 pb-10 px-10 text-center lg:pt-48 lg:pb-32 lg:w-3/5 lg:text-left z-10 flex flex-col justify-center">
               <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md inline-flex mx-auto lg:mx-0">
                 <span>✦</span> THE DIRECTORY
               </div>
@@ -177,11 +187,13 @@ export default function MemberDirectory() {
               </p>
             </div>
             
-            <div className="flex-grow relative w-full lg:absolute lg:inset-0 z-0">
+            {/* ZONE 2: GLOBE AREA (Fills remaining height on Tablet/Mobile) */}
+            <div className="flex-grow relative w-full h-[400px] lg:h-full lg:absolute lg:inset-0 z-0 pointer-events-auto">
               <canvas ref={canvasRef} id="globeCanvas" className="w-full h-full cursor-grab active:cursor-grabbing opacity-80" />
             </div>
 
-            <div className="flex-shrink-0 w-full bg-primary py-4 overflow-hidden relative z-10 border-y border-white/10">
+            {/* ZONE 3: MARQUEE TICKER (Sticks to bottom of 100vh) */}
+            <div className="flex-shrink-0 w-full bg-primary py-4 overflow-hidden relative z-10 border-y border-white/10 mt-auto">
               <div className="flex whitespace-nowrap animate-infinite-scroll">
                 {Array(4).fill(null).map((_, i) => (
                   <div key={i} className="flex items-center gap-12 px-6">
@@ -198,11 +210,12 @@ export default function MemberDirectory() {
         </div>
       </section>
 
+      {/* SEARCH & FILTERS SECTION */}
       <section className="bg-black border-b border-white/10">
         <div className="max-w-[1400px] mx-auto border-x border-white/10 p-10">
           <div className="flex flex-col gap-8">
             <div className="relative group">
-              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" />
+              <svg className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 fill-none stroke-muted-foreground group-focus-within:stroke-primary transition-colors stroke-[2px]" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
               <input 
                 type="text" 
                 placeholder="Search developers, designers, or protocols..."
@@ -237,6 +250,7 @@ export default function MemberDirectory() {
         </div>
       </section>
 
+      {/* MEMBER GRID SECTION */}
       <section className="bg-black">
         <div className="max-w-[1400px] mx-auto border-x border-white/10">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border-b border-white/10">
@@ -300,6 +314,7 @@ export default function MemberDirectory() {
         </div>
       </section>
 
+      {/* MEMBER MODAL */}
       {selectedMember && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 lg:p-10">
           <div 
