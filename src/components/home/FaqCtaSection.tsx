@@ -9,7 +9,7 @@ export default function FaqCtaSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="faq-section w-full border-t border-white/15">
+    <section className="faq-section w-full border-t border-white/15 bg-black">
       {/* Header */}
       <div className="header-wrapper max-w-[1600px] mx-auto px-10 py-20 border-x border-white/15">
         <div className="pill-badge mb-6"><span>✦</span> KNOWLEDGE BASE</div>
@@ -22,7 +22,7 @@ export default function FaqCtaSection() {
         <div className="faq-cta-grid max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-[6fr_4fr] border-x border-white/15">
           
           {/* FAQ Column */}
-          <div className="faq-column border-b lg:border-b-0 lg:border-r border-white/15">
+          <div className="faq-column border-b lg:border-b-0 lg:border-r border-white/15 bg-black flex flex-col">
             {faqs.map((faq, idx) => (
               <div key={idx} className={cn("faq-item border-b border-white/15 last:border-b-0", openIndex === idx && "active")}>
                 <button 
@@ -52,26 +52,37 @@ export default function FaqCtaSection() {
           </div>
 
           {/* CTA Column */}
-          <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0">
-             {/* Background Glow Wrapper */}
+          <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 overflow-visible">
+             {/* Dedicated Background Layer for Glow and Grid */}
              <div className="cta-bg-wrapper absolute inset-0 pointer-events-none overflow-hidden z-0">
-                <div className="absolute -bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px]" />
-                <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+                {/* Purple Glow */}
+                <div className="absolute -bottom-[10%] -right-[10%] w-[800px] h-[800px] bg-primary/15 rounded-full blur-[100px]" />
+                
+                {/* Grid Pattern */}
+                <div 
+                  className="absolute inset-0 opacity-50" 
+                  style={{ 
+                    backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', 
+                    backgroundSize: '40px 40px',
+                    backgroundPosition: 'center center'
+                  }} 
+                />
              </div>
              
-             <div className="cta-sticky-box p-10 lg:p-20 z-10 sticky top-24">
-                <h2 className="text-5xl lg:text-7xl font-headline font-extrabold tracking-tighter leading-[1.1] mb-8 uppercase">
+             {/* Sticky Content */}
+             <div className="cta-sticky-box p-10 lg:p-20 z-10 lg:sticky lg:top-[100px]">
+                <h2 className="text-5xl lg:text-7xl font-headline font-extrabold tracking-tighter leading-[1.1] mb-8 uppercase text-white">
                   BUILD<br />THE<br />FUTURE.
                 </h2>
                 <p className="text-lg lg:text-xl text-muted-foreground mb-12 max-w-md leading-relaxed">
                   Ready to ship your next big idea on Solana? Get access to exclusive bounties, ecosystem funding, and the smartest builders in Malaysia.
                 </p>
-                <div className="flex flex-col gap-4 max-w-xs">
-                  <a href="#" className="group flex items-center justify-between bg-primary text-black px-8 py-5 font-code font-bold uppercase tracking-widest hover:bg-white transition-all">
+                <div className="flex flex-col gap-4 w-full max-w-sm">
+                  <a href="#" className="group flex items-center justify-between bg-primary text-black px-8 py-5 font-code font-bold uppercase tracking-widest border border-primary hover:bg-white hover:border-white transition-all shadow-lg hover:shadow-primary/20">
                     Join Discord
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </a>
-                  <a href="#" className="group flex items-center justify-between bg-transparent text-white border border-white/15 px-8 py-5 font-code font-bold uppercase tracking-widest hover:bg-white/5 transition-all">
+                  <a href="#" className="group flex items-center justify-between bg-transparent text-white border border-white/15 px-8 py-5 font-code font-bold uppercase tracking-widest hover:bg-white/5 hover:border-white transition-all">
                     Apply For Grant
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </a>
