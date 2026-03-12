@@ -17,20 +17,114 @@ export default function Home() {
       <Navbar />
       <Hero />
       
-      {/* Mission Section */}
-      <section id="mission" className="py-24 px-4 bg-black">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-headline font-bold mb-8">Our <span className="solana-text-gradient">Mission</span></h2>
-          <p className="text-xl text-muted-foreground leading-relaxed">
-            Superteam is a global cooperative of operators, developers, and designers who are building on the Solana ecosystem. 
-            Our mission is to help the most talented builders in Malaysia launch and scale the next generation of 
-            decentralized applications, providing them with the resources, community, and capital they need to succeed.
-          </p>
+      {/* Framed Mission Layout */}
+      <section id="mission" className="bg-black">
+        {/* Row 1 */}
+        <div className="w-full border-b border-white/10">
+          <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
+            <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter">Builder<br />Support</h2>
+              <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 01 / 05 ]</div>
+            </div>
+            <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="shape-sphere"></div>
+                <div className="base-podium"></div>
+              </div>
+            </div>
+            <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
+                Superteam Malaysia helps developers, designers, and founders start building in the Solana ecosystem. Through mentorship, collaboration, and guidance from experienced community members, we help builders move from learning to launching real products.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Row 2 */}
+        <div className="w-full border-b border-white/10">
+          <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
+            <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter">Events &<br />Hackathons</h2>
+              <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 02 / 05 ]</div>
+            </div>
+            <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="shape-card"></div>
+              </div>
+            </div>
+            <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
+                We host workshops, meetups, and hackathons that bring the Malaysian Web3 community together. These events help builders learn new skills, meet collaborators, and turn ideas into working prototypes and projects.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Row 3 */}
+        <div className="w-full border-b border-white/10">
+          <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
+            <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter">Grants &<br />Funding</h2>
+              <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 03 / 05 ]</div>
+            </div>
+            <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="orbit-mission"></div>
+                <div className="shape-globe-mission"></div>
+              </div>
+            </div>
+            <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
+                Superteam connects builders with grants and funding opportunities across the Solana ecosystem. Whether launching a startup or building an open-source tool, we help talented builders access the resources needed to grow their projects.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Row 4 */}
+        <div className="w-full border-b border-white/10">
+          <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
+            <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter">Bounties &<br />Opportunities</h2>
+              <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 04 / 05 ]</div>
+            </div>
+            <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="shape-coin coin-1"></div>
+                <div className="shape-coin coin-2"></div>
+              </div>
+            </div>
+            <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
+                Members can earn by contributing to real projects through ecosystem bounties and freelance opportunities. Builders can work with leading Solana teams while gaining experience and getting rewarded for their contributions.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Row 5 */}
+        <div className="w-full border-b border-white/10">
+          <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
+            <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
+              <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter">Education &<br />Learning</h2>
+              <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 05 / 05 ]</div>
+            </div>
+            <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="shape-pyramid"></div>
+              </div>
+            </div>
+            <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
+              <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
+                We provide workshops, learning sessions, and community resources to help builders develop the skills needed to succeed in Web3. From beginners learning Solana development to experienced contributors leveling up their expertise.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 px-4">
+      <section className="py-24 px-4 bg-black">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl font-headline font-bold mb-12 text-center">Frequently Asked <span className="solana-text-gradient">Questions</span></h2>
           <Accordion type="single" collapsible className="w-full space-y-4">
