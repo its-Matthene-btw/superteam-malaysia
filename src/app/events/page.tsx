@@ -220,7 +220,7 @@ export default function EventsPage() {
           <p className="text-muted-foreground mb-10 leading-relaxed">Find the exact coordinates for our upcoming physical build stations.</p>
           
           <div className="relative aspect-video lg:flex-1 bg-black border border-white/10 rounded-xl overflow-hidden group">
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground font-code text-[10px] uppercase tracking-[4px] gap-4 bg-black/80 backdrop-blur-sm z-10 group-hover:opacity-0 transition-opacity">
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-muted-foreground font-code text-[10px] uppercase tracking-[4px] gap-4 bg-black/80 z-10 group-hover:opacity-0 transition-opacity">
               <MapPin className="w-8 h-8 opacity-20" />
               <span>[ GOOGLE_MAPS_IFRAME_PLACEHOLDER ]</span>
             </div>
