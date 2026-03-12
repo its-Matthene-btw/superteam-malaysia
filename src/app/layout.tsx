@@ -1,16 +1,37 @@
 
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import './globals.css';
+import { createClient } from '@/lib/supabase/server';
 
-export const metadata: Metadata = {
-  title: 'Superteam Connect Malaysia | Solana Ecosystem Hub',
-  description: 'The premier community for developers, designers, and creators building on Solana in Malaysia.',
-  openGraph: {
-    title: 'Superteam Connect Malaysia',
-    description: 'Empowering Malaysian talent to build and scale on Solana.',
-    images: ['https://picsum.photos/seed/stmyog/1200/630'],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const supabase = createClient();
+  const { data } = await supabase.from('site_settings').select('*');
+  
+  const settings = data?.reduce((acc: Record<string, string>, item) => {
+    acc[item.id] = item.value;
+    return acc;
+  }, {}) || {};
+
+  const title = settings.site_title || 'Superteam Connect Malaysia | Solana Ecosystem Hub';
+  const description = settings.site_description || 'The premier community for developers, designers, and creators building on Solana in Malaysia.';
+  const ogImage = settings.site_og_image || 'https://picsum.photos/seed/stmyog/1200/630';
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [ogImage],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [ogImage],
+    }
+  };
+}
 
 export default function RootLayout({
   children,

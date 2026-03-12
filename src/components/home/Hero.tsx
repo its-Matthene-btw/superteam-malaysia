@@ -1,12 +1,19 @@
 
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import * as d3 from 'd3';
+import { getSettings } from '@/services/settings';
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [content, setContent] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    getSettings().then(setContent).catch(console.error);
+  }, []);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -162,27 +169,44 @@ export default function Hero() {
     };
   }, []);
 
+  const headline = content.hero_headline || "Malaysia’s Home for Solana Builders";
+  const subheadline = content.hero_subheadline || "Discover bounties, grants, events, and opportunities while building with the fastest growing Web3 ecosystem.";
+  
+  const primaryBtnText = content.hero_primary_btn_text || "JOIN NETWORK";
+  const primaryBtnLink = content.hero_primary_btn_link || "/contact";
+  
+  const secondaryBtnText = content.hero_secondary_btn_text || "OPPORTUNITIES";
+  const secondaryBtnLink = content.hero_secondary_btn_link || "/ecosystem";
+
   return (
     <section className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden">
       <div className="absolute inset-0 bg-gradient-radial from-[#1a083a] via-black to-black opacity-80" />
       <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_center,_rgba(0,0,0,0.75)_0%,_transparent_70%)]" />
 
-      <div className="relative z-20 text-center max-w-4xl px-6 pointer-events-auto">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold mb-6 leading-[1.1] tracking-tight text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-          Malaysia’s Home for Solana <span className="text-primary">Builders</span>
+      <div className="relative z-20 text-center max-w-4xl px-6 pointer-events-auto animate-fade-up">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold mb-6 leading-[1.1] tracking-tight text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.5)] uppercase">
+          {headline.split(' ').map((word, i) => (
+            word.toLowerCase() === 'builders' || word.toLowerCase() === 'solana' ? 
+            <span key={i} className="text-primary">{word} </span> : 
+            <span key={i}>{word} </span>
+          ))}
         </h1>
 
-        <p className="max-w-xl mx-auto text-lg text-[#a1a1aa] mb-10 leading-relaxed">
-          Discover bounties, grants, events, and opportunities while building with the fastest growing Web3 ecosystem.
+        <p className="max-w-xl mx-auto text-lg text-[#a1a1aa] mb-10 leading-relaxed font-medium">
+          {subheadline}
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button size="lg" className="bg-white text-black hover:bg-white/90 font-bold h-12 px-8 rounded-full uppercase">
-            JOIN NETWORK
-          </Button>
-          <Button size="lg" variant="outline" className="h-12 px-8 rounded-full border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white uppercase tracking-wider text-xs font-bold">
-            OPPORTUNITIES
-          </Button>
+          <Link href={primaryBtnLink}>
+            <Button size="lg" className="bg-white text-black hover:bg-white/90 font-bold h-14 px-10 rounded-full uppercase tracking-widest text-xs">
+              {primaryBtnText}
+            </Button>
+          </Link>
+          <Link href={secondaryBtnLink}>
+            <Button size="lg" variant="outline" className="h-14 px-10 rounded-full border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 text-white uppercase tracking-widest text-xs font-bold">
+              {secondaryBtnText}
+            </Button>
+          </Link>
         </div>
       </div>
 

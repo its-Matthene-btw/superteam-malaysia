@@ -1,9 +1,11 @@
+
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { sendMessage } from '@/services/messages';
+import { getSettings } from '@/services/settings';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -30,6 +32,11 @@ export default function ContactPage() {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [settings, setSettings] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    getSettings().then(setSettings).catch(console.error);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +52,27 @@ export default function ContactPage() {
     }
   };
 
+  const quickAnswers = [
+    { 
+      title: settings.qa_1_title || 'Looking for Grants?', 
+      desc: settings.qa_1_desc || 'We offer equity-free funding up to $25k for builders in the region. Check our grant criteria before applying.', 
+      link: settings.qa_1_link || '/ecosystem', 
+      label: settings.qa_1_label || 'READ_GUIDELINES' 
+    },
+    { 
+      title: settings.qa_2_title || 'Want to earn Bounties?', 
+      desc: settings.qa_2_desc || 'Check the Superteam Earn platform. We post new technical and non-technical bounties every week.', 
+      link: settings.qa_2_link || 'https://earn.superteam.fun', 
+      label: settings.qa_2_label || 'EXPLORE_EARN' 
+    },
+    { 
+      title: settings.qa_3_title || 'Need Dev Support?', 
+      desc: settings.qa_3_desc || "Don't use the contact form for code issues. Drop your Anchor/Rust questions in the #dev-support Discord channel.", 
+      link: settings.qa_3_link || settings.social_discord || 'https://discord.gg/superteammy', 
+      label: settings.qa_3_label || 'JOIN_DISCORD' 
+    }
+  ];
+
   return (
     <main className="min-h-screen bg-[#0a0a0c] text-white selection:bg-primary/30 font-body">
       <Navbar />
@@ -54,7 +82,7 @@ export default function ContactPage() {
         <div className="bg-[#0a0a0c] p-10 lg:p-24 relative overflow-hidden flex flex-col justify-center">
           <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:linear-gradient(to_bottom,black:30%,transparent_100%)]" />
           
-          <div className="relative z-10">
+          <div className="relative z-10 animate-fade-up">
             <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-6">// INITIATE_COMMUNICATION</div>
             <h1 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10 uppercase">
               Transmit<br />Message<span className="inline-block w-4 h-12 lg:w-6 lg:h-20 bg-primary align-bottom ml-4 animate-pulse" />
@@ -92,12 +120,12 @@ export default function ContactPage() {
           <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-12">// INPUT_PARAMETERS</div>
           
           {sent ? (
-            <div className="p-10 border border-[#14F195]/20 bg-[#14F195]/5 font-code text-sm text-[#14F195] uppercase tracking-widest animate-in fade-in slide-in-from-bottom-4">
+            <div className="p-10 border border-primary/20 bg-primary/5 font-code text-sm text-primary uppercase tracking-widest animate-in fade-in slide-in-from-bottom-4">
               // SUCCESS: TRANSMISSION_RECEIVED. WE WILL RESPOND WITHIN 48_HOURS.
               <Button 
                 variant="link" 
                 onClick={() => setSent(false)} 
-                className="mt-6 text-[#14F195] p-0 font-bold underline"
+                className="mt-6 text-primary p-0 font-bold underline"
               >
                 [ RESET_TERMINAL ]
               </Button>
@@ -161,7 +189,7 @@ export default function ContactPage() {
         <aside className="p-10 lg:p-16 bg-[#050505] border-l border-white/10 flex flex-col gap-10">
           <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-4">// DIRECT_CHANNELS</div>
           
-          <Link href="https://discord.gg/superteammy" target="_blank" className="p-8 bg-[#0a0a0c] border border-white/10 relative overflow-hidden group hover:border-primary transition-all flex flex-col gap-6">
+          <Link href={settings.social_discord || 'https://discord.gg/superteammy'} target="_blank" className="p-8 bg-[#0a0a0c] border border-white/10 relative overflow-hidden group hover:border-primary transition-all flex flex-col gap-6">
             <div className="absolute top-0 left-0 w-1 h-full bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom" />
             <div className="w-12 h-12 bg-[#050505] border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-colors">
               <DiscordIcon className="w-6 h-6" />
@@ -173,7 +201,7 @@ export default function ContactPage() {
             <span className="font-code text-[10px] text-primary uppercase tracking-[2px]">JOIN_SERVER ↗</span>
           </Link>
 
-          <Link href="https://x.com/superteammy" target="_blank" className="p-8 bg-[#0a0a0c] border border-white/10 relative overflow-hidden group hover:border-primary transition-all flex flex-col gap-6">
+          <Link href={settings.social_x || 'https://x.com/superteammy'} target="_blank" className="p-8 bg-[#0a0a0c] border border-white/10 relative overflow-hidden group hover:border-primary transition-all flex flex-col gap-6">
             <div className="absolute top-0 left-0 w-1 h-full bg-primary transform scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom" />
             <div className="w-12 h-12 bg-[#050505] border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-colors">
               <XIcon className="w-5 h-5" />
@@ -209,13 +237,9 @@ export default function ContactPage() {
           <h2 className="text-5xl font-black uppercase tracking-tighter mb-16">Quick Answers</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-white/10 border border-white/10">
-            {[
-              { title: 'Looking for Grants?', desc: 'We offer equity-free funding up to $25k for builders in the region. Check our grant criteria before applying.', link: '/ecosystem', label: 'READ_GUIDELINES' },
-              { title: 'Want to earn Bounties?', desc: 'Check the Superteam Earn platform. We post new technical and non-technical bounties every week.', link: 'https://earn.superteam.fun', label: 'EXPLORE_EARN' },
-              { title: 'Need Dev Support?', desc: "Don't use the contact form for code issues. Drop your Anchor/Rust questions in the #dev-support Discord channel.", link: 'https://discord.gg/superteammy', label: 'JOIN_DISCORD' }
-            ].map((card, i) => (
-              <Link key={i} href={card.link} className="p-12 bg-[#050505] hover:bg-[#0a0a0c] transition-colors flex flex-col h-full group">
-                <h3 className="text-2xl font-black uppercase tracking-tight text-white mb-6 group-hover:text-[#14F195] transition-colors">{card.title}</h3>
+            {quickAnswers.map((card, i) => (
+              <Link key={i} href={card.link} target={card.link.startsWith('http') ? '_blank' : '_self'} className="p-12 bg-[#050505] hover:bg-[#0a0a0c] transition-colors flex flex-col h-full group">
+                <h3 className="text-2xl font-black uppercase tracking-tight text-white mb-6 group-hover:text-primary transition-colors">{card.title}</h3>
                 <p className="text-muted-foreground leading-relaxed mb-10 flex-1">{card.desc}</p>
                 <div className="font-code text-[10px] text-primary uppercase tracking-[2px]">{card.label} ↗</div>
               </Link>

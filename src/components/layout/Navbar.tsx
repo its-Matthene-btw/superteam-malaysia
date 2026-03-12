@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { getSettings } from '@/services/settings';
 
 const XIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -17,15 +18,18 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [settings, setSettings] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    getSettings().then(setSettings).catch(console.error);
+  }, []);
 
   useEffect(() => {
     const controlNavbar = () => {
       if (typeof window !== 'undefined') {
         if (window.scrollY > lastScrollY && window.scrollY > 100) {
-          // Scrolling down
           setIsVisible(false);
         } else {
-          // Scrolling up
           setIsVisible(true);
         }
         setLastScrollY(window.scrollY);
@@ -48,7 +52,7 @@ export default function Navbar() {
   return (
     <nav 
       className={cn(
-        "fixed top-0 left-0 right-0 z-[100] bg-black transition-transform duration-300 ease-in-out",
+        "fixed top-0 left-0 right-0 z-[100] bg-black transition-transform duration-300 ease-in-out border-b border-white/5",
         isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
@@ -67,7 +71,7 @@ export default function Navbar() {
           ))}
           <div className="flex items-center lg:space-x-6 space-x-3 ml-2 lg:ml-6 flex-shrink-0">
             <a 
-              href="https://x.com/superteammy" 
+              href={settings.social_x || "https://x.com/superteammy"} 
               target="_blank" 
               rel="noopener noreferrer"
               className="w-8 h-8 lg:w-10 lg:h-10 bg-white rounded-full flex items-center justify-center hover:bg-white/90 transition-all group"
@@ -99,7 +103,7 @@ export default function Navbar() {
           ))}
           <div className="flex items-center space-x-4">
              <a 
-              href="https://x.com/superteammy" 
+              href={settings.social_x || "https://x.com/superteammy"} 
               target="_blank" 
               rel="noopener noreferrer"
               className="w-12 h-12 bg-white rounded-full flex items-center justify-center"
@@ -109,7 +113,7 @@ export default function Navbar() {
             <span className="text-white font-bold">Follow us on X</span>
           </div>
           <Link href="/contact" onClick={() => setIsOpen(false)}>
-            <Button className="w-full bg-primary font-bold rounded-none uppercase tracking-widest">
+            <Button className="w-full bg-primary font-bold rounded-none uppercase tracking-widest h-14">
               CONTACT
             </Button>
           </Link>
