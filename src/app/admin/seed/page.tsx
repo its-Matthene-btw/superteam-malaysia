@@ -70,7 +70,9 @@ CREATE POLICY "Admin All Features" ON ecosystem_features FOR ALL TO authenticate
     <AdminLayout>
       <div className="max-w-6xl mx-auto space-y-10 animate-fade-up">
         <div>
-          <div className="pill-badge mb-6"><span>✦</span> CORE INITIALIZATION v6</div>
+          <div className="pill-badge mb-6 bg-white/5 border-white/10">
+            <ShieldCheck className="w-3 h-3 text-primary" /> CORE INITIALIZATION
+          </div>
           <h1 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-white">
             DATABASE <span className="text-primary">SYNC</span>
           </h1>
@@ -94,7 +96,7 @@ CREATE POLICY "Admin All Features" ON ecosystem_features FOR ALL TO authenticate
                   onClick={copySql}
                   className="absolute top-2 right-2 p-2 bg-black/80 hover:bg-primary hover:text-black transition-all rounded"
                 >
-                  {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  {copied ? <CheckCircle2 className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
                 </button>
               </pre>
             </CardContent>
@@ -144,7 +146,7 @@ CREATE POLICY "Admin All Features" ON ecosystem_features FOR ALL TO authenticate
                   </Button>
                 </div>
               </CardContent>
-            </div>
+            </Card>
           </div>
         </div>
       </div>
