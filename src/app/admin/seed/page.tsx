@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -80,7 +79,7 @@ ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
 
--- 4. Create Policies (Safe for re-runs)
+-- 4. Create Policies (Idempotent using DROP IF EXISTS)
 DROP POLICY IF EXISTS "Public Read Ecosystem" ON ecosystem_projects;
 CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
 
@@ -207,11 +206,11 @@ CREATE POLICY "Admin All FAQs" ON faqs FOR ALL TO authenticated USING (true);
           <Card className="glass border-white/10 flex flex-col">
             <CardHeader className="border-b border-white/5 bg-white/5">
               <CardTitle className="flex items-center gap-2 text-white uppercase tracking-widest text-xs">
-                <HelpCircle className="w-4 h-4 text-[#14F195]" /> 3. Knowledge Base
+                <HelpCircle className="w-4 h-4 text-[#14F195]" /> 3. FAQ / Knowledge Base
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
-              <p className="text-xs text-muted-foreground">Populate FAQ parameters for Grants, Bounties, and Build Stations.</p>
+              <p className="text-xs text-muted-foreground">Populate technical FAQ parameters for Grants, Bounties, and Build Stations.</p>
               <div className="mt-auto">
                 <Button onClick={handleFaqSeed} disabled={faqLoading} className="w-full bg-[#14F195] text-black hover:bg-[#14F195]/80 font-bold h-12 text-xs uppercase">
                   {faqLoading ? 'Seeding...' : 'Seed Knowledge Base'}

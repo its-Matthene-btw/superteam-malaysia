@@ -6,13 +6,12 @@ import Footer from '@/components/layout/Footer';
 import { getFAQs } from '@/services/faqs';
 import { FAQ } from '@/types/database';
 import { cn } from '@/lib/utils';
-import { Loader2, Search, Plus, Send } from 'lucide-react';
+import { Loader2, Search, Plus, Send, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 export default function FAQPage() {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState('Grants & Funding');
   const [openId, setOpenId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -21,15 +20,13 @@ export default function FAQPage() {
     async function fetch() {
       try {
         const data = await getFAQs();
-        setFaqs(data);
+        setFaqs(data || []);
         if (data && data.length > 0) {
-          // Set default category to the first one available
           const uniqueCats = Array.from(new Set(data.map(f => f.category)));
           if (uniqueCats.length > 0) setActiveCategory(uniqueCats[0]);
         }
       } catch (e: any) {
         console.error('FAQ Fetch Failure:', e);
-        setError(e.message || 'Could not access the knowledge base.');
       } finally {
         setLoading(false);
       }
@@ -38,8 +35,7 @@ export default function FAQPage() {
   }, []);
 
   const categories = useMemo(() => {
-    const cats = Array.from(new Set(faqs.map(f => f.category)));
-    return cats;
+    return Array.from(new Set(faqs.map(f => f.category)));
   }, [faqs]);
 
   const categoryCounts = useMemo(() => {
@@ -51,8 +47,9 @@ export default function FAQPage() {
 
   const filteredFaqs = useMemo(() => {
     return faqs.filter(f => {
-      const matchesSearch = f.question.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            f.answer.toLowerCase().includes(searchTerm.toLowerCase());
+      const query = searchTerm.toLowerCase();
+      const matchesSearch = f.question.toLowerCase().includes(query) || 
+                            f.answer.toLowerCase().includes(query);
       const matchesCategory = searchTerm.length > 0 || f.category === activeCategory;
       return matchesSearch && matchesCategory;
     });
@@ -62,7 +59,7 @@ export default function FAQPage() {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center">
         <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-        <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground">Accessing Node...</p>
+        <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground">Accessing Knowledge Base...</p>
       </div>
     );
   }
@@ -71,8 +68,8 @@ export default function FAQPage() {
     <main className="min-h-screen bg-black text-white font-body selection:bg-primary/30">
       <Navbar />
 
-      {/* TERMINAL HEADER - Adjusted with pt-20 to clear global Navbar */}
-      <header className="relative pt-20 border-b border-white/10 grid grid-cols-1 lg:grid-cols-2 min-h-[50vh] bg-black">
+      {/* TERMINAL QUERY SYSTEM HERO */}
+      <header className="relative pt-32 border-b border-white/10 grid grid-cols-1 lg:grid-cols-2 min-h-[50vh] bg-black overflow-hidden">
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:linear-gradient(to_right,black:0%,transparent:100%)] pointer-events-none" />
         
         <div className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center relative z-10">
@@ -86,7 +83,7 @@ export default function FAQPage() {
         </div>
 
         <div className="bg-[#050505] p-10 lg:p-24 flex items-center justify-center relative z-10">
-          <div className="w-full max-w-[600px] bg-[#030303] border border-white/10 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 focus-within:border-primary focus-within:shadow-[0_0_30px_rgba(153,69,255,0.15)]">
+          <div className="w-full max-w-[600px] bg-[#030303] border border-white/10 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 focus-within:border-primary">
             <div className="bg-[#111] px-6 py-3 border-b border-white/10 flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
               <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
@@ -113,7 +110,7 @@ export default function FAQPage() {
         </div>
       </header>
 
-      {/* MAIN ASYMMETRIC GRID */}
+      {/* ASYMMETRIC GRID */}
       <section className="grid grid-cols-1 lg:grid-cols-[350px_1fr] border-b border-white/10 min-h-screen">
         {/* SIDEBAR DIRECTORY */}
         <aside className="p-10 lg:p-16 border-r border-white/10 bg-[#050505] lg:sticky lg:top-20 lg:h-[calc(100vh-80px)] overflow-y-auto">
@@ -130,7 +127,7 @@ export default function FAQPage() {
                 }}
                 className={cn(
                   "w-full text-left p-5 font-code text-xs uppercase tracking-widest transition-all flex justify-between items-center group",
-                  activeCategory === cat && !searchTerm ? "bg-black border border-primary text-primary border-l-4" : "border border-transparent text-white hover:bg-white/5 hover:border-white/10"
+                  activeCategory === cat && !searchTerm ? "bg-black border border-primary text-primary border-l-4" : "border border-transparent text-white hover:bg-white/5"
                 )}
               >
                 {cat} 
@@ -196,8 +193,8 @@ export default function FAQPage() {
         </div>
       </section>
 
-      {/* UNRESOLVED QUERY CTA */}
-      <section className="py-32 px-10 bg-white/5 text-center relative overflow-hidden border-b border-white/10">
+      {/* CTA */}
+      <section className="py-32 px-10 bg-[#0f0f13] text-center relative overflow-hidden border-b border-white/10">
         <div className="max-w-2xl mx-auto relative z-10">
           <div className="font-code text-primary text-[10px] uppercase tracking-[3px] mb-6">// UNRESOLVED_QUERY</div>
           <h2 className="text-5xl lg:text-7xl font-black tracking-tighter leading-[0.9] mb-10 uppercase">

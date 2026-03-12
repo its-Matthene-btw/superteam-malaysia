@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useRef, useEffect, useState } from 'react';
@@ -41,6 +40,25 @@ export default function CommunityCarousel({ members }: { members: Member[] }) {
     return () => cancelAnimationFrame(animationFrameId);
   }, [isDown, isHovering]);
 
+  // DETECT SLIDE AWAY (Trackpad / Mouse Wheel)
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    let lastScrollPos = slider.scrollLeft;
+    const handleScroll = () => {
+      const currentScroll = slider.scrollLeft;
+      // If user scrolls horizontally while a card is open, close it
+      if (expandedId && Math.abs(currentScroll - lastScrollPos) > 10) {
+        setExpandedId(null);
+      }
+      lastScrollPos = currentScroll;
+    };
+
+    slider.addEventListener('scroll', handleScroll);
+    return () => slider.removeEventListener('scroll', handleScroll);
+  }, [expandedId]);
+
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!sliderRef.current) return;
     setIsDown(true);
@@ -58,7 +76,7 @@ export default function CommunityCarousel({ members }: { members: Member[] }) {
     // Detection of intentional drag
     if (Math.abs(walk) > 5) {
       setIsDragging(true);
-      // Auto-close card when sliding away via mouse drag
+      // Close open card if user starts dragging
       if (expandedId) setExpandedId(null);
     }
     
@@ -99,19 +117,12 @@ export default function CommunityCarousel({ members }: { members: Member[] }) {
       <div className="w-full border-y border-white/10 bg-black overflow-hidden">
         <div 
           ref={sliderRef}
-          className="max-w-[1400px] mx-auto border-x border-white/10 overflow-x-hidden cursor-grab active:cursor-grabbing"
+          className="max-w-[1400px] mx-auto border-x border-white/10 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => { setIsHovering(false); setIsDown(false); }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={() => setIsDown(false)}
-          onScroll={() => {
-            // Auto-close card when sliding away via trackpad/wheel
-            // We only trigger this if the user is actively hovering (intentional interaction)
-            if (isHovering && expandedId && !isDown) {
-              setExpandedId(null);
-            }
-          }}
         >
           <div className="flex whitespace-nowrap">
             {displayMembers.map((member, idx) => (
@@ -170,6 +181,10 @@ export default function CommunityCarousel({ members }: { members: Member[] }) {
           </div>
         </div>
       </div>
+      <style jsx global>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
     </section>
   );
 }
