@@ -40,7 +40,7 @@ export default async function AdminCategoriesPage() {
             {error.message || 'Could not access ecosystem_categories table.'}
             <div className="mt-4">
               <Link href="/admin/seed" className="underline hover:text-white transition-colors">
-                Run migration in System Seed ->
+                Run migration in System Seed -&gt;
               </Link>
             </div>
           </AlertDescription>
