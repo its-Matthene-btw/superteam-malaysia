@@ -24,7 +24,7 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
               <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Builder<br /><span className="text-primary">Support</span></h2>
-              <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 01 / 05 ]</div>
+              <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 01 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
               <div className="relative w-full h-full flex items-center justify-center">
@@ -33,7 +33,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
+              <p className="text-lg text-white leading-relaxed max-w-sm">
                 Superteam Malaysia helps developers, designers, and founders start building in the Solana ecosystem. Through mentorship, collaboration, and guidance from experienced community members, we help builders move from learning to launching real products.
               </p>
             </div>
@@ -45,7 +45,7 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
               <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Events &<br /><span className="text-primary">Hackathons</span></h2>
-              <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 02 / 05 ]</div>
+              <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 02 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
               <div className="relative w-full h-full flex items-center justify-center">
@@ -53,7 +53,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
+              <p className="text-lg text-white leading-relaxed max-w-sm">
                 We host workshops, meetups, and hackathons that bring the Malaysian Web3 community together. These events help builders learn new skills, meet collaborators, and turn ideas into working prototypes and projects.
               </p>
             </div>
@@ -65,7 +65,7 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
               <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Grants &<br /><span className="text-primary">Funding</span></h2>
-              <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 03 / 05 ]</div>
+              <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 03 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
               <div className="relative w-full h-full flex items-center justify-center">
@@ -74,7 +74,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
+              <p className="text-lg text-white leading-relaxed max-w-sm">
                 Superteam connects builders with grants and funding opportunities across the Solana ecosystem. Whether launching a startup or building an open-source tool, we help talented builders access the resources needed to grow their projects.
               </p>
             </div>
@@ -86,7 +86,7 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
               <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white"><span className="text-primary">Bounties</span> &<br />Opportunities</h2>
-              <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 04 / 05 ]</div>
+              <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 04 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
               <div className="relative w-full h-full flex items-center justify-center">
@@ -95,7 +95,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
+              <p className="text-lg text-white leading-relaxed max-w-sm">
                 Members can earn by contributing to real projects through ecosystem bounties and freelance opportunities. Builders can work with leading Solana teams while gaining experience and getting rewarded for their contributions.
               </p>
             </div>
@@ -107,7 +107,7 @@ export default function Home() {
           <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
             <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
               <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">Education &<br /><span className="text-primary">Learning</span></h2>
-              <div className="hidden lg:block font-code text-sm tracking-[4px] text-muted-foreground font-bold">[ 05 / 05 ]</div>
+              <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ 05 / 05 ]</div>
             </div>
             <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
               <div className="relative w-full h-full flex items-center justify-center">
@@ -115,7 +115,7 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-sm">
+              <p className="text-lg text-white leading-relaxed max-w-sm">
                 We provide workshops, learning sessions, and community resources to help builders develop the skills needed to succeed in Web3. From beginners learning Solana development to experienced contributors leveling up their expertise.
               </p>
             </div>
