@@ -6,17 +6,11 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { createClient } from '@/lib/supabase/client';
 import { EcosystemProject, EcosystemFeature } from '@/types/ecosystem';
-import { ArrowLeft, ExternalLink, Globe, LayoutGrid, Zap, Sparkles, Twitter, Github, Copy, CheckCircle2, Loader2, MessageSquare, ShieldCheck, Code2 } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Globe, LayoutGrid, Zap, Sparkles, Twitter, Github, Copy, CheckCircle2, Loader2, MessageSquare, ShieldCheck, Code2, Box } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { cn } from '@/lib/utils';
-
-const XIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
-  </svg>
-);
 
 export default function ProjectDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -109,7 +103,7 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
             )}
           </div>
           <div className="font-code text-[#14F195] text-xs font-bold tracking-[3px] mb-6 uppercase">
-            // {project.category.replace(/ /g, '_')}
+            // {project.category ? project.category.replace(/ /g, '_') : 'GENERAL'}
           </div>
           <h1 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-8 uppercase">
             {project.name}
@@ -157,8 +151,8 @@ export default function ProjectDetail({ params }: { params: Promise<{ slug: stri
       {/* STATS STRIP */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 border-b border-white/10">
         <StatBox label="Network" value={project.network || "Solana Mainnet"} />
-        <StatBox label="Category" value={project.category} />
-        <StatBox label="Status" value={project.status} highlight />
+        <StatBox label="Category" value={project.category || "General"} />
+        <StatBox label="Status" value={project.status || "Live"} highlight />
         <StatBox label="Token" value={project.token_symbol ? `$${project.token_symbol}` : "No Token"} />
       </section>
 

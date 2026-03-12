@@ -41,6 +41,20 @@ const projects = [
     featured: true,
     website_url: 'https://phantom.app',
     twitter_url: 'https://x.com/phantom'
+  },
+  {
+    name: 'Pyth Network',
+    slug: 'pyth',
+    category: 'Infrastructure',
+    short_description: 'High-fidelity, real-time market data directly on-chain. Powering the DeFi ecosystem pricing logic.',
+    long_description: 'Pyth Network is a specialized oracle solution for latency-sensitive financial data. It connects high-fidelity market data from top traders and exchanges directly to any smart contract on Solana.',
+    logo_url: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&w=200&q=80',
+    hero_image_url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80',
+    network: 'Pythnet',
+    token_symbol: 'PYTH',
+    status: 'Operational',
+    featured: false,
+    website_url: 'https://pyth.network'
   }
 ];
 

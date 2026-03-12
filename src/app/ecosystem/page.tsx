@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
@@ -103,7 +104,7 @@ export default function EcosystemPage() {
       {/* FILTER BAR (NON-STICKY) */}
       <div className="bg-[#0a0a0c] border-b border-white/10 py-10 relative z-50">
         <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between gap-6">
-          <div className="flex gap-4 overflow-x-auto no-scrollbar">
+          <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
             <FilterButton 
               active={activeFilter === 'all'} 
               onClick={() => setActiveFilter('all')}
