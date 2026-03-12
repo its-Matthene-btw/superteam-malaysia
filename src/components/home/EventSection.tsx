@@ -2,7 +2,7 @@
 "use client";
 
 import { Event } from '@/types/database';
-import { ArrowRight, MapPin, Globe } from 'lucide-react';
+import { ArrowRight, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -15,10 +15,10 @@ export default function EventSection({ events }: { events: Event[] }) {
 
   return (
     <section id="events" className="w-full border-b border-white/10 bg-black">
-      <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-[4fr_6fr] border-x border-white/10 bg-white/5 gap-[1px]">
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[4.5fr_5.5fr] border-x border-white/10 bg-white/5 gap-[1px]">
         
         {/* LEFT COLUMN - STICKY */}
-        <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center p-10 lg:p-20 bg-black relative overflow-hidden">
+        <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center p-10 lg:p-20 bg-black relative overflow-hidden border-r border-white/10">
           {/* Abstract Grid Background */}
           <div 
             className="absolute inset-0 z-0 opacity-50"
@@ -49,12 +49,15 @@ export default function EventSection({ events }: { events: Event[] }) {
         </div>
 
         {/* RIGHT COLUMN - SCROLLING CARDS */}
-        <div className="p-10 lg:p-20 bg-[#0f0f13] flex flex-col gap-12 lg:gap-20">
+        <div className="p-10 lg:p-20 bg-[#0f0f13] relative flex flex-col gap-12 lg:gap-20 overflow-hidden">
+          {/* PURPLE GRID BACKGROUND */}
+          <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(153,69,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(153,69,255,0.05)_1px,transparent_1px)] bg-[size:60px:60px] pointer-events-none" />
+
           {sortedEvents.length > 0 ? sortedEvents.map((event) => (
             <Link 
               key={event.id} 
               href={`/events/${event.id}`}
-              className="group bg-black border border-white/10 transition-all duration-500 hover:-translate-x-2 relative flex flex-col"
+              className="group bg-black border border-white/10 transition-all duration-500 hover:-translate-x-2 relative z-10 flex flex-col"
             >
               {/* Card Image Box */}
               <div className="relative h-72 w-full overflow-hidden border-b border-white/10 bg-[#111]">
@@ -71,7 +74,7 @@ export default function EventSection({ events }: { events: Event[] }) {
                 {/* Scanline Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent mix-blend-overlay pointer-events-none" />
                 
-                <div className="absolute top-6 right-6 px-4 py-1.5 bg-black/80 border border-white/10 backdrop-blur-md font-code text-[10px] font-bold text-[#14F195] uppercase tracking-widest z-10">
+                <div className="absolute top-6 right-6 px-4 py-1.5 bg-black/80 border border-white/10 backdrop-blur-md font-code text-[10px] font-bold text-primary uppercase tracking-widest z-10">
                   {event.category || 'EVENT'}
                 </div>
               </div>
@@ -108,7 +111,7 @@ export default function EventSection({ events }: { events: Event[] }) {
                 <div className="flex items-center justify-between">
                   <span className={cn(
                     "font-code text-[10px] font-bold uppercase tracking-[2px]",
-                    event.status === 'upcoming' ? "text-[#14F195]" : "text-muted-foreground"
+                    event.status === 'upcoming' ? "text-primary" : "text-muted-foreground"
                   )}>
                     {event.status === 'upcoming' ? 'REGISTRATION_OPEN' : 'ARCHIVED_FEED'}
                   </span>
@@ -124,7 +127,7 @@ export default function EventSection({ events }: { events: Event[] }) {
               <div className="absolute inset-0 border border-transparent group-hover:border-primary/40 pointer-events-none transition-colors duration-500 shadow-[inset_0_0_30px_rgba(153,69,255,0)] group-hover:shadow-[inset_0_0_30px_rgba(153,69,255,0.1)]" />
             </Link>
           )) : (
-            <div className="py-40 text-center border border-white/10 bg-black">
+            <div className="py-40 text-center border border-white/10 bg-black relative z-10">
               <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground">No upcoming events found.</p>
             </div>
           )}
