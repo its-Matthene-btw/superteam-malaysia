@@ -1,7 +1,9 @@
+
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/home/Hero';
 import EventSection from '@/components/home/EventSection';
 import EcosystemPartners from '@/components/home/EcosystemPartners';
+import CommunityCarousel from '@/components/home/CommunityCarousel';
 import Footer from '@/components/layout/Footer';
 import { stats, faqs } from '@/lib/data';
 import { 
@@ -166,6 +168,7 @@ export default function Home() {
       </section>
 
       <EventSection />
+      <CommunityCarousel />
       <EcosystemPartners />
       <Footer />
     </main>
