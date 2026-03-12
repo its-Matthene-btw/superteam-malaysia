@@ -17,7 +17,7 @@ export async function seedDatabase() {
   try {
     // 1. Seed Stats
     if (hardcodedStats.length > 0) {
-      const { error: sErr } = await supabase.from('stats').upsert(
+      const { error: sErr } = await supabase.from('stats').insert(
         hardcodedStats.map((s, i) => ({
           label: s.label,
           value: s.value,
@@ -30,7 +30,7 @@ export async function seedDatabase() {
 
     // 2. Seed Members
     if (hardcodedMembers.length > 0) {
-      const { error: mErr } = await supabase.from('members').upsert(
+      const { error: mErr } = await supabase.from('members').insert(
         hardcodedMembers.map(m => ({
           name: m.name,
           role: m.track,
@@ -48,12 +48,12 @@ export async function seedDatabase() {
 
     // 3. Seed Events
     if (hardcodedEvents.length > 0) {
-      const { error: eErr } = await supabase.from('events').upsert(
+      const { error: eErr } = await supabase.from('events').insert(
         hardcodedEvents.map(e => ({
           title: e.title,
           description: e.description,
           location: e.location,
-          event_date: new Date().toISOString(), // Default to now for seed
+          event_date: new Date().toISOString(), 
           luma_url: e.lumaUrl,
           status: 'upcoming',
           featured: true
@@ -65,7 +65,7 @@ export async function seedDatabase() {
 
     // 4. Seed Partners
     if (hardcodedPartners.length > 0) {
-      const { error: pErr } = await supabase.from('partners').upsert(
+      const { error: pErr } = await supabase.from('partners').insert(
         hardcodedPartners.map(p => ({
           name: p.name,
           logo_url: p.logo,
@@ -76,12 +76,13 @@ export async function seedDatabase() {
       else results.partners = hardcodedPartners.length;
     }
 
-    // 5. Seed Testimonials (using a few hardcoded examples)
+    // 5. Seed Testimonials
     const testimonials = [
-      { name: 'Solana Dev', role: 'Builder', content: 'Building on Solana in Malaysia has never been easier thanks to Superteam.', type: 'official' },
-      { name: 'Anatoly Yakovenko', role: 'Solana Founder', content: 'Superteam is the standard for ecosystem growth.', type: 'twitter' }
+      { name: 'Aiman Rahman', role: 'Solana Developer', content: 'Superteam Malaysia is the ultimate launching pad for builders. The network effect here is real.', type: 'official' },
+      { name: 'Sarah Chen', role: 'Product Designer', content: 'Being part of this community accelerated my transition into Web3 by months.', type: 'official' },
+      { name: 'Anatoly Yakovenko', role: 'Solana Founder', content: 'Superteam is the gold standard for ecosystem communities.', type: 'twitter' }
     ];
-    const { error: tErr } = await supabase.from('testimonials').upsert(testimonials);
+    const { error: tErr } = await supabase.from('testimonials').insert(testimonials);
     if (tErr) results.errors.push(`Testimonials: ${tErr.message}`);
     else results.testimonials = testimonials.length;
 
