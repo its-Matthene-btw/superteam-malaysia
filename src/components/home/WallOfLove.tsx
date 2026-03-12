@@ -130,7 +130,7 @@ function WallCard({ testimonial }: { testimonial: Testimonial }) {
       className={cn(
         "wall-card relative flex flex-col bg-[#050505] overflow-hidden transition-colors duration-400 group min-w-[320px]",
         testimonial.isWide ? "flex-[2_1_calc(66.666%-2px)]" : "flex-[1_1_calc(33.333%-2px)]",
-        "max-md:flex-[1_1_100%] max-md:min-w-full"
+        "max-md:flex-[1_1:100%] max-md:min-w-full"
       )}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -208,10 +208,10 @@ function WallCard({ testimonial }: { testimonial: Testimonial }) {
 
 export default function WallOfLove() {
   return (
-    <section className="wall-section w-full bg-black border-t border-white/15">
-      <div className="header-wrapper max-w-[1600px] mx-auto px-10 pt-20 border-x border-white/15">
+    <section className="wall-section w-full bg-black border-t border-white/10">
+      <div className="header-wrapper max-w-[1600px] mx-auto px-10 pt-20 border-x border-white/10">
         <div className="flex flex-col gap-6 mb-10">
-          <div className="inline-flex items-center gap-2 border border-white/15 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[2px] text-muted-foreground uppercase w-fit">
+          <div className="inline-flex items-center gap-2 border border-white/10 px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[2px] text-muted-foreground uppercase w-fit">
             <span className="text-primary text-base">✦</span> Wall of Love
           </div>
           <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none">
@@ -219,7 +219,7 @@ export default function WallOfLove() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-10 py-10 border-t border-white/15">
+        <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-10 py-10 border-t border-white/10">
           <div className="uppercase font-bold text-sm tracking-wider leading-relaxed text-white max-w-sm">
             REAL BUILDERS. REAL STORIES. THE ALPHA SITS IN OUR CHATS.
           </div>
@@ -229,8 +229,8 @@ export default function WallOfLove() {
         </div>
       </div>
 
-      <div className="grid-full-width w-full border-y border-white/15">
-        <div className="wall-grid max-w-[1600px] mx-auto flex flex-wrap gap-[1px] bg-white/15 border-x border-white/15">
+      <div className="grid-full-width w-full border-y border-white/10">
+        <div className="wall-grid max-w-[1600px] mx-auto flex flex-wrap gap-[1px] bg-white/10 border-x border-white/10">
           {testimonials.map((testimonial) => (
             <WallCard key={testimonial.id} testimonial={testimonial} />
           ))}

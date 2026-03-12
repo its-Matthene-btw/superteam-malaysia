@@ -9,14 +9,14 @@ export default function Footer() {
   };
 
   return (
-    <footer className="footer-section w-full bg-[#050505] border-t border-white/15">
-      <div className="footer-wrapper max-w-[1600px] mx-auto border-x border-white/15 flex flex-col">
+    <footer className="footer-section w-full bg-[#050505] border-t border-white/10">
+      <div className="footer-wrapper max-w-[1600px] mx-auto border-x border-white/10 flex flex-col">
         
         {/* Main Footer Grid */}
-        <div className="footer-main-grid grid grid-cols-1 lg:grid-cols-[5fr_3fr_4fr] border-b border-white/15">
+        <div className="footer-main-grid grid grid-cols-1 lg:grid-cols-[5fr_3fr_4fr] border-b border-white/10">
           
           {/* Column 1: Brand */}
-          <div className="footer-col p-10 lg:p-20 border-b lg:border-b-0 lg:border-r border-white/15 flex flex-col">
+          <div className="footer-col p-10 lg:p-20 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col">
             <Link href="/" className="brand-logo text-4xl lg:text-6xl font-headline font-extrabold tracking-tighter uppercase leading-none mb-8 hover:opacity-80 transition-opacity">
               Superteam<br /><span className="text-primary">Malaysia</span>
             </Link>
@@ -26,7 +26,7 @@ export default function Footer() {
           </div>
 
           {/* Column 2: Directory */}
-          <div className="footer-col p-10 lg:p-20 border-b lg:border-b-0 lg:border-r border-white/15 flex flex-col">
+          <div className="footer-col p-10 lg:p-20 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col">
             <span className="col-title font-code text-xs text-primary uppercase tracking-[2px] mb-8 block">[ DIRECTORY ]</span>
             <ul className="nav-list flex flex-col gap-4">
               <FooterNavLink href="/" label="Home" />
@@ -100,7 +100,7 @@ function SocialBrutalistButton({ href, label, icon }: { href: string; label: str
       href={href} 
       target="_blank" 
       rel="noopener noreferrer"
-      className="social-btn flex items-center justify-between p-4 border border-white/15 text-white font-code text-[11px] font-bold uppercase tracking-[1px] hover:bg-primary hover:text-black hover:border-primary transition-all group"
+      className="social-btn flex items-center justify-between p-4 border border-white/10 text-white font-code text-[11px] font-bold uppercase tracking-[1px] hover:bg-primary hover:text-black hover:border-primary transition-all group"
     >
       <div className="flex items-center gap-3">
         {icon}

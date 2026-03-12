@@ -9,22 +9,22 @@ export default function FaqCtaSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="faq-section w-full border-t border-white/15 bg-black">
+    <section className="faq-section w-full border-t border-white/10 bg-black">
       {/* Header */}
-      <div className="header-wrapper max-w-[1600px] mx-auto px-10 py-20 border-x border-white/15">
+      <div className="header-wrapper max-w-[1600px] mx-auto px-10 py-20 border-x border-white/10">
         <div className="pill-badge mb-6"><span>✦</span> KNOWLEDGE BASE</div>
         <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none">
           Have Questions?
         </h2>
       </div>
 
-      <div className="grid-full-width w-full border-y border-white/15">
-        <div className="faq-cta-grid max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-[6fr_4fr] border-x border-white/15">
+      <div className="grid-full-width w-full border-y border-white/10">
+        <div className="faq-cta-grid max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-[6fr_4fr] border-x border-white/10">
           
           {/* FAQ Column */}
-          <div className="faq-column border-b lg:border-b-0 lg:border-r border-white/15 bg-black flex flex-col">
+          <div className="faq-column border-b lg:border-b-0 lg:border-r border-white/10 bg-black flex flex-col">
             {faqs.map((faq, idx) => (
-              <div key={idx} className={cn("faq-item border-b border-white/15 last:border-b-0", openIndex === idx && "active")}>
+              <div key={idx} className={cn("faq-item border-b border-white/10 last:border-b-0", openIndex === idx && "active")}>
                 <button 
                   className="faq-header w-full flex items-center justify-between p-8 lg:p-10 hover:bg-white/[0.02] group transition-all"
                   onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
@@ -82,7 +82,7 @@ export default function FaqCtaSection() {
                     Join Discord
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </a>
-                  <a href="#" className="group flex items-center justify-between bg-transparent text-white border border-white/15 px-8 py-5 font-code font-bold uppercase tracking-widest hover:bg-white/5 hover:border-white transition-all">
+                  <a href="#" className="group flex items-center justify-between bg-transparent text-white border border-white/10 px-8 py-5 font-code font-bold uppercase tracking-widest hover:bg-white/5 hover:border-white transition-all">
                     Apply For Grant
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                   </a>

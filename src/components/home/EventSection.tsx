@@ -1,4 +1,3 @@
-
 "use client";
 
 import { events } from '@/lib/data';
@@ -8,8 +7,8 @@ import Link from 'next/link';
 
 export default function EventSection() {
   return (
-    <section id="events" className="w-full border-t border-white/10 border-b border-white/10 bg-black">
-      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[4fr_6fr] border-x border-white/10">
+    <section id="events" className="w-full border-b border-white/10 bg-black">
+      <div className="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-[4fr_6fr] border-x border-white/10">
         
         {/* Sticky Sidebar */}
         <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center p-10 lg:p-20 border-b lg:border-b-0 lg:border-r border-white/10">
