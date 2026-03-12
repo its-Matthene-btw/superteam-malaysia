@@ -1,28 +1,41 @@
-import { createClient } from '@/lib/supabaseClient';
-import { Member } from '@/types/member';
+import { createClient } from '@/lib/supabase/client';
+import { Member } from '@/types/database';
 
 const supabase = createClient();
 
-export const getMembers = async (): Promise<Member[]> => {
-  const { data, error } = await supabase.from('members').select('*');
+export async function getMembers() {
+  const { data, error } = await supabase.from('members').select('*').order('created_at', { ascending: false });
   if (error) throw error;
   return data as Member[];
-};
+}
 
-export const createMember = async (member: Omit<Member, 'id'>) => {
-  const { data, error } = await supabase.from('members').insert([member]);
+export async function getFeaturedMembers(limit = 6) {
+  const { data, error } = await supabase.from('members').select('*').eq('featured', true).limit(limit);
   if (error) throw error;
-  return data;
-};
+  return data as Member[];
+}
 
-export const updateMember = async (id: string, member: Partial<Omit<Member, 'id'>>) => {
-  const { data, error } = await supabase.from('members').update(member).eq('id', id);
+export async function createMember(member: Partial<Member>) {
+  const { data, error } = await supabase.from('members').insert([member]).select();
   if (error) throw error;
-  return data;
-};
+  return data[0];
+}
 
-export const deleteMember = async (id: string) => {
-  const { data, error } = await supabase.from('members').delete().eq('id', id);
+export async function updateMember(id: string, member: Partial<Member>) {
+  const { data, error } = await supabase.from('members').update(member).eq('id', id).select();
   if (error) throw error;
-  return data;
-};
+  return data[0];
+}
+
+export async function deleteMember(id: string) {
+  const { error } = await supabase.from('members').delete().eq('id', id);
+  if (error) throw error;
+}
+
+export async function uploadAvatar(file: File) {
+  const fileName = `${Date.now()}-${file.name}`;
+  const { data, error } = await supabase.storage.from('avatars').upload(fileName, file);
+  if (error) throw error;
+  const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(data.path);
+  return publicUrl;
+}
