@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -20,41 +21,52 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { getStats, updateStat, deleteStat, createStat } from '@/services/stats';
+import { getCurrentProfile, Profile } from '@/services/profiles';
 import { Stat } from '@/types/database';
-import { Edit2, Save, Trash2, Plus, BarChart3 } from 'lucide-react';
+import { Edit2, Save, Trash2, Plus, BarChart3, Eye, Lock } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 export default function StatsAdmin() {
   const [stats, setStats] = useState<Stat[]>([]);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
   const [editLabel, setEditLabel] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newStat, setNewStat] = useState({ label: '', value: '' });
 
+  const isViewer = profile?.role === 'viewer';
+
   useEffect(() => {
-    fetchStats();
+    async function init() {
+      try {
+        const [data, p] = await Promise.all([getStats(), getCurrentProfile()]);
+        setStats(data);
+        setProfile(p);
+      } catch (error) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch stats.' });
+      } finally {
+        setLoading(false);
+      }
+    }
+    init();
   }, []);
 
   async function fetchStats() {
-    try {
-      const data = await getStats();
-      setStats(data);
-    } catch (error) {
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch stats.' });
-    } finally {
-      setLoading(false);
-    }
+    const data = await getStats();
+    setStats(data);
   }
 
   const handleStartEdit = (stat: Stat) => {
+    if (isViewer) return;
     setEditingId(stat.id);
     setEditValue(stat.value);
     setEditLabel(stat.label);
   };
 
   const handleSave = async (id: string) => {
+    if (isViewer) return;
     try {
       await updateStat(id, { value: editValue, label: editLabel });
       toast({ title: 'Success', description: 'Stat updated.' });
@@ -66,6 +78,7 @@ export default function StatsAdmin() {
   };
 
   const handleDelete = async (id: string) => {
+    if (isViewer) return;
     if (confirm('Permanently delete this statistic?')) {
       try {
         await deleteStat(id);
@@ -79,6 +92,7 @@ export default function StatsAdmin() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isViewer) return;
     try {
       await createStat({ ...newStat, order_index: stats.length });
       toast({ title: 'Success', description: 'Stat created.' });
@@ -100,9 +114,11 @@ export default function StatsAdmin() {
           </h1>
           <p className="text-muted-foreground mt-2">Update the numbers displayed in the impact section.</p>
         </div>
-        <Button onClick={() => setIsModalOpen(true)} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
-          <Plus className="w-4 h-4 mr-2" /> New Metric
-        </Button>
+        {!isViewer && (
+          <Button onClick={() => setIsModalOpen(true)} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
+            <Plus className="w-4 h-4 mr-2" /> New Metric
+          </Button>
+        )}
       </div>
 
       <div className="glass border-white/10 rounded-xl overflow-hidden">
@@ -154,11 +170,13 @@ export default function StatsAdmin() {
                     ) : (
                       <>
                         <Button variant="ghost" size="icon" onClick={() => handleStartEdit(stat)} className="hover:bg-white/5">
-                          <Edit2 className="w-4 h-4" />
+                          {isViewer ? <Eye className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDelete(stat.id)} className="hover:bg-destructive/20 hover:text-destructive">
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                        {!isViewer && (
+                          <Button variant="ghost" size="icon" onClick={() => handleDelete(stat.id)} className="hover:bg-destructive/20 hover:text-destructive">
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
                       </>
                     )}
                   </div>

@@ -12,30 +12,40 @@ import {
   TableRow 
 } from '@/components/ui/table';
 import { getMessages, deleteMessage } from '@/services/messages';
+import { getCurrentProfile, Profile } from '@/services/profiles';
 import { Contact } from '@/types/database';
-import { Trash2, Mail, User, Clock, Inbox } from 'lucide-react';
+import { Trash2, Mail, User, Clock, Inbox, Lock } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 export default function MessagesAdmin() {
   const [messages, setMessages] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<Profile | null>(null);
+
+  const isViewer = profile?.role === 'viewer';
 
   useEffect(() => {
-    fetchMessages();
+    async function init() {
+      try {
+        const [data, p] = await Promise.all([getMessages(), getCurrentProfile()]);
+        setMessages(data);
+        setProfile(p);
+      } catch (error) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch messages.' });
+      } finally {
+        setLoading(false);
+      }
+    }
+    init();
   }, []);
 
   async function fetchMessages() {
-    try {
-      const data = await getMessages();
-      setMessages(data);
-    } catch (error) {
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch messages.' });
-    } finally {
-      setLoading(false);
-    }
+    const data = await getMessages();
+    setMessages(data);
   }
 
   const handleDelete = async (id: string) => {
+    if (isViewer) return;
     if (confirm('Delete this inquiry?')) {
       try {
         await deleteMessage(id);
@@ -102,9 +112,12 @@ export default function MessagesAdmin() {
                     <a href={`mailto:${msg.email}`} className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/10 hover:bg-primary hover:text-black transition-all">
                       <Mail className="w-4 h-4" />
                     </a>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(msg.id)} className="hover:bg-destructive/20 hover:text-destructive">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    {!isViewer && (
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(msg.id)} className="hover:bg-destructive/20 hover:text-destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
+                    {isViewer && <Lock className="w-4 h-4 text-muted-foreground opacity-20" />}
                   </div>
                 </TableCell>
               </TableRow>

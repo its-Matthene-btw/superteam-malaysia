@@ -23,8 +23,9 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '@/services/testimonials';
+import { getCurrentProfile, Profile } from '@/services/profiles';
 import { Testimonial } from '@/types/database';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, Lock } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -38,33 +39,37 @@ const XIcon = ({ className }: { className?: string }) => (
 export default function TestimonialsAdmin() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTestimonial, setEditingTestimonial] = useState<Partial<Testimonial> | null>(null);
   const [formData, setFormData] = useState<Partial<Testimonial>>({
-    name: '',
-    role: '',
-    content: '',
-    type: 'official',
-    avatar_url: '',
-    twitter_url: ''
+    name: '', role: '', content: '', type: 'official', avatar_url: '', twitter_url: ''
   });
 
+  const isViewer = profile?.role === 'viewer';
+
   useEffect(() => {
-    fetchTestimonials();
+    async function init() {
+      try {
+        const [data, p] = await Promise.all([getTestimonials(), getCurrentProfile()]);
+        setTestimonials(data);
+        setProfile(p);
+      } catch (error) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch testimonials.' });
+      } finally {
+        setLoading(false);
+      }
+    }
+    init();
   }, []);
 
   async function fetchTestimonials() {
-    try {
-      const data = await getTestimonials();
-      setTestimonials(data);
-    } catch (error) {
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch testimonials.' });
-    } finally {
-      setLoading(false);
-    }
+    const data = await getTestimonials();
+    setTestimonials(data);
   }
 
   const handleOpenModal = (testimonial?: Testimonial) => {
+    if (isViewer && !testimonial) return;
     if (testimonial) {
       setEditingTestimonial(testimonial);
       setFormData(testimonial);
@@ -77,6 +82,7 @@ export default function TestimonialsAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isViewer) return;
     try {
       if (editingTestimonial?.id) {
         await updateTestimonial(editingTestimonial.id, formData);
@@ -93,6 +99,7 @@ export default function TestimonialsAdmin() {
   };
 
   const handleDelete = async (id: string) => {
+    if (isViewer) return;
     if (confirm('Delete this testimonial?')) {
       try {
         await deleteTestimonial(id);
@@ -114,9 +121,11 @@ export default function TestimonialsAdmin() {
           </h1>
           <p className="text-muted-foreground mt-2">Manage testimonials from X, Discord, and core partners.</p>
         </div>
-        <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
-          <Plus className="w-4 h-4 mr-2" /> Add Feedback
-        </Button>
+        {!isViewer && (
+          <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
+            <Plus className="w-4 h-4 mr-2" /> Add Feedback
+          </Button>
+        )}
       </div>
 
       <div className="glass border-white/10 rounded-xl overflow-hidden">
@@ -164,11 +173,13 @@ export default function TestimonialsAdmin() {
                 <TableCell className="text-right pr-8">
                   <div className="flex justify-end gap-2">
                     <Button variant="ghost" size="icon" onClick={() => handleOpenModal(t)} className="hover:bg-primary/20 hover:text-primary">
-                      <Edit2 className="w-4 h-4" />
+                      {isViewer ? <Eye className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(t.id)} className="hover:bg-destructive/20 hover:text-destructive">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    {!isViewer && (
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(t.id)} className="hover:bg-destructive/20 hover:text-destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
@@ -180,8 +191,9 @@ export default function TestimonialsAdmin() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="glass border-white/10 text-white sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-black uppercase tracking-tighter">
-              {editingTestimonial ? 'Edit' : 'Add'} <span className="text-primary">Feedback</span>
+            <DialogTitle className="text-2xl font-black uppercase tracking-tighter flex items-center gap-2">
+              {isViewer ? 'View' : editingTestimonial ? 'Edit' : 'Add'} <span className="text-primary">Feedback</span>
+              {isViewer && <Lock className="w-4 h-4 text-muted-foreground" />}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-6 pt-4">
@@ -192,6 +204,7 @@ export default function TestimonialsAdmin() {
                   value={formData.name} 
                   onChange={(e) => setFormData({...formData, name: e.target.value})} 
                   className="glass border-white/10 h-12" 
+                  disabled={isViewer}
                   required 
                 />
               </div>
@@ -200,6 +213,7 @@ export default function TestimonialsAdmin() {
                 <Select 
                   value={formData.type} 
                   onValueChange={(val: any) => setFormData({...formData, type: val})}
+                  disabled={isViewer}
                 >
                   <SelectTrigger className="glass border-white/10 h-12">
                     <SelectValue />
@@ -219,6 +233,7 @@ export default function TestimonialsAdmin() {
                 value={formData.content} 
                 onChange={(e) => setFormData({...formData, content: e.target.value})} 
                 className="glass border-white/10 min-h-[120px]" 
+                disabled={isViewer}
                 required
               />
             </div>
@@ -230,6 +245,7 @@ export default function TestimonialsAdmin() {
                   value={formData.role || ''} 
                   onChange={(e) => setFormData({...formData, role: e.target.value})} 
                   className="glass border-white/10" 
+                  disabled={isViewer}
                 />
               </div>
               <div className="space-y-2">
@@ -238,14 +254,21 @@ export default function TestimonialsAdmin() {
                   value={formData.avatar_url || ''} 
                   onChange={(e) => setFormData({...formData, avatar_url: e.target.value})} 
                   className="glass border-white/10" 
+                  disabled={isViewer}
                 />
               </div>
             </div>
 
             <DialogFooter className="mt-8">
-              <Button type="submit" className="w-full solana-gradient h-14 font-bold uppercase tracking-widest text-xs">
-                {editingTestimonial ? 'Update Feedback' : 'Post Feedback'}
-              </Button>
+              {isViewer ? (
+                <Button type="button" onClick={() => setIsModalOpen(false)} className="w-full glass border-white/10 font-bold uppercase tracking-widest text-xs h-14">
+                  Close Viewer
+                </Button>
+              ) : (
+                <Button type="submit" className="w-full solana-gradient h-14 font-bold uppercase tracking-widest text-xs">
+                  {editingTestimonial ? 'Update Feedback' : 'Post Feedback'}
+                </Button>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>

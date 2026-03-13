@@ -18,7 +18,10 @@ export default async function AdminCategoriesPage() {
 
   const { data: { user } } = await supabase.auth.getUser();
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user?.id).single();
-  const isAdmin = profile?.role === 'admin';
+  
+  const role = profile?.role || 'viewer';
+  const isViewer = role === 'viewer';
+  const isAdmin = role === 'admin';
 
   if (error) {
     console.error('Error fetching categories:', error.message || error);
@@ -27,12 +30,14 @@ export default async function AdminCategoriesPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <Link href="/admin/ecosystem/categories/new">
-          <Button className="solana-gradient font-bold uppercase tracking-widest text-[10px]">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            Add Category
-          </Button>
-        </Link>
+        {!isViewer && (
+          <Link href="/admin/ecosystem/categories/new">
+            <Button className="solana-gradient font-bold uppercase tracking-widest text-[10px]">
+              <PlusCircle className="mr-2 h-4 w-4" />
+              Add Category
+            </Button>
+          </Link>
+        )}
       </div>
 
       {error ? (
@@ -51,7 +56,7 @@ export default async function AdminCategoriesPage() {
           </AlertDescription>
         </Alert>
       ) : (
-        <CategoriesTable categories={categories || []} />
+        <CategoriesTable categories={categories || []} userRole={role} />
       )}
     </div>
   );

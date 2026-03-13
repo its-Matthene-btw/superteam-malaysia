@@ -22,39 +22,46 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { getPartners, createPartner, updatePartner, deletePartner } from '@/services/partners';
+import { getCurrentProfile, Profile } from '@/services/profiles';
 import { Partner } from '@/types/database';
-import { Plus, Edit2, Trash2, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, Image as ImageIcon, Link as LinkIcon, Eye, Lock } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from '@/hooks/use-toast';
 
 export default function PartnersAdmin() {
   const [partners, setPartners] = useState<Partner[]>([]);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingPartner, setEditingPartner] = useState<Partial<Partner> | null>(null);
   const [formData, setFormData] = useState<Partial<Partner>>({
-    name: '',
-    logo_url: '',
-    website_url: '',
-    featured: false
+    name: '', logo_url: '', website_url: '', featured: false
   });
 
+  const isViewer = profile?.role === 'viewer';
+
   useEffect(() => {
-    fetchPartners();
+    async function init() {
+      try {
+        const [data, p] = await Promise.all([getPartners(), getCurrentProfile()]);
+        setPartners(data);
+        setProfile(p);
+      } catch (error) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch partners.' });
+      } finally {
+        setLoading(false);
+      }
+    }
+    init();
   }, []);
 
   async function fetchPartners() {
-    try {
-      const data = await getPartners();
-      setPartners(data);
-    } catch (error) {
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch partners.' });
-    } finally {
-      setLoading(false);
-    }
+    const data = await getPartners();
+    setPartners(data);
   }
 
   const handleOpenModal = (partner?: Partner) => {
+    if (isViewer && !partner) return;
     if (partner) {
       setEditingPartner(partner);
       setFormData(partner);
@@ -67,6 +74,7 @@ export default function PartnersAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isViewer) return;
     try {
       if (editingPartner?.id) {
         await updatePartner(editingPartner.id, formData);
@@ -83,6 +91,7 @@ export default function PartnersAdmin() {
   };
 
   const handleDelete = async (id: string) => {
+    if (isViewer) return;
     if (confirm('Remove this partner?')) {
       try {
         await deletePartner(id);
@@ -104,9 +113,11 @@ export default function PartnersAdmin() {
           </h1>
           <p className="text-muted-foreground mt-2">Manage the logos displayed on the homepage marquee.</p>
         </div>
-        <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
-          <Plus className="w-4 h-4 mr-2" /> Add Partner
-        </Button>
+        {!isViewer && (
+          <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
+            <Plus className="w-4 h-4 mr-2" /> Add Partner
+          </Button>
+        )}
       </div>
 
       <div className="glass border-white/10 rounded-xl overflow-hidden">
@@ -142,11 +153,13 @@ export default function PartnersAdmin() {
                 <TableCell className="text-right pr-8">
                   <div className="flex justify-end gap-2">
                     <Button variant="ghost" size="icon" onClick={() => handleOpenModal(partner)} className="hover:bg-primary/20 hover:text-primary">
-                      <Edit2 className="w-4 h-4" />
+                      {isViewer ? <Eye className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(partner.id)} className="hover:bg-destructive/20 hover:text-destructive">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    {!isViewer && (
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(partner.id)} className="hover:bg-destructive/20 hover:text-destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
@@ -158,8 +171,9 @@ export default function PartnersAdmin() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="glass border-white/10 text-white sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-black uppercase tracking-tighter">
-              {editingPartner ? 'Edit' : 'Add'} <span className="text-primary">Partner</span>
+            <DialogTitle className="text-2xl font-black uppercase tracking-tighter flex items-center gap-2">
+              {isViewer ? 'View' : editingPartner ? 'Edit' : 'Add'} <span className="text-primary">Partner</span>
+              {isViewer && <Lock className="w-4 h-4 text-muted-foreground" />}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-6 pt-4">
@@ -169,6 +183,7 @@ export default function PartnersAdmin() {
                 value={formData.name} 
                 onChange={(e) => setFormData({...formData, name: e.target.value})} 
                 className="glass border-white/10 h-12" 
+                disabled={isViewer}
                 required 
               />
             </div>
@@ -179,7 +194,7 @@ export default function PartnersAdmin() {
                 value={formData.website_url || ''} 
                 onChange={(e) => setFormData({...formData, website_url: e.target.value})} 
                 className="glass border-white/10" 
-                placeholder="https://..."
+                disabled={isViewer}
               />
             </div>
 
@@ -189,42 +204,31 @@ export default function PartnersAdmin() {
                 checked={formData.featured} 
                 onCheckedChange={(checked) => setFormData({...formData, featured: !!checked})}
                 className="border-white/20 data-[state=checked]:bg-primary"
+                disabled={isViewer}
               />
               <Label htmlFor="featured-partner" className="text-xs uppercase tracking-widest font-code cursor-pointer">High Visibility</Label>
             </div>
 
-            <div className="space-y-4 p-4 rounded-lg bg-white/5 border border-white/10">
-              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-2">Logo Source</Label>
-              <div className="flex flex-col gap-4">
-                <div className="relative w-full h-24 rounded-lg overflow-hidden border border-white/10 bg-black flex items-center justify-center p-4">
-                  {formData.logo_url ? (
-                    <Image src={formData.logo_url} alt="Logo Preview" fill className="object-contain p-4 grayscale" />
-                  ) : (
-                    <ImageIcon className="w-8 h-8 text-muted-foreground" />
-                  )}
-                </div>
-                
-                <div className="space-y-3">
-                  <div className="space-y-1">
-                    <Label className="text-[9px] uppercase tracking-tighter text-muted-foreground flex items-center gap-1">
-                      <LinkIcon className="w-2 h-2" /> Direct Logo Link
-                    </Label>
-                    <Input 
-                      placeholder="Paste image URL here..." 
-                      value={formData.logo_url || ''}
-                      onChange={(e) => setFormData({...formData, logo_url: e.target.value})}
-                      className="glass border-white/10 h-10 text-xs"
-                    />
-                    <p className="text-[9px] text-muted-foreground mt-1 italic">Provide a link to a transparent PNG or SVG logo.</p>
-                  </div>
-                </div>
-              </div>
+            <div className="space-y-2">
+              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Logo URL</Label>
+              <Input 
+                value={formData.logo_url} 
+                onChange={(e) => setFormData({...formData, logo_url: e.target.value})} 
+                className="glass border-white/10" 
+                disabled={isViewer}
+              />
             </div>
 
             <DialogFooter className="mt-8">
-              <Button type="submit" className="w-full solana-gradient h-14 font-bold uppercase tracking-widest text-xs">
-                {editingPartner ? 'Update Partner' : 'Confirm Partner'}
-              </Button>
+              {isViewer ? (
+                <Button type="button" onClick={() => setIsModalOpen(false)} className="w-full glass border-white/10 font-bold uppercase tracking-widest text-xs h-14">
+                  Close Viewer
+                </Button>
+              ) : (
+                <Button type="submit" className="w-full solana-gradient h-14 font-bold uppercase tracking-widest text-xs">
+                  {editingPartner ? 'Update Partner' : 'Confirm Partner'}
+                </Button>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>

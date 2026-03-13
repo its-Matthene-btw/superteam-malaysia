@@ -23,22 +23,18 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { getMembers, createMember, updateMember, deleteMember } from '@/services/members';
+import { getCurrentProfile, Profile } from '@/services/profiles';
 import { Member } from '@/types/database';
-import { Plus, Edit2, Trash2, User, Star, Link as LinkIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, User, Star, Link as LinkIcon, Eye, Lock } from 'lucide-react';
 import Image from 'next/image';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-
-const XIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
-  </svg>
-);
 
 export default function MembersAdmin() {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [editingMember, setEditingMember] = useState<Partial<Member> | null>(null);
   const [formData, setFormData] = useState<Partial<Member>>({
     name: '',
@@ -51,36 +47,37 @@ export default function MembersAdmin() {
     avatar_url: ''
   });
 
+  const isViewer = profile?.role === 'viewer';
+
   useEffect(() => {
-    fetchMembers();
+    async function init() {
+      try {
+        const [data, p] = await Promise.all([getMembers(), getCurrentProfile()]);
+        setMembers(data);
+        setProfile(p);
+      } catch (error) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch directory.' });
+      } finally {
+        setLoading(false);
+      }
+    }
+    init();
   }, []);
 
   async function fetchMembers() {
-    try {
-      const data = await getMembers();
-      setMembers(data);
-    } catch (error) {
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch members.' });
-    } finally {
-      setLoading(false);
-    }
+    const data = await getMembers();
+    setMembers(data);
   }
 
   const handleOpenModal = (member?: Member) => {
+    if (isViewer && !member) return;
     if (member) {
       setEditingMember(member);
       setFormData(member);
     } else {
       setEditingMember(null);
       setFormData({
-        name: '',
-        role: '',
-        company: '',
-        skills: [],
-        bio: '',
-        featured: false,
-        twitter_url: '',
-        avatar_url: ''
+        name: '', role: '', company: '', skills: [], bio: '', featured: false, twitter_url: '', avatar_url: ''
       });
     }
     setIsModalOpen(true);
@@ -88,13 +85,14 @@ export default function MembersAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isViewer) return;
     try {
       if (editingMember?.id) {
         await updateMember(editingMember.id, formData);
-        toast({ title: 'Success', description: 'Member updated successfully.' });
+        toast({ title: 'Success', description: 'Member updated.' });
       } else {
         await createMember(formData);
-        toast({ title: 'Success', description: 'Member created successfully.' });
+        toast({ title: 'Success', description: 'Member created.' });
       }
       setIsModalOpen(false);
       fetchMembers();
@@ -104,6 +102,7 @@ export default function MembersAdmin() {
   };
 
   const handleDelete = async (id: string) => {
+    if (isViewer) return;
     if (confirm('Are you sure you want to delete this member?')) {
       try {
         await deleteMember(id);
@@ -125,9 +124,11 @@ export default function MembersAdmin() {
           </h1>
           <p className="text-muted-foreground mt-2">Add, edit, or remove builders from the network.</p>
         </div>
-        <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
-          <Plus className="w-4 h-4 mr-2" /> Add Member
-        </Button>
+        {!isViewer && (
+          <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
+            <Plus className="w-4 h-4 mr-2" /> Add Member
+          </Button>
+        )}
       </div>
 
       <div className="glass border-white/10 rounded-xl overflow-hidden">
@@ -174,11 +175,13 @@ export default function MembersAdmin() {
                 <TableCell className="text-right pr-8">
                   <div className="flex justify-end gap-2">
                     <Button variant="ghost" size="icon" onClick={() => handleOpenModal(member)} className="hover:bg-primary/20 hover:text-primary">
-                      <Edit2 className="w-4 h-4" />
+                      {isViewer ? <Eye className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(member.id)} className="hover:bg-destructive/20 hover:text-destructive">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    {!isViewer && (
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(member.id)} className="hover:bg-destructive/20 hover:text-destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
@@ -190,8 +193,9 @@ export default function MembersAdmin() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="glass border-white/10 text-white sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-black uppercase tracking-tighter">
-              {editingMember ? 'Edit' : 'Add'} <span className="text-primary">Member</span>
+            <DialogTitle className="text-2xl font-black uppercase tracking-tighter flex items-center gap-2">
+              {isViewer ? 'View' : editingMember ? 'Edit' : 'Add'} <span className="text-primary">Member</span>
+              {isViewer && <Lock className="w-4 h-4 text-muted-foreground" />}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-6 pt-4">
@@ -202,6 +206,7 @@ export default function MembersAdmin() {
                   value={formData.name} 
                   onChange={(e) => setFormData({...formData, name: e.target.value})} 
                   className="glass border-white/10" 
+                  disabled={isViewer}
                   required 
                 />
               </div>
@@ -211,6 +216,7 @@ export default function MembersAdmin() {
                   value={formData.role} 
                   onChange={(e) => setFormData({...formData, role: e.target.value})} 
                   className="glass border-white/10" 
+                  disabled={isViewer}
                   required 
                 />
               </div>
@@ -223,6 +229,7 @@ export default function MembersAdmin() {
                   value={formData.company} 
                   onChange={(e) => setFormData({...formData, company: e.target.value})} 
                   className="glass border-white/10" 
+                  disabled={isViewer}
                 />
               </div>
               <div className="space-y-2">
@@ -231,6 +238,7 @@ export default function MembersAdmin() {
                   value={formData.twitter_url || ''} 
                   onChange={(e) => setFormData({...formData, twitter_url: e.target.value})} 
                   className="glass border-white/10" 
+                  disabled={isViewer}
                 />
               </div>
             </div>
@@ -241,6 +249,7 @@ export default function MembersAdmin() {
                 value={formData.bio || ''} 
                 onChange={(e) => setFormData({...formData, bio: e.target.value})} 
                 className="glass border-white/10 min-h-[100px]" 
+                disabled={isViewer}
               />
             </div>
 
@@ -250,6 +259,7 @@ export default function MembersAdmin() {
                 checked={formData.featured} 
                 onCheckedChange={(checked) => setFormData({...formData, featured: !!checked})}
                 className="border-white/20 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                disabled={isViewer}
               />
               <Label htmlFor="featured" className="text-xs uppercase tracking-widest font-code cursor-pointer">Featured on spotlight</Label>
             </div>
@@ -275,17 +285,23 @@ export default function MembersAdmin() {
                       value={formData.avatar_url || ''}
                       onChange={(e) => setFormData({...formData, avatar_url: e.target.value})}
                       className="glass border-white/10 h-10 text-xs"
+                      disabled={isViewer}
                     />
-                    <p className="text-[9px] text-muted-foreground mt-1 italic">Provide a direct link to an image (Unsplash, Picsum, etc.)</p>
                   </div>
                 </div>
               </div>
             </div>
 
             <DialogFooter className="mt-8">
-              <Button type="submit" className="w-full solana-gradient h-12 font-bold uppercase tracking-widest text-xs">
-                {editingMember ? 'Update Member' : 'Create Member'}
-              </Button>
+              {isViewer ? (
+                <Button type="button" onClick={() => setIsModalOpen(false)} className="w-full glass border-white/10 font-bold uppercase tracking-widest text-xs h-12">
+                  Close Viewer
+                </Button>
+              ) : (
+                <Button type="submit" className="w-full solana-gradient h-12 font-bold uppercase tracking-widest text-xs">
+                  {editingMember ? 'Update Member' : 'Create Member'}
+                </Button>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>

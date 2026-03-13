@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -22,8 +23,9 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { getEvents, createEvent, updateEvent, deleteEvent } from '@/services/events';
+import { getCurrentProfile, Profile } from '@/services/profiles';
 import { Event } from '@/types/database';
-import { Plus, Edit2, Trash2, Calendar, MapPin, Star, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
+import { Plus, Edit2, Trash2, Calendar, MapPin, Star, Image as ImageIcon, Link as LinkIcon, Eye, Lock } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
@@ -33,35 +35,36 @@ export default function EventsAdmin() {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [editingEvent, setEditingEvent] = useState<Partial<Event> | null>(null);
   const [formData, setFormData] = useState<Partial<Event>>({
-    title: '',
-    description: '',
-    location: '',
-    event_date: '',
-    luma_url: '',
-    image_url: '',
-    status: 'upcoming',
-    category: 'Meetup',
-    featured: false
+    title: '', description: '', location: '', event_date: '', luma_url: '', image_url: '', status: 'upcoming', category: 'Meetup', featured: false
   });
 
+  const isViewer = profile?.role === 'viewer';
+
   useEffect(() => {
-    fetchEvents();
+    async function init() {
+      try {
+        const [data, p] = await Promise.all([getEvents(), getCurrentProfile()]);
+        setEvents(data);
+        setProfile(p);
+      } catch (error) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Failed to sync calendar.' });
+      } finally {
+        setLoading(false);
+      }
+    }
+    init();
   }, []);
 
   async function fetchEvents() {
-    try {
-      const data = await getEvents();
-      setEvents(data);
-    } catch (error) {
-      toast({ variant: 'destructive', title: 'Error', description: 'Failed to fetch events.' });
-    } finally {
-      setLoading(false);
-    }
+    const data = await getEvents();
+    setEvents(data);
   }
 
   const handleOpenModal = (event?: Event) => {
+    if (isViewer && !event) return;
     if (event) {
       setEditingEvent(event);
       setFormData({
@@ -78,15 +81,7 @@ export default function EventsAdmin() {
     } else {
       setEditingEvent(null);
       setFormData({
-        title: '',
-        description: '',
-        location: '',
-        event_date: '',
-        luma_url: '',
-        image_url: '',
-        status: 'upcoming',
-        category: 'Meetup',
-        featured: false
+        title: '', description: '', location: '', event_date: '', luma_url: '', image_url: '', status: 'upcoming', category: 'Meetup', featured: false
       });
     }
     setIsModalOpen(true);
@@ -94,8 +89,7 @@ export default function EventsAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Sanitize payload: only send fields that exist in the database schema
+    if (isViewer) return;
     const payload = {
       title: formData.title,
       description: formData.description || null,
@@ -119,12 +113,12 @@ export default function EventsAdmin() {
       setIsModalOpen(false);
       fetchEvents();
     } catch (error: any) {
-      console.error('Submit error:', error);
-      toast({ variant: 'destructive', title: 'Error', description: error.message || 'Failed to save event.' });
+      toast({ variant: 'destructive', title: 'Error', description: 'Failed to save event.' });
     }
   };
 
   const handleDelete = async (id: string) => {
+    if (isViewer) return;
     if (confirm('Delete this event?')) {
       try {
         await deleteEvent(id);
@@ -156,9 +150,11 @@ export default function EventsAdmin() {
           </h1>
           <p className="text-muted-foreground mt-2">Update upcoming and past ecosystem events.</p>
         </div>
-        <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
-          <Plus className="w-4 h-4 mr-2" /> Add Event
-        </Button>
+        {!isViewer && (
+          <Button onClick={() => handleOpenModal()} className="solana-gradient font-bold h-12 px-8 uppercase tracking-widest text-xs">
+            <Plus className="w-4 h-4 mr-2" /> Add Event
+          </Button>
+        )}
       </div>
 
       <div className="glass border-white/10 rounded-xl overflow-hidden">
@@ -218,11 +214,13 @@ export default function EventsAdmin() {
                 <TableCell className="text-right pr-8">
                   <div className="flex justify-end gap-2">
                     <Button variant="ghost" size="icon" onClick={() => handleOpenModal(event)} className="hover:bg-primary/20 hover:text-primary">
-                      <Edit2 className="w-4 h-4" />
+                      {isViewer ? <Eye className="w-4 h-4" /> : <Edit2 className="w-4 h-4" />}
                     </Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(event.id)} className="hover:bg-destructive/20 hover:text-destructive">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    {!isViewer && (
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(event.id)} className="hover:bg-destructive/20 hover:text-destructive">
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
@@ -234,8 +232,9 @@ export default function EventsAdmin() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="glass border-white/10 text-white sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-black uppercase tracking-tighter">
-              {editingEvent ? 'Edit' : 'Create'} <span className="text-primary">Event</span>
+            <DialogTitle className="text-2xl font-black uppercase tracking-tighter flex items-center gap-2">
+              {isViewer ? 'View' : editingEvent ? 'Edit' : 'Create'} <span className="text-primary">Event</span>
+              {isViewer && <Lock className="w-4 h-4 text-muted-foreground" />}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-6 pt-4">
@@ -245,6 +244,7 @@ export default function EventsAdmin() {
                 value={formData.title} 
                 onChange={(e) => setFormData({...formData, title: e.target.value})} 
                 className="glass border-white/10 h-12" 
+                disabled={isViewer}
                 required 
               />
             </div>
@@ -256,7 +256,7 @@ export default function EventsAdmin() {
                   value={formData.location} 
                   onChange={(e) => setFormData({...formData, location: e.target.value})} 
                   className="glass border-white/10" 
-                  placeholder="e.g. KLCC, Virtual"
+                  disabled={isViewer}
                 />
               </div>
               <div className="space-y-2">
@@ -266,6 +266,7 @@ export default function EventsAdmin() {
                   value={formData.event_date ? formData.event_date.split('T')[0] : ''} 
                   onChange={(e) => setFormData({...formData, event_date: e.target.value})} 
                   className="glass border-white/10" 
+                  disabled={isViewer}
                   required 
                 />
               </div>
@@ -277,6 +278,7 @@ export default function EventsAdmin() {
                 <Select 
                   value={formData.category ?? 'Meetup'} 
                   onValueChange={(val: any) => setFormData({...formData, category: val})}
+                  disabled={isViewer}
                 >
                   <SelectTrigger className="glass border-white/10">
                     <SelectValue />
@@ -294,6 +296,7 @@ export default function EventsAdmin() {
                 <Select 
                   value={formData.status ?? 'upcoming'} 
                   onValueChange={(val: any) => setFormData({...formData, status: val})}
+                  disabled={isViewer}
                 >
                   <SelectTrigger className="glass border-white/10">
                     <SelectValue />
@@ -312,37 +315,18 @@ export default function EventsAdmin() {
                 value={formData.luma_url} 
                 onChange={(e) => setFormData({...formData, luma_url: e.target.value})} 
                 className="glass border-white/10" 
-                placeholder="lu.ma/..."
+                disabled={isViewer}
               />
             </div>
 
-            <div className="space-y-4 p-4 rounded-lg bg-white/5 border border-white/10">
-              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground block mb-2">Event Graphic</Label>
-              <div className="flex flex-col gap-4">
-                <div className="relative w-full h-40 rounded-lg overflow-hidden border border-white/10 bg-black flex items-center justify-center">
-                  {isValidUrl(formData.image_url) ? (
-                    <Image src={formData.image_url!} alt="Preview" fill className="object-cover grayscale" />
-                  ) : (
-                    <div className="text-center">
-                      <ImageIcon className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-[9px] text-muted-foreground font-code uppercase">Preview Unavailable</p>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="space-y-1">
-                  <Label className="text-[9px] uppercase tracking-tighter text-muted-foreground flex items-center gap-1">
-                    <LinkIcon className="w-2 h-2" /> Direct Image Link
-                  </Label>
-                  <Input 
-                    placeholder="https://images.unsplash.com/..." 
-                    value={formData.image_url}
-                    onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                    className="glass border-white/10 h-10 text-xs"
-                  />
-                  <p className="text-[9px] text-muted-foreground mt-1 italic">Provide a link to a high-res JPG/PNG banner.</p>
-                </div>
-              </div>
+            <div className="space-y-2">
+              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Image URL</Label>
+              <Input 
+                value={formData.image_url} 
+                onChange={(e) => setFormData({...formData, image_url: e.target.value})} 
+                className="glass border-white/10" 
+                disabled={isViewer}
+              />
             </div>
 
             <div className="space-y-2">
@@ -351,6 +335,7 @@ export default function EventsAdmin() {
                 value={formData.description} 
                 onChange={(e) => setFormData({...formData, description: e.target.value})} 
                 className="glass border-white/10 min-h-[120px]" 
+                disabled={isViewer}
               />
             </div>
 
@@ -360,14 +345,21 @@ export default function EventsAdmin() {
                 checked={formData.featured ?? false} 
                 onCheckedChange={(checked) => setFormData({...formData, featured: !!checked})}
                 className="border-white/20 data-[state=checked]:bg-primary"
+                disabled={isViewer}
               />
               <Label htmlFor="featured-event" className="text-xs uppercase tracking-widest font-code cursor-pointer">Highlight this event</Label>
             </div>
 
             <DialogFooter className="mt-8">
-              <Button type="submit" className="w-full solana-gradient h-14 font-bold uppercase tracking-widest text-xs">
-                {editingEvent ? 'Update Schedule' : 'Launch Event'}
-              </Button>
+              {isViewer ? (
+                <Button type="button" onClick={() => setIsModalOpen(false)} className="w-full glass border-white/10 font-bold uppercase tracking-widest text-xs h-14">
+                  Close Viewer
+                </Button>
+              ) : (
+                <Button type="submit" className="w-full solana-gradient h-14 font-bold uppercase tracking-widest text-xs">
+                  {editingEvent ? 'Update Schedule' : 'Launch Event'}
+                </Button>
+              )}
             </DialogFooter>
           </form>
         </DialogContent>
