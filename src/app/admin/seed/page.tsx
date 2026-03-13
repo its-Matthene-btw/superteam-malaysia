@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { seedDatabase, seedFAQsOnly, seedSiteSettings } from '@/lib/supabase/seed';
 import { seedEcosystemData } from '@/lib/supabase/ecosystem-seed';
-import { Database, CheckCircle2, Copy, ShieldCheck, Trash2, HelpCircle, Globe, Users } from 'lucide-react';
+import { Database, CheckCircle2, Copy, ShieldCheck, Trash2, HelpCircle, Globe } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 export default function SeedPage() {
@@ -16,9 +16,9 @@ export default function SeedPage() {
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const sqlSchema = `-- MASTER MIGRATION SQL (RBAC UPDATED)
+  const sqlSchema = `-- MASTER MIGRATION SQL (FULL SYSTEM)
 
--- 1. Create Profiles Table (RBAC)
+-- 1. Profiles (RBAC)
 CREATE TABLE IF NOT EXISTS profiles (
   id uuid PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE,
   email text UNIQUE NOT NULL,
@@ -26,7 +26,111 @@ CREATE TABLE IF NOT EXISTS profiles (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 2. Create Ecosystem Tables
+-- 2. Core CMS Tables
+CREATE TABLE IF NOT EXISTS members (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text UNIQUE NOT NULL,
+  role text NOT NULL,
+  company text,
+  skills text[],
+  bio text,
+  avatar_url text,
+  twitter_url text,
+  featured boolean DEFAULT false,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS partners (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text UNIQUE NOT NULL,
+  slug text UNIQUE,
+  logo_url text,
+  website_url text,
+  description text,
+  long_description text,
+  case_study text,
+  featured boolean DEFAULT false,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS stats (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  label text UNIQUE NOT NULL,
+  value text NOT NULL,
+  order_index integer DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS testimonials (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  role text,
+  content text NOT NULL,
+  avatar_url text,
+  twitter_url text,
+  tweet_image_url text,
+  type text CHECK (type IN ('twitter', 'discord', 'official')),
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS events (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  title text UNIQUE NOT NULL,
+  description text,
+  location text,
+  event_date timestamp WITH TIME ZONE NOT NULL,
+  luma_url text,
+  image_url text,
+  status text DEFAULT 'upcoming' CHECK (status IN ('upcoming', 'past')),
+  featured boolean DEFAULT false,
+  category text,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS news (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  slug text UNIQUE NOT NULL,
+  excerpt text,
+  content text,
+  image_url text,
+  published_at timestamp WITH TIME ZONE NOT NULL,
+  meta_title text,
+  meta_description text,
+  meta_keywords text,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS faqs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  category text NOT NULL,
+  question text UNIQUE NOT NULL,
+  answer text NOT NULL,
+  faq_id text,
+  order_index integer DEFAULT 0,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS contacts (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  email text NOT NULL,
+  message text NOT NULL,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email text UNIQUE NOT NULL,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS site_settings (
+  id text PRIMARY KEY,
+  value text,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+-- 3. Ecosystem Tables
 CREATE TABLE IF NOT EXISTS ecosystem_projects (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
@@ -63,87 +167,72 @@ CREATE TABLE IF NOT EXISTS ecosystem_categories (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS faqs (
+CREATE TABLE IF NOT EXISTS ecosystem_opportunities (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  category text NOT NULL,
-  question text NOT NULL,
-  answer text NOT NULL,
-  faq_id text,
-  order_index integer DEFAULT 0,
-  created_at timestamp WITH TIME ZONE DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS site_settings (
-  id text PRIMARY KEY,
-  value text,
-  created_at timestamp WITH TIME ZONE DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS events (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  title text NOT NULL,
+  title text,
   description text,
-  location text,
-  event_date timestamp WITH TIME ZONE NOT NULL,
-  luma_url text,
-  image_url text,
-  status text DEFAULT 'upcoming',
-  featured boolean DEFAULT false,
-  category text,
+  type text,
+  link text,
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS news (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  title text NOT NULL,
-  slug text UNIQUE NOT NULL,
-  excerpt text,
-  content text,
-  image_url text,
-  published_at timestamp WITH TIME ZONE NOT NULL,
-  meta_title text,
-  meta_description text,
-  meta_keywords text,
-  created_at timestamp WITH TIME ZONE DEFAULT now()
-);
-
--- 3. Enable RLS
+-- 4. Enable RLS
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE partners ENABLE ROW LEVEL SECURITY;
+ALTER TABLE stats ENABLE ROW LEVEL SECURITY;
+ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
+ALTER TABLE events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE news ENABLE ROW LEVEL SECURITY;
+ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE contacts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
-ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
-ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE events ENABLE ROW LEVEL SECURITY;
-ALTER TABLE news ENABLE ROW LEVEL SECURITY;
+ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
 
--- 4. Create Policies (Idempotent)
-DROP POLICY IF EXISTS "Public Read Profiles" ON profiles;
+-- 5. Policies
+-- Public Selects
 CREATE POLICY "Public Read Profiles" ON profiles FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Admin Full Access Profiles" ON profiles;
-CREATE POLICY "Admin Full Access Profiles" ON profiles FOR ALL TO authenticated USING (
-  EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND role = 'admin')
-);
-
--- Content Policies (Editor/Admin)
-DROP POLICY IF EXISTS "Public Read Content" ON news;
-CREATE POLICY "Public Read Content" ON news FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Editor Modify Content" ON news;
-CREATE POLICY "Editor Modify Content" ON news FOR ALL TO authenticated USING (
-  EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND role IN ('admin', 'editor'))
-);
-
--- Repeat for other content tables...
-DROP POLICY IF EXISTS "Public Read Events" ON events;
+CREATE POLICY "Public Read Members" ON members FOR SELECT USING (true);
+CREATE POLICY "Public Read Partners" ON partners FOR SELECT USING (true);
+CREATE POLICY "Public Read Stats" ON stats FOR SELECT USING (true);
+CREATE POLICY "Public Read Testimonials" ON testimonials FOR SELECT USING (true);
 CREATE POLICY "Public Read Events" ON events FOR SELECT USING (true);
-DROP POLICY IF EXISTS "Editor Modify Events" ON events;
-CREATE POLICY "Editor Modify Events" ON events FOR ALL TO authenticated USING (
-  EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND role IN ('admin', 'editor'))
-);
+CREATE POLICY "Public Read News" ON news FOR SELECT USING (true);
+CREATE POLICY "Public Read FAQs" ON faqs FOR SELECT USING (true);
+CREATE POLICY "Public Read Settings" ON site_settings FOR SELECT USING (true);
+CREATE POLICY "Public Read Eco Projects" ON ecosystem_projects FOR SELECT USING (true);
+CREATE POLICY "Public Read Eco Features" ON ecosystem_features FOR SELECT USING (true);
+CREATE POLICY "Public Read Eco Categories" ON ecosystem_categories FOR SELECT USING (true);
+CREATE POLICY "Public Read Eco Opportunities" ON ecosystem_opportunities FOR SELECT USING (true);
 
--- 5. Trigger for Profile Creation
+-- Authenticated Staff Access (Modify)
+CREATE POLICY "Staff Modify Members" ON members FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify Partners" ON partners FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify Stats" ON stats FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify Testimonials" ON testimonials FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify Events" ON events FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify News" ON news FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify FAQs" ON faqs FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify Eco Projects" ON ecosystem_projects FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify Eco Features" ON ecosystem_features FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify Eco Categories" ON ecosystem_categories FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify Eco Opportunities" ON ecosystem_opportunities FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+
+-- Inbox/Leads Policies
+CREATE POLICY "Public Insert Contacts" ON contacts FOR INSERT WITH CHECK (true);
+CREATE POLICY "Staff Manage Contacts" ON contacts FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Public Insert Newsletter" ON newsletter_subscribers FOR INSERT WITH CHECK (true);
+CREATE POLICY "Staff Manage Newsletter" ON newsletter_subscribers FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+
+-- Admin Only
+CREATE POLICY "Admin All Profiles" ON profiles FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Admin All Settings" ON site_settings FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+
+-- 6. Auth Trigger
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 BEGIN
