@@ -49,23 +49,136 @@ export async function seedDatabase() {
     if (faqErr) results.errors.push(`FAQs: ${faqErr.message}`);
     else results.faqs = hardcodedFAQs.length;
 
-    // 4. Seed News
+    // 4. Seed News (15 HIGH FIDELITY POSTS)
     const news = [
       { 
-        title: 'The Blueprint for Solana Malaysia', 
+        title: 'Superteam Malaysia Hits 70k Builders', 
+        slug: 'stmy-70k-builders', 
+        excerpt: 'Superteam Malaysia has officially crossed an incredible milestone — 70,000 builders in its ecosystem.', 
+        content: `<article class="blog-post">
+<header>
+<p class="lead">Superteam Malaysia has officially crossed an incredible milestone — <strong>70,000 builders</strong> in its ecosystem. This achievement marks a major step forward for Web3 innovation and highlights the rapidly growing interest in the Solana ecosystem.</p>
+<img src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0" alt="Network" />
+</header>
+<section>
+<h2>The Rise of the Builder Movement</h2>
+<p>Over the past few years, Web3 has evolved from a niche experiment into a global movement. Reaching 70,000 builders reflects the growing momentum of Web3 development across the region.</p>
+</section>
+</article>`, 
+        image_url: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c', 
+        published_at: new Date().toISOString() 
+      },
+      { 
+        title: 'The Blueprint for Solana Malaysia 2026', 
         slug: 'blueprint-2026', 
         excerpt: 'A comprehensive look into our 2026 roadmap, community grants, and the expansion of the KL Build Station.', 
-        content: 'The heartbeat of the Solana ecosystem in Malaysia has reached a critical frequency. After twelve months of intensive community building, we are unveiling the next phase of our residency program: The KL Build Station 2.0.\n\nOur objective is to move beyond mere co-working. The new residency model provides builders with high-speed validator access, direct pipelines to the Solana Foundation grants committee, and a 24/7 technical support mesh comprised of senior Rust engineers.', 
-        image_url: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=1200', 
-        published_at: new Date().toISOString() 
+        content: '## Roadmap 2026\n\nThe heartbeat of the Solana ecosystem in Malaysia has reached a critical frequency. We are unveiling the next phase of our residency program: **The KL Build Station 2.0**.\n\n### Key Pillars:\n1. **High-Speed Access**: Dedicated validator nodes for local residency members.\n2. **Grant Pipelines**: Direct access to the Solana Foundation grants committee.\n3. **Technical Mesh**: 24/7 support from senior Rust engineers.', 
+        image_url: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0', 
+        published_at: new Date(Date.now() - 86400000).toISOString() 
       },
       {
         title: 'Backpack: The xNFT Revolution',
         slug: 'backpack-xnft',
-        excerpt: 'Backpack is not just a wallet; it is an operating system for Web3. Discover how xNFTs allow developers to build native applications directly within the wallet interface.',
-        content: 'The launch of Backpack represents a paradigm shift in how we interact with blockchain technology. By treating the wallet as an operating system, the xNFT standard allows for native, secure, and interactive applications to run directly where your assets live.\n\nIn Malaysia, we are seeing a massive uptick in developers exploring the Backpack SDK to build localized mini-apps for payment and loyalty programs.',
-        image_url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=1200',
-        published_at: new Date().toISOString()
+        excerpt: 'Backpack is not just a wallet; it is an operating system for Web3.',
+        content: 'The launch of **Backpack** represents a paradigm shift. By treating the wallet as an operating system, the xNFT standard allows for native, secure, and interactive applications to run directly where your assets live.',
+        image_url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5',
+        published_at: new Date(Date.now() - 172800000).toISOString()
+      },
+      {
+        title: 'Mastering Rust for Solana Development',
+        slug: 'mastering-rust-solana',
+        excerpt: 'A guide for Javascript developers transitioning to the high-performance world of Rust and Anchor.',
+        content: 'Moving from TypeScript to Rust is a challenge, but the rewards are immense. This guide covers memory safety, ownership, and how Anchor handles the heavy lifting of account serialization.',
+        image_url: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4',
+        published_at: new Date(Date.now() - 259200000).toISOString()
+      },
+      {
+        title: 'Why Kuala Lumpur is the next Web3 Hub',
+        slug: 'kl-web3-hub',
+        excerpt: 'Exploring the unique convergence of talent, regulatory support, and community energy in Malaysia.',
+        content: 'With a vibrant developer community and a strategic location in Southeast Asia, KL is becoming the go-to destination for Solana founders looking to scale.',
+        image_url: 'https://images.unsplash.com/photo-1596422846543-75c6ff416766',
+        published_at: new Date(Date.now() - 345600000).toISOString()
+      },
+      {
+        title: 'Navigating the Solana Grant Ecosystem',
+        slug: 'solana-grants-guide',
+        excerpt: 'How to write a winning proposal for ecosystem funding and what reviewers are looking for.',
+        content: 'Funding is available, but competition is fierce. Focus on public goods, unique utility, and proven technical milestones.',
+        image_url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71',
+        published_at: new Date(Date.now() - 432000000).toISOString()
+      },
+      {
+        title: 'Jupiter: Liquidity Aggregation Deep Dive',
+        slug: 'jupiter-deep-dive',
+        excerpt: 'Understanding the routing logic that makes Jupiter the best swap experience on Solana.',
+        content: 'Jupiter doesn\'t just aggregate; it optimizes. Learn how the split-trade algorithm finds liquidity across dozens of DEXs simultaneously.',
+        image_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe',
+        published_at: new Date(Date.now() - 518400000).toISOString()
+      },
+      {
+        title: 'Building Mobile-First with Solana SMS',
+        slug: 'solana-mobile-stack',
+        excerpt: 'The Solana Mobile Stack is changing how we think about crypto on the go.',
+        content: 'DApp stores are restrictive. SMS provides a decentralized alternative for developers to ship mobile-native crypto experiences.',
+        image_url: 'https://images.unsplash.com/photo-1614850523459-c2f4c699c52e',
+        published_at: new Date(Date.now() - 604800000).toISOString()
+      },
+      {
+        title: 'The Future of DePIN in Southeast Asia',
+        slug: 'depin-southeast-asia',
+        excerpt: 'How decentralized physical infrastructure is solving real-world problems in the region.',
+        content: 'From decentralized maps to community-owned Wi-Fi nodes, DePIN is finding its strongest use cases in developing economies.',
+        image_url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa',
+        published_at: new Date(Date.now() - 691200000).toISOString()
+      },
+      {
+        title: 'Community Spotlight: Top Founders of 2025',
+        slug: 'founder-spotlight-2025',
+        excerpt: 'Meeting the visionaries building the most successful protocols in the Superteam network.',
+        content: 'Interviews with founders who turned hackathon prototypes into multi-million dollar protocols.',
+        image_url: 'https://images.unsplash.com/photo-1556761175-b413da4baf72',
+        published_at: new Date(Date.now() - 777600000).toISOString()
+      },
+      {
+        title: 'Understanding Anchor Framework v0.30',
+        slug: 'anchor-v30-updates',
+        excerpt: 'Breaking down the newest features and safety improvements in the latest Anchor release.',
+        content: 'Anchor continues to evolve. v0.30 brings better IDL generation and more robust account constraints.',
+        image_url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5',
+        published_at: new Date(Date.now() - 864000000).toISOString()
+      },
+      {
+        title: 'Hackathon Survival Guide: KL Edition',
+        slug: 'kl-hackathon-survival',
+        excerpt: 'Everything you need to know to survive and thrive during a 48-hour build session in Kuala Lumpur.',
+        content: 'Coffee, code, and community. Here is how to manage your time and your team during the next Superteam Hackathon.',
+        image_url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87',
+        published_at: new Date(Date.now() - 950400000).toISOString()
+      },
+      {
+        title: 'Tokenomics for Sustainable Growth',
+        slug: 'sustainable-tokenomics',
+        excerpt: 'Avoiding the pitfalls of high-inflation tokens and building long-term value for holders.',
+        content: 'Tokens should be utility-driven, not just speculative assets. We explore real-yield models and voting escrow mechanisms.',
+        image_url: 'https://images.unsplash.com/photo-1642104704074-907c0698cbd9',
+        published_at: new Date(Date.now() - 1036800000).toISOString()
+      },
+      {
+        title: 'Security First: Auditing your Smart Contracts',
+        slug: 'smart-contract-security',
+        excerpt: 'A checklist for developers before deploying to Solana Mainnet-Beta.',
+        content: 'Never skip an audit. This post outlines common vulnerabilities in Rust programs and how to mitigate them.',
+        image_url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d',
+        published_at: new Date(Date.now() - 1123200000).toISOString()
+      },
+      {
+        title: 'Joining the Superteam: How to earn your place',
+        slug: 'joining-superteam-guide',
+        excerpt: 'The path from Contributor to Member is paved with proof of work.',
+        content: 'Superteam is a meritocracy. Start with bounties, join the Discord, and show us what you can build.',
+        image_url: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d',
+        published_at: new Date(Date.now() - 1209600000).toISOString()
       }
     ];
     const { error: newsErr } = await supabase.from('news').upsert(news, { onConflict: 'slug' });
