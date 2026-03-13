@@ -18,6 +18,7 @@ import { Stat, Event, Member, Partner, Testimonial } from '@/types/database';
 import { Wrench, LayoutGrid, DollarSign, TrendingUp, Code2, Globe, CheckCircle2, Users, Database } from 'lucide-react';
 import Link from 'next/link';
 import WatermarkS from '@/components/home/WatermarkS';
+import { AnimatedSection, AnimatedItem } from '@/components/layout/AnimatedSection';
 
 const iconMap: Record<string, any> = {
   Wrench, LayoutGrid, DollarSign, TrendingUp, Code2, Globe, CheckCircle2, Users
@@ -118,13 +119,14 @@ export default function Home() {
       {/* Mission Section */}
       <section id="mission" className="bg-black">
         {missionItems.map((item, i) => (
-          <div key={i} className="w-full border-b border-white/10">
+          <AnimatedSection key={i} className="w-full border-b border-white/10" staggerChildren={0.2}>
             <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
-              <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
+              <AnimatedItem className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
                 <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">{item.title}</h2>
                 <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ {item.index} / 05 ]</div>
-              </div>
-              <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0 overflow-hidden">
+              </AnimatedItem>
+              
+              <AnimatedItem className="flex items-center justify-center relative min-h-[400px] lg:min-h-0 overflow-hidden">
                 <video 
                   key={item.video}
                   autoPlay 
@@ -135,27 +137,29 @@ export default function Home() {
                 >
                   <source src={item.video} type="video/webm" />
                 </video>
-              </div>
-              <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
+              </AnimatedItem>
+              
+              <AnimatedItem className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
                 <p className="text-lg text-white leading-relaxed max-w-sm">{item.desc}</p>
-              </div>
+              </AnimatedItem>
             </div>
-          </div>
+          </AnimatedSection>
         ))}
       </section>
 
       {/* Dynamic Stats Section */}
-      <section className="w-full bg-white/5 relative overflow-hidden border-b border-white/10">
+      <AnimatedSection className="w-full bg-white/5 relative overflow-hidden border-b border-white/10" staggerChildren={0.15}>
         <WatermarkS />
         <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-[2.5fr_7.5fr] gap-10 md:gap-16 px-10 py-24 md:py-32">
-          <div className="stats-header">
+          <AnimatedItem className="stats-header">
             <h2 className="text-5xl font-headline font-bold tracking-tight text-white">In <span className="text-white">Numbers</span></h2>
-          </div>
+          </AnimatedItem>
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-y-16 md:gap-y-20">
             {stats.length > 0 ? stats.map((stat, idx) => {
               const Icon = iconMap[stat.label.split(' ')[0]] || Globe;
               return (
-                <div key={idx} className="stat-cell group border-l border-white/10 p-2.5 px-8 min-h-[160px] flex flex-col justify-between">
+                <AnimatedItem key={idx} className="stat-cell group border-l border-white/10 p-2.5 px-8 min-h-[160px] flex flex-col justify-between">
                   <div className="flex items-start gap-3">
                     <Icon className="w-5 h-5 text-white group-hover:text-primary transition-colors mt-0.5" />
                     <span className="text-sm font-medium text-white leading-tight uppercase tracking-wider">{stat.label}</span>
@@ -163,16 +167,16 @@ export default function Home() {
                   <div className="text-5xl md:text-6xl font-headline font-bold tracking-tighter mt-10 text-white group-hover:solana-text-gradient transition-all duration-300">
                     {stat.value}
                   </div>
-                </div>
+                </AnimatedItem>
               );
             }) : (
-              <div className="col-span-full py-10 border-l border-white/10 pl-8">
+              <AnimatedItem className="col-span-full py-10 border-l border-white/10 pl-8">
                 <p className="font-code text-xs uppercase tracking-widest text-muted-foreground italic">No system metrics detected.</p>
-              </div>
+              </AnimatedItem>
             )}
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       <EventSection events={events} />
       <CommunityCarousel members={featuredMembers} />

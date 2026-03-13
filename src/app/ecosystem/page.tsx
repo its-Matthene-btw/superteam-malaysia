@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
@@ -11,6 +10,7 @@ import { ArrowRight, Loader2, Search, Zap, ExternalLink, Globe, LayoutGrid, Box,
 import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { AnimatedSection, AnimatedItem } from '@/components/layout/AnimatedSection';
 
 export default function EcosystemPage() {
   const [projects, setProjects] = useState<EcosystemProject[]>([]);
@@ -74,28 +74,34 @@ export default function EcosystemPage() {
       <Navbar />
 
       {/* HERO SECTION */}
-      <section className="relative pt-40 pb-20 border-b border-white/10 overflow-hidden">
+      <AnimatedSection className="relative pt-40 pb-20 border-b border-white/10 overflow-hidden" staggerChildren={0.2}>
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:linear-gradient(to_bottom,black:20%,transparent_100%)]" />
         <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
         
         <div className="max-w-[1400px] mx-auto px-10 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           <div>
-            <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-6">// MALAYSIA_NETWORK</div>
-            <h1 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10 uppercase">
-              The Solana<br /><span className="text-primary">Ecosystem</span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-lg mb-12 font-medium">
-              Explore the leading protocols, infrastructure, and developer tools built by and for the Malaysian Web3 community.
-            </p>
+            <AnimatedItem>
+              <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-6">// MALAYSIA_NETWORK</div>
+            </AnimatedItem>
+            <AnimatedItem>
+              <h1 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10 uppercase">
+                The Solana<br /><span className="text-primary">Ecosystem</span>
+              </h1>
+            </AnimatedItem>
+            <AnimatedItem>
+              <p className="text-xl text-muted-foreground max-w-lg mb-12 font-medium">
+                Explore the leading protocols, infrastructure, and developer tools built by and for the Malaysian Web3 community.
+              </p>
+            </AnimatedItem>
             
             <div className="grid grid-cols-3 gap-8">
-              <StatItem value={projects.length} label="Ecosystem Projects" />
-              <StatItem value={45} label="Global Partners" />
-              <StatItem value="2.5k" label="Active Builders" />
+              <AnimatedItem><StatItem value={projects.length} label="Ecosystem Projects" /></AnimatedItem>
+              <AnimatedItem><StatItem value={45} label="Global Partners" /></AnimatedItem>
+              <AnimatedItem><StatItem value="2.5k" label="Active Builders" /></AnimatedItem>
             </div>
           </div>
 
-          <div className="relative group perspective-1000 hidden lg:block">
+          <AnimatedItem className="relative group perspective-1000 hidden lg:block">
             <div className="relative aspect-[4/3] rounded-3xl border border-white/10 overflow-hidden bg-zinc-900 shadow-2xl transition-transform duration-700 hover:scale-[1.02] animate-in fade-in zoom-in duration-1000 group">
               <Image 
                 src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=1200" 
@@ -105,14 +111,14 @@ export default function EcosystemPage() {
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-transparent pointer-events-none" />
             </div>
-          </div>
+          </AnimatedItem>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* FILTER BAR - NON-STICKY */}
-      <div className="bg-[#0a0a0c] border-b border-white/10 py-10 relative z-50">
+      <AnimatedSection className="bg-[#0a0a0c] border-b border-white/10 py-10 relative z-50">
         <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between gap-6">
-          <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+          <AnimatedItem className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
             <FilterButton 
               active={activeFilter === 'all'} 
               onClick={() => setActiveFilter('all')}
@@ -126,8 +132,8 @@ export default function EcosystemPage() {
                 label={cat.name}
               />
             ))}
-          </div>
-          <div className="relative w-full md:w-64">
+          </AnimatedItem>
+          <AnimatedItem className="relative w-full md:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input 
               type="text"
@@ -136,16 +142,18 @@ export default function EcosystemPage() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-          </div>
+          </AnimatedItem>
         </div>
-      </div>
+      </AnimatedSection>
 
       {/* PROJECT GRID */}
-      <section className="py-20 border-b border-white/10">
+      <AnimatedSection className="py-20 border-b border-white/10" staggerChildren={0.1}>
         <div className="max-w-[1400px] mx-auto px-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10">
             {filteredProjects.map((p) => (
-              <ProjectCard key={p.id} project={p} />
+              <AnimatedItem key={p.id}>
+                <ProjectCard project={p} />
+              </AnimatedItem>
             ))}
             {filteredProjects.length === 0 && (
               <div className="col-span-full py-40 text-center bg-[#0f0f13]">
@@ -155,29 +163,31 @@ export default function EcosystemPage() {
             )}
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* FEATURED PILLARS */}
-      <section className="py-32 bg-[#050505] border-b border-white/10">
+      <AnimatedSection className="py-32 bg-[#050505] border-b border-white/10" staggerChildren={0.2}>
         <div className="max-w-[1400px] mx-auto px-10">
-          <div className="mb-16">
+          <AnimatedItem className="mb-16">
             <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-4">// FEATURED_PROTOCOLS</div>
             <h2 className="text-5xl font-black uppercase tracking-tighter">Ecosystem Pillars</h2>
-          </div>
+          </AnimatedItem>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {featured.map(p => (
-              <FeaturedCard key={p.id} project={p} />
+              <AnimatedItem key={p.id}>
+                <FeaturedCard project={p} />
+              </AnimatedItem>
             ))}
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       {/* RANDOM DEEP DIVE SECTION */}
       {randomPost && (
-        <section className="border-b border-white/10">
+        <AnimatedSection className="border-b border-white/10" staggerChildren={0.25}>
           <div className="grid grid-cols-1 lg:grid-cols-2">
-            <div className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center">
+            <AnimatedItem className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center h-full">
               <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-8">// DEEP_DIVE_PREVIEW</div>
               <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9] mb-10">
                 {randomPost.title.split(' ').slice(0, 2).join(' ')}:<br />
@@ -194,8 +204,8 @@ export default function EcosystemPage() {
                   Visit Feed
                 </Link>
               </div>
-            </div>
-            <div className="relative bg-[#050505] min-h-[500px] overflow-hidden group">
+            </AnimatedItem>
+            <AnimatedItem className="relative bg-[#050505] min-h-[500px] overflow-hidden group">
               {randomPost.image_url ? (
                 <Image 
                   src={randomPost.image_url} 
@@ -207,41 +217,43 @@ export default function EcosystemPage() {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(153,69,255,0.2)_0%,transparent_70%)]" />
               )}
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#0a0a0c_100%)] pointer-events-none" />
-            </div>
+            </AnimatedItem>
           </div>
-        </section>
+        </AnimatedSection>
       )}
 
       {/* OPPORTUNITIES */}
-      <section className="py-32 border-b border-white/10">
+      <AnimatedSection className="py-32 border-b border-white/10" staggerChildren={0.1}>
         <div className="max-w-[1400px] mx-auto px-10">
-          <div className="mb-16">
+          <AnimatedItem className="mb-16">
             <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-4">// ACTIVE_OPPORTUNITIES</div>
             <h2 className="text-5xl font-black uppercase tracking-tighter">Get Involved</h2>
-          </div>
+          </AnimatedItem>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] bg-white/10 border border-white/10">
             {opportunities.map(opp => (
-              <div key={opp.id} className="bg-[#0a0a0c] p-12 flex flex-col justify-between group hover:bg-white/[0.02] transition-colors h-full">
-                <div>
-                  <div className={cn(
-                    "inline-block px-4 py-1.5 rounded-full font-code text-[10px] font-bold uppercase tracking-widest mb-8 border",
-                    opp.type === 'Grant' ? "border-[#14F195] text-[#14F195]" : 
-                    opp.type === 'Bounty' ? "border-primary text-primary" : "border-yellow-500 text-yellow-500"
-                  )}>
-                    {opp.type}
+              <AnimatedItem key={opp.id}>
+                <div className="bg-[#0a0a0c] p-12 flex flex-col justify-between group hover:bg-white/[0.02] transition-colors h-full">
+                  <div>
+                    <div className={cn(
+                      "inline-block px-4 py-1.5 rounded-full font-code text-[10px] font-bold uppercase tracking-widest mb-8 border",
+                      opp.type === 'Grant' ? "border-[#14F195] text-[#14F195]" : 
+                      opp.type === 'Bounty' ? "border-primary text-primary" : "border-yellow-500 text-yellow-500"
+                    )}>
+                      {opp.type}
+                    </div>
+                    <h3 className="text-3xl font-black uppercase tracking-tight mb-6">{opp.title}</h3>
+                    <p className="text-muted-foreground text-lg mb-10 leading-relaxed">{opp.description}</p>
                   </div>
-                  <h3 className="text-3xl font-black uppercase tracking-tight mb-6">{opp.title}</h3>
-                  <p className="text-muted-foreground text-lg mb-10 leading-relaxed">{opp.description}</p>
+                  <a href={opp.link || '#'} target="_blank" className="font-code text-xs font-bold uppercase tracking-widest flex items-center gap-3 group-hover:text-primary transition-colors">
+                    Apply Now <ArrowRight className="w-4 h-4" />
+                  </a>
                 </div>
-                <a href={opp.link || '#'} target="_blank" className="font-code text-xs font-bold uppercase tracking-widest flex items-center gap-3 group-hover:text-primary transition-colors">
-                  Apply Now <ArrowRight className="w-4 h-4" />
-                </a>
-              </div>
+              </AnimatedItem>
             ))}
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       <Footer />
     </main>

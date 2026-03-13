@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -8,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { getFAQs } from '@/services/faqs';
 import { getSettings } from '@/services/settings';
 import { FAQ } from '@/types/database';
+import { AnimatedSection, AnimatedItem } from '@/components/layout/AnimatedSection';
 
 export default function FaqCtaSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -49,12 +49,16 @@ export default function FaqCtaSection() {
   const grantUrl = settings.cta_grant_url || "https://earn.superteam.fun";
 
   return (
-    <section className="faq-section w-full border-t border-white/10 bg-black">
+    <AnimatedSection className="faq-section w-full border-t border-white/10 bg-black" staggerChildren={0.2}>
       <div className="header-wrapper max-w-[1400px] mx-auto px-10 py-20 border-x border-white/10">
-        <div className="pill-badge mb-6"><span>✦</span> KNOWLEDGE BASE</div>
-        <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
-          Have <span className="text-primary">Questions?</span>
-        </h2>
+        <AnimatedItem>
+          <div className="pill-badge mb-6"><span>✦</span> KNOWLEDGE BASE</div>
+        </AnimatedItem>
+        <AnimatedItem>
+          <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white">
+            Have <span className="text-primary">Questions?</span>
+          </h2>
+        </AnimatedItem>
       </div>
 
       <div className="grid-full-width w-full border-y border-white/10">
@@ -67,7 +71,7 @@ export default function FaqCtaSection() {
               </div>
             ) : faqs.length > 0 ? (
               faqs.map((faq, idx) => (
-                <div key={idx} className={cn("faq-item border-b border-white/10 last:border-b-0", openIndex === idx && "active")}>
+                <AnimatedItem key={idx} className={cn("faq-item border-b border-white/10 last:border-b-0", openIndex === idx && "active")}>
                   <button 
                     className="faq-header w-full flex items-center justify-between p-8 lg:p-10 hover:bg-white/[0.02] group transition-all"
                     onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
@@ -90,7 +94,7 @@ export default function FaqCtaSection() {
                       {faq.answer}
                     </div>
                   </div>
-                </div>
+                </AnimatedItem>
               ))
             ) : (
               <div className="p-20 text-center text-muted-foreground font-code uppercase text-xs tracking-widest">
@@ -99,7 +103,7 @@ export default function FaqCtaSection() {
             )}
           </div>
 
-          <div className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 items-start overflow-hidden border-l border-white/10">
+          <AnimatedItem className="cta-column bg-[#050505] relative flex flex-col min-h-[500px] lg:min-h-0 items-start overflow-hidden border-l border-white/10">
              <div className="cta-bg-wrapper absolute inset-0 pointer-events-none overflow-hidden z-0">
                 <div className="absolute -bottom-[10%] -right-[10%] w-[800px] h-[800px] bg-primary/15 rounded-full blur-[100px]" />
                 
@@ -133,10 +137,10 @@ export default function FaqCtaSection() {
                   </a>
                 </div>
              </div>
-          </div>
+          </AnimatedItem>
 
         </div>
       </div>
-    </section>
+    </AnimatedSection>
   );
 }

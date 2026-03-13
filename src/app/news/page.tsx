@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
@@ -10,6 +9,7 @@ import { ArrowRight, Loader2, Search, Sparkles, AlertCircle } from 'lucide-react
 import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { AnimatedSection, AnimatedItem } from '@/components/layout/AnimatedSection';
 
 export default function NewsPage() {
   const [posts, setPosts] = useState<NewsPost[]>([]);
@@ -58,8 +58,8 @@ export default function NewsPage() {
 
       {/* 3-COL WIREFRAME HERO */}
       {featured && (
-        <header className="relative pt-20 border-b border-white/10 grid grid-cols-1 lg:grid-cols-[350px_1fr_400px] min-h-[500px]">
-          <div className="p-10 border-r border-white/10 flex flex-col justify-between max-lg:hidden">
+        <AnimatedSection className="relative pt-20 border-b border-white/10 grid grid-cols-1 lg:grid-cols-[350px_1fr_400px] min-h-[500px]" staggerChildren={0.2}>
+          <AnimatedItem className="p-10 border-r border-white/10 flex flex-col justify-between max-lg:hidden">
             <div className="font-code text-[10px] text-primary uppercase tracking-[3px]">[ SYSTEM_UPDATE_v.2.0 ]</div>
             <div>
               <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[2px]">Latest Entry</div>
@@ -67,9 +67,9 @@ export default function NewsPage() {
                 {new Date(featured.published_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase().replace(' ', '_')}
               </div>
             </div>
-          </div>
+          </AnimatedItem>
 
-          <div className="p-10 lg:p-16 border-r border-white/10 flex flex-col justify-center relative">
+          <AnimatedItem className="p-10 lg:p-16 border-r border-white/10 flex flex-col justify-center relative">
             <div className="inline-block bg-primary text-white px-3 py-1 text-[10px] font-black uppercase tracking-widest mb-8">FEATURED DISPATCH</div>
             <h1 className="text-5xl lg:text-7xl font-black leading-[0.9] tracking-tighter mb-10 uppercase">
               {featured.title}
@@ -83,9 +83,9 @@ export default function NewsPage() {
             >
               Read Entry <ArrowRight className="w-4 h-4" />
             </Link>
-          </div>
+          </AnimatedItem>
 
-          <div className="relative bg-zinc-900 overflow-hidden max-lg:h-64">
+          <AnimatedItem className="relative bg-zinc-900 overflow-hidden max-lg:h-64">
             {featured.image_url && (
               <Image 
                 src={featured.image_url} 
@@ -94,13 +94,13 @@ export default function NewsPage() {
                 className="object-cover grayscale contrast-125 opacity-60 mix-blend-screen"
               />
             )}
-          </div>
-        </header>
+          </AnimatedItem>
+        </AnimatedSection>
       )}
 
       {/* SYSTEM BAR */}
-      <section className="grid grid-cols-1 lg:grid-cols-[350px_1fr] border-b border-white/10 bg-[#050505]">
-        <div className="px-10 py-6 border-r border-white/10 flex items-center gap-4">
+      <AnimatedSection className="grid grid-cols-1 lg:grid-cols-[350px_1fr] border-b border-white/10 bg-[#050505]" staggerChildren={0.1}>
+        <AnimatedItem className="px-10 py-6 border-r border-white/10 flex items-center gap-4">
           <span className="font-code text-primary text-xs font-bold tracking-widest whitespace-nowrap">SCAN_</span>
           <input 
             type="text" 
@@ -109,8 +109,8 @@ export default function NewsPage() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-        </div>
-        <nav className="flex items-center gap-10 px-10 overflow-x-auto whitespace-nowrap no-scrollbar max-lg:py-6">
+        </AnimatedItem>
+        <AnimatedItem className="flex items-center gap-10 px-10 overflow-x-auto whitespace-nowrap no-scrollbar max-lg:py-6">
           {['ALL', 'DEV_LOGS', 'GRANTS', 'EVENTS', 'CULTURE'].map(filter => (
             <button 
               key={filter}
@@ -123,50 +123,51 @@ export default function NewsPage() {
               / {filter}
             </button>
           ))}
-        </nav>
-      </section>
+        </AnimatedItem>
+      </AnimatedSection>
 
       {/* SQUARE GRID FEED */}
-      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+      <AnimatedSection className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4" staggerChildren={0.1}>
         {gridItems.map((post, idx) => (
-          <Link 
-            key={post.id} 
-            href={`/news/${post.slug}`}
-            className="group relative aspect-square border-r border-b border-white/10 flex flex-col overflow-hidden hover:bg-primary/5 transition-all duration-500"
-          >
-            <div className="flex-1 relative overflow-hidden border-b border-white/10 bg-black">
-              {post.image_url ? (
-                <Image 
-                  src={post.image_url} 
-                  alt={post.title} 
-                  fill 
-                  className="object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700" 
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center"><Sparkles className="w-8 h-8 text-white/10" /></div>
-              )}
-            </div>
-            
-            <div className="p-8 h-40 flex flex-col justify-between">
-              <div>
-                <div className="font-code text-[9px] text-primary font-bold uppercase tracking-widest mb-3">
-                  {(idx + 1).toString().padStart(2, '0')}. DISPATCH
-                </div>
-                <h3 className="text-lg font-black uppercase tracking-tight leading-tight line-clamp-2 group-hover:text-primary transition-colors">
-                  {post.title}
-                </h3>
+          <AnimatedItem key={post.id}>
+            <Link 
+              href={`/news/${post.slug}`}
+              className="group relative aspect-square border-r border-b border-white/10 flex flex-col overflow-hidden hover:bg-primary/5 transition-all duration-500"
+            >
+              <div className="flex-1 relative overflow-hidden border-b border-white/10 bg-black">
+                {post.image_url ? (
+                  <Image 
+                    src={post.image_url} 
+                    alt={post.title} 
+                    fill 
+                    className="object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-80 group-hover:scale-105 transition-all duration-700" 
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center"><Sparkles className="w-8 h-8 text-white/10" /></div>
+                )}
               </div>
-            </div>
+              
+              <div className="p-8 h-40 flex flex-col justify-between">
+                <div>
+                  <div className="font-code text-[9px] text-primary font-bold uppercase tracking-widest mb-3">
+                    {(idx + 1).toString().padStart(2, '0')}. DISPATCH
+                  </div>
+                  <h3 className="text-lg font-black uppercase tracking-tight leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+                    {post.title}
+                  </h3>
+                </div>
+              </div>
 
-            <div className="px-8 py-4 border-t border-white/10 bg-white/[0.02] flex justify-between items-center font-code text-[10px] uppercase tracking-widest text-muted-foreground group-hover:text-white">
-              <span>{new Date(post.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}</span>
-              <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </Link>
+              <div className="px-8 py-4 border-t border-white/10 bg-white/[0.02] flex justify-between items-center font-code text-[10px] uppercase tracking-widest text-muted-foreground group-hover:text-white">
+                <span>{new Date(post.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+          </AnimatedItem>
         ))}
 
         {/* CTA SQUARE */}
-        <div className="aspect-square bg-primary p-10 flex flex-col items-center justify-center text-center text-black">
+        <AnimatedItem className="aspect-square bg-primary p-10 flex flex-col items-center justify-center text-center text-black">
           <div className="font-code text-[10px] font-black uppercase tracking-[3px] mb-6">[ BECOME_MEMBER ]</div>
           <h3 className="text-2xl font-black uppercase tracking-tighter mb-8 leading-tight">
             Join the Inner Circle of Solana Malaysia
@@ -177,15 +178,15 @@ export default function NewsPage() {
           >
             Apply Now
           </Link>
-        </div>
-      </section>
+        </AnimatedItem>
+      </AnimatedSection>
 
       {/* PAGINATION INFO */}
-      <section className="border-b border-white/10 flex items-center">
-        <div className="p-10 border-r border-white/10 w-[350px] font-code max-lg:hidden">
+      <AnimatedSection className="border-b border-white/10 flex items-center" staggerChildren={0.1}>
+        <AnimatedItem className="p-10 border-r border-white/10 w-[350px] font-code max-lg:hidden">
           <span className="text-[10px] text-muted-foreground uppercase tracking-widest">Displaying</span><br />
           <span className="text-xl font-black">{filteredPosts.length} / {posts.length} ARTICLES</span>
-        </div>
+        </AnimatedItem>
         <div className="flex font-code">
           <button className="w-20 h-20 border-r border-white/10 flex items-center justify-center bg-primary text-black font-black">01</button>
           {[2, 3, 4].map(num => (
@@ -193,7 +194,7 @@ export default function NewsPage() {
           ))}
           <button className="w-20 h-20 border-r border-white/10 flex items-center justify-center text-muted-foreground">...</button>
         </div>
-      </section>
+      </AnimatedSection>
 
       <Footer />
     </main>

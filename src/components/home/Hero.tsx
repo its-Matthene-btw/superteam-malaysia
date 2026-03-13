@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
@@ -6,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import * as d3 from 'd3';
 import { getSettings } from '@/services/settings';
+import { motion } from 'framer-motion';
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -178,25 +178,46 @@ export default function Hero() {
   const secondaryBtnText = content.hero_secondary_btn_text || "OPPORTUNITIES";
   const secondaryBtnLink = content.hero_secondary_btn_link || "/ecosystem";
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+  };
+
   return (
     <section className="relative w-full h-screen flex items-center justify-center bg-black overflow-hidden">
       <div className="absolute inset-0 bg-gradient-radial from-[#1a083a] via-black to-black opacity-80" />
       <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_center,_rgba(0,0,0,0.75)_0%,_transparent_70%)]" />
 
-      <div className="relative z-20 text-center max-w-4xl px-6 pointer-events-auto animate-fade-up">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold mb-6 leading-[1.1] tracking-tight text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.5)] uppercase">
+      <motion.div 
+        className="relative z-20 text-center max-w-4xl px-6 pointer-events-auto"
+        variants={container}
+        initial="hidden"
+        animate="show"
+      >
+        <motion.h1 variants={item} className="text-4xl md:text-6xl lg:text-7xl font-headline font-extrabold mb-6 leading-[1.1] tracking-tight text-white drop-shadow-[0_0_40px_rgba(0,0,0,0.5)] uppercase">
           {headline.split(' ').map((word, i) => (
             word.toLowerCase() === 'builders' || word.toLowerCase() === 'solana' ? 
             <span key={i} className="text-primary">{word} </span> : 
             <span key={i}>{word} </span>
           ))}
-        </h1>
+        </motion.h1>
 
-        <p className="max-w-xl mx-auto text-lg text-[#a1a1aa] mb-10 leading-relaxed font-medium">
+        <motion.p variants={item} className="max-w-xl mx-auto text-lg text-[#a1a1aa] mb-10 leading-relaxed font-medium">
           {subheadline}
-        </p>
+        </motion.p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link href={primaryBtnLink}>
             <Button size="lg" className="bg-white text-black hover:bg-white/90 font-bold h-14 px-10 rounded-full uppercase tracking-widest text-xs">
               {primaryBtnText}
@@ -207,8 +228,8 @@ export default function Hero() {
               {secondaryBtnText}
             </Button>
           </Link>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       <div className="absolute inset-0 z-0 pointer-events-none">
         <canvas ref={canvasRef} id="globe-canvas" className="block" />

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useRef } from 'react';
@@ -6,6 +5,7 @@ import Image from 'next/image';
 import { MessageSquare, Quote, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Testimonial } from '@/types/database';
+import { AnimatedSection, AnimatedItem } from '@/components/layout/AnimatedSection';
 
 const XIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -84,27 +84,33 @@ export default function WallOfLove({ testimonials }: { testimonials: Testimonial
   if (!testimonials || testimonials.length === 0) return null;
   
   return (
-    <section className="wall-section w-full bg-black border-t border-white/10">
+    <AnimatedSection className="wall-section w-full bg-black border-t border-white/10" staggerChildren={0.1}>
       <div className="max-w-[1400px] mx-auto border-x border-white/10">
         <div className="flex flex-col gap-6 mb-24 px-10 pt-32 lg:pt-48">
-          <div className="pill-badge mb-6"><span>✦</span> Wall of Love</div>
-          <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white mb-8">
-            REAL BUILDERS. REAL STORIES.<br />
-            <span className="text-[#9945FF]">THE ALPHA SITS IN OUR CHATS.</span>
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
-            Don't just take our word for it. See what founders, developers, and ecosystem participants are saying about their experience building with Superteam Malaysia.
-          </p>
+          <AnimatedItem>
+            <div className="pill-badge mb-6"><span>✦</span> Wall of Love</div>
+          </AnimatedItem>
+          <AnimatedItem>
+            <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-none text-white mb-8">
+              REAL BUILDERS. REAL STORIES.<br />
+              <span className="text-[#9945FF]">THE ALPHA SITS IN OUR CHATS.</span>
+            </h2>
+          </AnimatedItem>
+          <AnimatedItem>
+            <p className="text-xl text-muted-foreground max-w-3xl leading-relaxed">
+              Don't just take our word for it. See what founders, developers, and ecosystem participants are saying about their experience building with Superteam Malaysia.
+            </p>
+          </AnimatedItem>
         </div>
 
-        <div className="border-t border-b border-white/10 overflow-hidden">
+        <AnimatedItem className="border-t border-b border-white/10 overflow-hidden">
           <div className="wall-grid flex flex-wrap bg-transparent">
             {testimonials.map((testimonial) => (
               <WallCard key={testimonial.id} testimonial={testimonial} />
             ))}
           </div>
-        </div>
+        </AnimatedItem>
       </div>
-    </section>
+    </AnimatedSection>
   );
 }

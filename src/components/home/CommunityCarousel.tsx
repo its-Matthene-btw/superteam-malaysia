@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Member } from '@/types/database';
+import { AnimatedSection, AnimatedItem } from '@/components/layout/AnimatedSection';
 
 const XIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -86,35 +87,39 @@ export default function CommunityCarousel({ members }: { members: Member[] }) {
   if (!members || members.length === 0) return null;
 
   return (
-    <section className="w-full bg-black border-t border-white/10">
+    <AnimatedSection className="w-full bg-black border-t border-white/10" staggerChildren={0.25}>
       <div className="max-w-[1400px] mx-auto border-x border-white/10">
         <div className="px-10 py-24 lg:py-32">
-          <div className="header-top mb-16">
+          <AnimatedItem className="header-top mb-16">
             <div className="pill-badge mb-8"><span>✦</span> THE COMMUNITY</div>
             <h2 className="text-5xl lg:text-7xl font-headline font-bold uppercase tracking-tight leading-[1.1] max-w-3xl text-white">
               A TEAM OF<br />WEB3 <span className="text-[#9945FF]">EXPERTS.</span>
             </h2>
-          </div>
+          </AnimatedItem>
           
           <div className="grid grid-cols-1 lg:grid-cols-[4fr_6fr] gap-12 lg:gap-20 pt-16 border-t border-white/10">
-            <div className="col-left">
+            <AnimatedItem className="col-left">
               <p className="text-xl font-bold text-white uppercase tracking-wider leading-relaxed max-w-sm">
                 SUPERTEAM MALAYSIA STARTED AS A COLLECTIVE TO MANAGE WEB3 PROJECTS WITH FRIENDS AND BUILDERS.
               </p>
-            </div>
+            </AnimatedItem>
             <div className="col-right space-y-8">
-              <p className="text-xl text-muted-foreground leading-relaxed font-medium">
-                We built advanced tooling and a robust network to optimize project development for passionate teams. Due to the sheer talent within the Solana ecosystem, our little community grew crazy fast.
-              </p>
-              <p className="text-xl text-muted-foreground leading-relaxed font-medium">
-                Now, network operators and developers can run their own nodes with full control. Superteam just takes the headaches away.
-              </p>
+              <AnimatedItem>
+                <p className="text-xl text-muted-foreground leading-relaxed font-medium">
+                  We built advanced tooling and a robust network to optimize project development for passionate teams. Due to the sheer talent within the Solana ecosystem, our little community grew crazy fast.
+                </p>
+              </AnimatedItem>
+              <AnimatedItem>
+                <p className="text-xl text-muted-foreground leading-relaxed font-medium">
+                  Now, network operators and developers can run their own nodes with full control. Superteam just takes the headaches away.
+                </p>
+              </AnimatedItem>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="w-full border-y border-white/10 bg-black overflow-hidden">
+      <AnimatedItem className="w-full border-y border-white/10 bg-black overflow-hidden">
         <div 
           ref={sliderRef}
           className="max-w-[1400px] mx-auto border-x border-white/10 overflow-x-auto no-scrollbar cursor-grab active:cursor-grabbing"
@@ -180,11 +185,11 @@ export default function CommunityCarousel({ members }: { members: Member[] }) {
             ))}
           </div>
         </div>
-      </div>
+      </AnimatedItem>
       <style jsx global>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
-    </section>
+    </AnimatedSection>
   );
 }

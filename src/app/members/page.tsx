@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -11,6 +10,7 @@ import { Search, X, Briefcase, Github, Linkedin, Building2, ArrowRight, Loader2 
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
+import { AnimatedSection, AnimatedItem } from '@/components/layout/AnimatedSection';
 
 const Globe = dynamic(() => import('@/components/members/Globe'), { ssr: false });
 
@@ -67,16 +67,22 @@ export default function MemberDirectory() {
         
         <div className="flex flex-col flex-grow relative z-10 min-[1201px]:flex-row w-full">
           <div className="flex-shrink-0 pt-32 pb-10 px-6 text-center min-[1201px]:pt-48 min-[1201px]:pb-32 min-[1201px]:w-3/5 min-[1201px]:text-left min-[1201px]:flex min-[1201px]:flex-col min-[1201px]:justify-center min-[1201px]:px-20 z-10">
-            <div className="pill-badge mb-8 bg-black/50 backdrop-blur-md inline-flex mx-auto min-[1201px]:mx-0">
-              <span>✦</span> THE DIRECTORY
-            </div>
-            <h1 className="text-[clamp(4rem,8vw,7.5rem)] font-black uppercase tracking-tighter leading-[0.9] mb-10 flex flex-col">
-              <span className="text-white">BUILDER</span>
-              <span className="text-black [-webkit-text-stroke:1.5px_rgba(255,255,255,0.4)] tracking-[0.02em]">NETWORK</span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-md mx-auto min-[1201px]:mx-0 leading-relaxed font-medium">
-              Discover the top developers, designers, and founders scaling the Solana ecosystem across Malaysia.
-            </p>
+            <AnimatedSection staggerChildren={0.2}>
+              <AnimatedItem className="pill-badge mb-8 bg-black/50 backdrop-blur-md inline-flex mx-auto min-[1201px]:mx-0">
+                <span>✦</span> THE DIRECTORY
+              </AnimatedItem>
+              <AnimatedItem>
+                <h1 className="text-[clamp(4rem,8vw,7.5rem)] font-black uppercase tracking-tighter leading-[0.9] mb-10 flex flex-col">
+                  <span className="text-white">BUILDER</span>
+                  <span className="text-black [-webkit-text-stroke:1.5px_rgba(255,255,255,0.4)] tracking-[0.02em]">NETWORK</span>
+                </h1>
+              </AnimatedItem>
+              <AnimatedItem>
+                <p className="text-xl text-muted-foreground max-w-md mx-auto min-[1201px]:mx-0 leading-relaxed font-medium">
+                  Discover the top developers, designers, and founders scaling the Solana ecosystem across Malaysia.
+                </p>
+              </AnimatedItem>
+            </AnimatedSection>
           </div>
           
           <div className="flex-grow relative w-full min-h-[400px] min-[1201px]:absolute min-[1201px]:inset-0 min-[1201px]:z-0 pointer-events-auto overflow-hidden">
@@ -99,10 +105,10 @@ export default function MemberDirectory() {
         </div>
       </section>
 
-      <section className="bg-black border-b border-white/10 w-screen max-w-none">
+      <AnimatedSection className="bg-black border-b border-white/10 w-screen max-w-none" staggerChildren={0.1}>
         <div className="w-full px-10 py-10">
           <div className="flex flex-col gap-8">
-            <div className="relative group">
+            <AnimatedItem className="relative group">
               <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-muted-foreground group-focus-within:text-primary transition-colors" />
               <input 
                 type="text" 
@@ -114,8 +120,8 @@ export default function MemberDirectory() {
                   setVisibleCount(8);
                 }}
               />
-            </div>
-            <div className="flex flex-wrap gap-3">
+            </AnimatedItem>
+            <AnimatedItem className="flex flex-wrap gap-3">
               {categories.map(cat => (
                 <button 
                   key={cat}
@@ -133,10 +139,10 @@ export default function MemberDirectory() {
                   {cat}
                 </button>
               ))}
-            </div>
+            </AnimatedItem>
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
       <section className="bg-black w-screen max-w-none min-h-[400px]">
         {loading ? (
@@ -145,52 +151,53 @@ export default function MemberDirectory() {
             <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">Initializing Network...</p>
           </div>
         ) : (
-          <div className="w-full">
+          <AnimatedSection className="w-full" staggerChildren={0.1}>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border-b border-white/10">
               {displayedMembers.map((member) => (
-                <div 
-                  key={member.id} 
-                  className="bg-[#050505] flex flex-col cursor-pointer group transition-all duration-500 hover:bg-primary min-h-[500px]"
-                  onClick={() => setSelectedMember(member)}
-                >
-                  <div className="relative h-[320px] overflow-hidden border-b border-white/10">
-                    {member.avatar_url ? (
-                      <Image 
-                        src={member.avatar_url} 
-                        alt={member.name} 
-                        fill 
-                        className="object-cover object-[center_15%] grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-white/5 flex items-center justify-center text-white/20">
-                        <Loader2 className="w-10 h-10" />
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-40 transition-opacity" />
-                  </div>
-                  <div className="p-8 flex flex-col flex-1">
-                    <div className="flex justify-between items-start mb-4">
-                      <span className="font-code text-[10px] uppercase tracking-[2px] text-primary group-hover:text-black font-bold transition-colors">
-                        [{member.role}]
-                      </span>
-                      {member.twitter_url && <XIcon className="w-4 h-4 text-muted-foreground group-hover:text-black transition-colors" />}
+                <AnimatedItem key={member.id}>
+                  <div 
+                    className="bg-[#050505] flex flex-col cursor-pointer group transition-all duration-500 hover:bg-primary min-h-[500px]"
+                    onClick={() => setSelectedMember(member)}
+                  >
+                    <div className="relative h-[320px] overflow-hidden border-b border-white/10">
+                      {member.avatar_url ? (
+                        <Image 
+                          src={member.avatar_url} 
+                          alt={member.name} 
+                          fill 
+                          className="object-cover object-[center_15%] grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-white/5 flex items-center justify-center text-white/20">
+                          <Loader2 className="w-10 h-10" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent group-hover:opacity-40 transition-opacity" />
                     </div>
-                    <h3 className="text-2xl font-black uppercase tracking-tighter text-white group-hover:text-black transition-colors mb-2">
-                      {member.name}
-                    </h3>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-black/70 transition-colors mb-8">
-                      <Building2 className="w-4 h-4" />
-                      {member.company}
-                    </div>
-                    <div className="flex flex-wrap gap-2 mt-auto">
-                      {member.skills?.slice(0, 3).map(skill => (
-                        <span key={skill} className="font-code text-[9px] px-2 py-1 border border-white/10 text-muted-foreground group-hover:text-black group-hover:border-black/20 transition-colors">
-                          {skill}
+                    <div className="p-8 flex flex-col flex-1">
+                      <div className="flex justify-between items-start mb-4">
+                        <span className="font-code text-[10px] uppercase tracking-[2px] text-primary group-hover:text-black font-bold transition-colors">
+                          [{member.role}]
                         </span>
-                      ))}
+                        {member.twitter_url && <XIcon className="w-4 h-4 text-muted-foreground group-hover:text-black transition-colors" />}
+                      </div>
+                      <h3 className="text-2xl font-black uppercase tracking-tighter text-white group-hover:text-black transition-colors mb-2">
+                        {member.name}
+                      </h3>
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-black/70 transition-colors mb-8">
+                        <Building2 className="w-4 h-4" />
+                        {member.company}
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-auto">
+                        {member.skills?.slice(0, 3).map(skill => (
+                          <span key={skill} className="font-code text-[9px] px-2 py-1 border border-white/10 text-muted-foreground group-hover:text-black group-hover:border-black/20 transition-colors">
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </AnimatedItem>
               ))}
             </div>
 
@@ -201,16 +208,16 @@ export default function MemberDirectory() {
             )}
 
             {filteredMembers.length > visibleCount && (
-              <div className="py-20 flex justify-center border-b border-white/10">
+              <AnimatedItem className="py-20 flex justify-center border-b border-white/10">
                 <button 
                   className="px-12 py-5 border border-white/10 text-white font-code font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all"
                   onClick={() => setVisibleCount(prev => prev + 8)}
                 >
                   Load More Builders
                 </button>
-              </div>
+              </AnimatedItem>
             )}
-          </div>
+          </AnimatedSection>
         )}
       </section>
 
