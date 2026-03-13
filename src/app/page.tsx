@@ -60,6 +60,39 @@ export default function Home() {
     initData();
   }, []);
 
+  const missionItems = [
+    { 
+      title: "Builder Support", 
+      index: "01", 
+      desc: "Superteam Malaysia helps developers, designers, and founders start building in the Solana ecosystem.",
+      video: "https://image2url.com/r2/default/videos/1773393901796-e9294163-50ac-4a15-8163-a842c6538840.webm"
+    },
+    { 
+      title: "Events & Hackathons", 
+      index: "02", 
+      desc: "We host workshops, meetups, and hackathons that bring the Malaysian Web3 community together.",
+      video: "https://image2url.com/r2/default/videos/1773394250362-471929e1-04ca-4f98-8b73-a7a3ebb56105.webm"
+    },
+    { 
+      title: "Grants & Funding", 
+      index: "03", 
+      desc: "Superteam connects builders with grants and funding opportunities across the Solana ecosystem.",
+      video: "https://image2url.com/r2/default/videos/1773393988143-5175db13-8c2f-4cf4-a05e-8f56e34a5700.webm"
+    },
+    { 
+      title: "Bounties & Opportunities", 
+      index: "04", 
+      desc: "Members can earn by contributing to real projects through ecosystem bounties and freelance opportunities.",
+      video: "https://image2url.com/r2/default/videos/1773394101296-994b6a70-8dce-4b48-a7d1-896c23d305e9.webm"
+    },
+    { 
+      title: "Education & Learning", 
+      index: "05", 
+      desc: "We provide workshops, learning sessions, and community resources to help builders develop skills.",
+      video: "https://image2url.com/r2/default/videos/1773394228634-369b369a-76be-4427-9979-e8642a62ade5.webm"
+    },
+  ];
+
   return (
     <main className="min-h-screen">
       <Navbar />
@@ -85,21 +118,24 @@ export default function Home() {
 
       {/* Mission Section */}
       <section id="mission" className="bg-black">
-        {[
-          { title: "Builder Support", index: "01", desc: "Superteam Malaysia helps developers, designers, and founders start building in the Solana ecosystem." },
-          { title: "Events & Hackathons", index: "02", desc: "We host workshops, meetups, and hackathons that bring the Malaysian Web3 community together." },
-          { title: "Grants & Funding", index: "03", desc: "Superteam connects builders with grants and funding opportunities across the Solana ecosystem." },
-          { title: "Bounties & Opportunities", index: "04", desc: "Members can earn by contributing to real projects through ecosystem bounties and freelance opportunities." },
-          { title: "Education & Learning", index: "05", desc: "We provide workshops, learning sessions, and community resources to help builders develop skills." },
-        ].map((item, i) => (
+        {missionItems.map((item, i) => (
           <div key={i} className="w-full border-b border-white/10">
             <div className="max-w-[1400px] mx-auto min-h-screen grid grid-cols-1 lg:grid-cols-[1fr_1.5fr_1fr] border-x border-white/10">
               <div className="flex flex-col justify-between p-10 lg:p-20 border-b lg:border-b-0 border-white/10">
                 <h2 className="text-5xl lg:text-6xl font-medium leading-[1.1] tracking-tighter text-white">{item.title}</h2>
                 <div className="hidden lg:block font-code text-sm tracking-[4px] text-white font-bold">[ {item.index} / 05 ]</div>
               </div>
-              <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0">
-                <div className={i === 0 ? "shape-sphere" : i === 1 ? "shape-card" : i === 2 ? "shape-globe-mission" : i === 3 ? "shape-coin coin-1" : "shape-pyramid"}></div>
+              <div className="flex items-center justify-center relative min-h-[400px] lg:min-h-0 overflow-hidden">
+                <video 
+                  key={item.video}
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline 
+                  className="w-full max-w-[600px] h-auto object-contain opacity-90 grayscale contrast-125 mix-blend-screen"
+                >
+                  <source src={item.video} type="video/webm" />
+                </video>
               </div>
               <div className="flex flex-col justify-end p-10 lg:p-20 border-t lg:border-t-0 border-white/10">
                 <p className="text-lg text-white leading-relaxed max-w-sm">{item.desc}</p>
