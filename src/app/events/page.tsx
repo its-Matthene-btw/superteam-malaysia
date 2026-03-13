@@ -44,7 +44,7 @@ export default function EventsPage() {
       <Navbar />
       
       {/* 1. HERO SECTION */}
-      <AnimatedSection className="relative pt-20 border-b border-white/10 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] bg-white/10 gap-[1px]" staggerChildren={0.2}>
+      <AnimatedSection className="relative z-10 pt-20 border-b border-white/10 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] bg-black gap-[1px]" staggerChildren={0.2}>
         <div className="bg-black p-10 lg:p-24 relative overflow-hidden flex flex-col justify-center">
           <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:linear-gradient(to_bottom,black:30%,transparent:100%)]" />
           
@@ -86,14 +86,14 @@ export default function EventsPage() {
 
       {/* 2. FEATURED EVENT */}
       {featured && (
-        <AnimatedSection className="border-b border-white/10 bg-black" staggerChildren={0.2}>
+        <AnimatedSection className="relative z-10 border-b border-white/10 bg-black" staggerChildren={0.2}>
           <div className="grid grid-cols-1 lg:grid-cols-2">
-            <AnimatedItem className="p-10 lg:p-20 flex flex-col justify-center border-r border-white/10">
+            <AnimatedItem className="p-10 lg:p-20 flex flex-col justify-center border-r border-white/10 bg-black">
               <div className="inline-block bg-primary text-black px-4 py-1.5 text-[10px] font-black uppercase tracking-widest mb-8">MAJOR_SPOTLIGHT</div>
               <h2 className="text-5xl lg:text-6xl font-black uppercase tracking-tighter leading-[0.9] mb-8">
                 {featured.title}
               </h2>
-              <p className="text-xl text-muted-foreground mb-12 max-w-lg leading-relaxed">
+              <p className="text-xl text-muted-foreground mb-12 max-lg:max-w-lg leading-relaxed">
                 {featured.description}
               </p>
               
@@ -148,7 +148,7 @@ export default function EventsPage() {
       </div>
 
       {/* 4. UPCOMING GRID */}
-      <AnimatedSection className="py-24 bg-black border-b border-white/10" staggerChildren={0.1}>
+      <AnimatedSection className="relative z-10 py-24 bg-black border-b border-white/10" staggerChildren={0.1}>
         <div className="max-w-[1400px] mx-auto px-10">
           <AnimatedItem className="flex items-center justify-between mb-16">
             <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter">Upcoming Schedule</h2>
@@ -166,8 +166,8 @@ export default function EventsPage() {
                 <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">No events scheduled for this protocol.</p>
               </div>
             ) : filteredUpcoming.map(event => (
-              <AnimatedItem key={event.id}>
-                <div className="bg-black flex flex-col group hover:bg-[#050505] transition-all duration-500 relative overflow-hidden h-full">
+              <AnimatedItem key={event.id} className="h-full">
+                <div className="bg-black flex flex-col group hover:bg-[#050505] transition-all duration-500 relative overflow-hidden h-full z-10">
                   <div className="relative h-56 overflow-hidden border-b border-white/10">
                     <Image 
                       src={event.image_url || `https://picsum.photos/seed/${event.id}/800/600`} 
@@ -179,7 +179,7 @@ export default function EventsPage() {
                       {event.category || 'EVENT'}
                     </div>
                   </div>
-                  <div className="p-8 flex flex-col flex-1">
+                  <div className="p-8 flex flex-col flex-1 bg-black">
                     <h3 className="text-2xl font-black uppercase tracking-tight mb-4 group-hover:text-primary transition-colors">{event.title}</h3>
                     <p className="text-muted-foreground text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{event.description}</p>
                     
@@ -211,30 +211,30 @@ export default function EventsPage() {
       </AnimatedSection>
 
       {/* 5 & 6. LUMA & MAP SECTION */}
-      <AnimatedSection className="grid grid-cols-1 lg:grid-cols-2 border-b border-white/10 bg-black" staggerChildren={0.2}>
-        <AnimatedItem className="p-10 lg:p-20 border-r border-white/10 flex flex-col">
+      <AnimatedSection className="relative z-10 grid grid-cols-1 lg:grid-cols-2 border-b border-white/10 bg-black" staggerChildren={0.2}>
+        <AnimatedItem className="p-10 lg:p-20 border-r border-white/10 flex flex-col bg-black">
           <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-4">// CALENDAR_VIEW</div>
           <h3 className="text-3xl font-black uppercase tracking-tight mb-4">Luma Directory</h3>
           <p className="text-muted-foreground mb-10 leading-relaxed">Sync our entire schedule directly to your personal calendar.</p>
           
           <div className="relative aspect-video lg:flex-1 bg-black border border-white/10 rounded-xl overflow-hidden group">
-            <iframe src="https://lu.ma/embed/calendar/cal-SIn8K6uF6lXWp9n?compact=true" width="100%" height="100%" className="border-none invert grayscale" />
+            <iframe src="https://lu.ma/embed/calendar/cal-SIn8K6uF6lXWp9n?compact=true" width="100%" height="100%" className="border-none invert grayscale" title="Luma Calendar" />
           </div>
         </AnimatedItem>
 
-        <AnimatedItem className="p-10 lg:p-20 flex flex-col">
+        <AnimatedItem className="p-10 lg:p-20 flex flex-col bg-black">
           <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-4">// GEOLOCATION</div>
           <h3 className="text-3xl font-black uppercase tracking-tight mb-4">Event Coordinates</h3>
           <p className="text-muted-foreground mb-10 leading-relaxed">Find the exact coordinates for our upcoming physical build stations.</p>
           
           <div className="relative aspect-video lg:flex-1 bg-black border border-white/10 rounded-xl overflow-hidden group">
-            <iframe src="https://maps.google.com/maps?q=Kuala%20Lumpur&t=k&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" className="border-none invert grayscale" />
+            <iframe src="https://maps.google.com/maps?q=Kuala%20Lumpur&t=k&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" className="border-none invert grayscale" title="Google Maps" />
           </div>
         </AnimatedItem>
       </AnimatedSection>
 
       {/* 7. PAST EVENTS SECTION */}
-      <AnimatedSection className="py-24 bg-black border-b border-white/10" staggerChildren={0.1}>
+      <AnimatedSection className="relative z-10 py-24 bg-black border-b border-white/10" staggerChildren={0.1}>
         <div className="max-w-[1400px] mx-auto px-10">
           <AnimatedItem className="flex items-center justify-between mb-16">
             <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter">Archived Events</h2>
@@ -247,8 +247,8 @@ export default function EventsPage() {
                 <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">No past events found in database.</p>
               </div>
             ) : past.map(event => (
-              <AnimatedItem key={event.id}>
-                <div className="bg-black flex flex-col opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500 h-full">
+              <AnimatedItem key={event.id} className="h-full">
+                <div className="bg-black flex flex-col opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500 h-full z-10">
                   <div className="relative h-40 overflow-hidden border-b border-white/10">
                     <Image 
                       src={event.image_url || `https://picsum.photos/seed/${event.id}/600/400`} 
@@ -257,7 +257,7 @@ export default function EventsPage() {
                       className="object-cover" 
                     />
                   </div>
-                  <div className="p-6 flex flex-col flex-1">
+                  <div className="p-6 flex flex-col flex-1 bg-black">
                     <div className="font-code text-[9px] text-muted-foreground uppercase tracking-widest mb-2">{new Date(event.event_date).toLocaleDateString()}</div>
                     <h3 className="text-xl font-black uppercase tracking-tight mb-4">{event.title}</h3>
                     <p className="text-muted-foreground text-xs leading-relaxed mb-6 line-clamp-2">{event.description}</p>
@@ -273,7 +273,7 @@ export default function EventsPage() {
       </AnimatedSection>
 
       {/* 8. COMMUNITY CTA */}
-      <AnimatedSection className="py-40 text-center relative overflow-hidden bg-black" staggerChildren={0.2}>
+      <AnimatedSection className="relative z-10 py-40 text-center relative overflow-hidden bg-black" staggerChildren={0.2}>
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_top,rgba(153,69,255,0.1)_0%,transparent_60%)] pointer-events-none" />
         <div className="max-w-2xl mx-auto px-10 relative z-10">
           <AnimatedItem>

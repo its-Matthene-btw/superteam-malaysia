@@ -2,6 +2,7 @@
 
 import { motion, HTMLMotionProps } from 'framer-motion';
 import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 /**
  * Reusable component for scroll-based section animations.
@@ -39,6 +40,7 @@ export function AnimatedSection({
   children,
   staggerChildren = 0.1,
   delay = 0,
+  className,
   ...props
 }: AnimatedSectionProps) {
   return (
@@ -48,6 +50,7 @@ export function AnimatedSection({
       viewport={{ once: true, amount: 0.1 }}
       variants={containerVariants}
       custom={staggerChildren}
+      className={cn("relative", className)}
       {...props}
     >
       {children}
@@ -57,7 +60,7 @@ export function AnimatedSection({
 
 export function AnimatedItem({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div variants={itemVariants} className={className}>
+    <motion.div variants={itemVariants} className={cn("relative", className)}>
       {children}
     </motion.div>
   );

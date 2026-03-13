@@ -65,7 +65,7 @@ export default function EcosystemPage() {
       <Navbar />
 
       {/* HERO SECTION */}
-      <AnimatedSection className="relative pt-40 pb-20 border-b border-white/10 overflow-hidden" staggerChildren={0.2}>
+      <AnimatedSection className="relative z-10 pt-40 pb-20 border-b border-white/10 overflow-hidden bg-black" staggerChildren={0.2}>
         <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:linear-gradient(to_bottom,black:20%,transparent_100%)]" />
         <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
         
@@ -107,7 +107,7 @@ export default function EcosystemPage() {
       </AnimatedSection>
 
       {/* FILTER BAR - NON-STICKY */}
-      <AnimatedSection className="bg-black border-b border-white/10 py-10 relative z-50">
+      <AnimatedSection className="relative z-20 bg-black border-b border-white/10 py-10">
         <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between gap-6">
           <AnimatedItem className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
             <FilterButton 
@@ -138,11 +138,11 @@ export default function EcosystemPage() {
       </AnimatedSection>
 
       {/* PROJECT GRID */}
-      <AnimatedSection className="py-20 border-b border-white/10" staggerChildren={0.1}>
+      <AnimatedSection className="relative z-10 py-20 border-b border-white/10 bg-black" staggerChildren={0.1}>
         <div className="max-w-[1400px] mx-auto px-10">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10">
             {filteredProjects.map((p) => (
-              <AnimatedItem key={p.id}>
+              <AnimatedItem key={p.id} className="h-full">
                 <ProjectCard project={p} />
               </AnimatedItem>
             ))}
@@ -158,7 +158,7 @@ export default function EcosystemPage() {
 
       {/* FEATURED PILLARS */}
       {featured.length > 0 && (
-        <AnimatedSection className="py-32 bg-black border-b border-white/10" staggerChildren={0.2}>
+        <AnimatedSection className="relative z-10 py-32 bg-black border-b border-white/10" staggerChildren={0.2}>
           <div className="max-w-[1400px] mx-auto px-10">
             <AnimatedItem className="mb-16">
               <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-4">// FEATURED_PROTOCOLS</div>
@@ -178,7 +178,7 @@ export default function EcosystemPage() {
 
       {/* RANDOM DEEP DIVE SECTION */}
       {randomPost && (
-        <AnimatedSection className="border-b border-white/10 bg-black" staggerChildren={0.25}>
+        <AnimatedSection className="relative z-10 border-b border-white/10 bg-black" staggerChildren={0.25}>
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <AnimatedItem className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center h-full bg-black">
               <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-8">// DEEP_DIVE_PREVIEW</div>
@@ -217,7 +217,7 @@ export default function EcosystemPage() {
 
       {/* OPPORTUNITIES */}
       {opportunities.length > 0 && (
-        <AnimatedSection className="py-32 border-b border-white/10 bg-black" staggerChildren={0.1}>
+        <AnimatedSection className="relative z-10 py-32 border-b border-white/10 bg-black" staggerChildren={0.1}>
           <div className="max-w-[1400px] mx-auto px-10">
             <AnimatedItem className="mb-16">
               <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-4">// ACTIVE_OPPORTUNITIES</div>
@@ -307,7 +307,7 @@ function ProjectCard({ project }: { project: EcosystemProject }) {
   return (
     <Link 
       href={`/ecosystem/${project.slug}`}
-      className="bg-black p-10 flex flex-col group transition-all duration-500 hover:bg-[#050505] relative overflow-hidden h-full"
+      className="bg-black p-10 flex flex-col group transition-all duration-500 hover:bg-[#050505] relative overflow-hidden h-full z-10"
     >
       <div className="absolute inset-0 border border-transparent group-hover:border-primary/30 transition-colors z-10 pointer-events-none shadow-[inset_0_0_30px_rgba(153,69,255,0)] group-hover:shadow-[inset_0_0_30px_rgba(153,69,255,0.1)]" />
       <div className="flex justify-between items-start mb-8 relative z-20">
@@ -333,7 +333,7 @@ function FeaturedCard({ project }: { project: EcosystemProject }) {
   return (
     <Link 
       href={`/ecosystem/${project.slug}`}
-      className="rounded-3xl border border-white/10 overflow-hidden flex flex-col group transition-all duration-500 hover:border-primary hover:shadow-[0_0_50px_rgba(153,69,255,0.2)] bg-black h-full"
+      className="rounded-3xl border border-white/10 overflow-hidden flex flex-col group transition-all duration-500 hover:border-primary hover:shadow-[0_0_50px_rgba(153,69,255,0.2)] bg-black h-full relative z-10"
     >
       <div className="h-60 relative overflow-hidden bg-zinc-900">
         <Image 
