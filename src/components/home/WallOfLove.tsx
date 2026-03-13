@@ -70,9 +70,31 @@ function WallCard({ testimonial }: { testimonial: Testimonial }) {
           {testimonial.content}
         </div>
 
+        {/* Tweet Image Display */}
+        {testimonial.tweet_image_url && (
+          <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-white/10 mb-8 bg-black/40 group-hover:border-[#9945FF]/30 transition-colors">
+            <Image 
+              src={testimonial.tweet_image_url} 
+              alt="Testimonial media" 
+              fill 
+              className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+            />
+          </div>
+        )}
+
         <div className="card-footer mt-auto">
-          <div className="post-date font-code text-[10px] uppercase tracking-[2px] text-muted-foreground group-hover:text-white transition-colors">
-            {new Date(testimonial.created_at).toLocaleDateString()}
+          <div className="post-date font-code text-[10px] uppercase tracking-[2px] text-muted-foreground group-hover:text-white transition-colors flex justify-between items-center">
+            <span>{new Date(testimonial.created_at).toLocaleDateString()}</span>
+            {testimonial.twitter_url && (
+              <a 
+                href={testimonial.twitter_url} 
+                target="_blank" 
+                className="text-[#9945FF] hover:underline"
+                onClick={(e) => e.stopPropagation()}
+              >
+                VIEW_POST ↗
+              </a>
+            )}
           </div>
         </div>
       </div>
