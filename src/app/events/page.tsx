@@ -72,11 +72,15 @@ export default function EventsPage() {
         </div>
 
         <div className="relative bg-[#050505] overflow-hidden min-h-[400px] lg:min-h-full flex items-center justify-center">
-          <div className="hologram-circle flex items-center justify-center relative">
-             <div className="absolute inset-0 border border-dashed border-primary/40 rounded-full animate-[spin_20s_linear_infinite]" />
-             <div className="absolute w-48 h-48 border border-dashed border-white/10 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
-             <span className="font-code text-[10px] text-muted-foreground uppercase tracking-widest animate-flicker">CALENDAR_SYNC</span>
-          </div>
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            className="w-full max-w-[600px] h-auto object-contain opacity-60"
+          >
+            <source src="https://image2url.com/r2/default/videos/1773398842747-51e838a3-a9ba-4230-a50e-8972c4c84a1a.webm" type="video/webm" />
+          </video>
         </div>
       </AnimatedSection>
 
@@ -298,7 +302,6 @@ export default function EventsPage() {
       <Footer />
 
       <style jsx global>{`
-        .hologram-circle { width: 300px; height: 300px; border-radius: 50%; border: 1px dashed #9945FF; box-shadow: inset 0 0 50px rgba(153,69,255,0.15), 0 0 50px rgba(153,69,255,0.15); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
