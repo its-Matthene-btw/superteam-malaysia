@@ -25,7 +25,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '@/services/testimonials';
 import { getCurrentProfile, Profile } from '@/services/profiles';
 import { Testimonial } from '@/types/database';
-import { Plus, Edit2, Trash2, Eye, Lock } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, Lock, Loader2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -46,7 +46,8 @@ export default function TestimonialsAdmin() {
     name: '', role: '', content: '', type: 'official', avatar_url: '', twitter_url: ''
   });
 
-  const isViewer = profile?.role === 'viewer';
+  // FAIL-SAFE: Default to viewer if profile is loading or missing
+  const isViewer = loading || !profile || profile.role === 'viewer';
 
   useEffect(() => {
     async function init() {
@@ -82,7 +83,10 @@ export default function TestimonialsAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isViewer) return;
+    if (isViewer) {
+      toast({ variant: 'destructive', title: 'Permission Denied', description: 'Viewers cannot modify records.' });
+      return;
+    }
     try {
       if (editingTestimonial?.id) {
         await updateTestimonial(editingTestimonial.id, formData);
@@ -99,7 +103,10 @@ export default function TestimonialsAdmin() {
   };
 
   const handleDelete = async (id: string) => {
-    if (isViewer) return;
+    if (isViewer) {
+      toast({ variant: 'destructive', title: 'Permission Denied', description: 'Viewers cannot delete records.' });
+      return;
+    }
     if (confirm('Delete this testimonial?')) {
       try {
         await deleteTestimonial(id);

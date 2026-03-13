@@ -38,7 +38,7 @@ export default function PartnersAdmin() {
     name: '', logo_url: '', website_url: '', featured: false
   });
 
-  const isViewer = profile?.role === 'viewer';
+  const isViewer = loading || !profile || profile.role === 'viewer';
 
   useEffect(() => {
     async function init() {

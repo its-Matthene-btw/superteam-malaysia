@@ -41,7 +41,7 @@ export default function EventsAdmin() {
     title: '', description: '', location: '', event_date: '', luma_url: '', image_url: '', status: 'upcoming', category: 'Meetup', featured: false
   });
 
-  const isViewer = profile?.role === 'viewer';
+  const isViewer = loading || !profile || profile.role === 'viewer';
 
   useEffect(() => {
     async function init() {

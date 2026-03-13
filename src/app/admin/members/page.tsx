@@ -47,7 +47,7 @@ export default function MembersAdmin() {
     avatar_url: ''
   });
 
-  const isViewer = profile?.role === 'viewer';
+  const isViewer = loading || !profile || profile.role === 'viewer';
 
   useEffect(() => {
     async function init() {

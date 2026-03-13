@@ -36,7 +36,7 @@ export default function StatsAdmin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newStat, setNewStat] = useState({ label: '', value: '' });
 
-  const isViewer = profile?.role === 'viewer';
+  const isViewer = loading || !profile || profile.role === 'viewer';
 
   useEffect(() => {
     async function init() {

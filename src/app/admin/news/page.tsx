@@ -45,7 +45,7 @@ export default function NewsAdmin() {
     meta_description: '', meta_keywords: ''
   });
 
-  const isViewer = profile?.role === 'viewer';
+  const isViewer = loading || !profile || profile.role === 'viewer';
 
   useEffect(() => {
     async function init() {
@@ -84,6 +84,7 @@ export default function NewsAdmin() {
   };
 
   const generateSlug = () => {
+    if (isViewer) return;
     const slug = formData.title?.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
     setFormData({ ...formData, slug });
   };
