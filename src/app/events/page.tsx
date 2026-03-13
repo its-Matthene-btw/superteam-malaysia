@@ -148,14 +148,14 @@ export default function EventsPage() {
       </div>
 
       {/* 4. UPCOMING GRID */}
-      <AnimatedSection className="relative z-10 py-24 bg-black border-b border-white/10" staggerChildren={0.1}>
+      <AnimatedSection className="relative z-20 py-24 bg-black border-b border-white/10" staggerChildren={0.1}>
         <div className="max-w-[1400px] mx-auto px-10">
           <AnimatedItem className="flex items-center justify-between mb-16">
             <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter">Upcoming Schedule</h2>
             <div className="font-code text-[10px] text-primary uppercase tracking-[3px]">[ SYSTEM_SYNCED ]</div>
           </AnimatedItem>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-white/10 border border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-white/10 border border-white/10 relative z-30">
             {loading ? (
               <div className="col-span-full py-40 flex flex-col items-center justify-center bg-black">
                 <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
@@ -241,7 +241,7 @@ export default function EventsPage() {
             <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px]">[ PAST_TRANSMISSIONS ]</div>
           </AnimatedItem>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10 relative z-30">
             {past.length === 0 ? (
               <div className="col-span-full py-24 text-center bg-black">
                 <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">No past events found in database.</p>

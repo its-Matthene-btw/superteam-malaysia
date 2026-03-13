@@ -93,7 +93,7 @@ export default function EcosystemPage() {
           </div>
 
           <AnimatedItem className="relative group perspective-1000 hidden lg:block">
-            <div className="relative aspect-[4/3] rounded-3xl border border-white/10 overflow-hidden bg-black shadow-2xl transition-transform duration-700 hover:scale-[1.02] animate-in fade-in zoom-in duration-1000 group">
+            <div className="relative aspect-[4/3] rounded-3xl border border-white/10 overflow-hidden bg-black shadow-2xl transition-transform duration-700 hover:scale-[1.02] group">
               <Image 
                 src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?auto=format&fit=crop&q=80&w=1200" 
                 alt="Ecosystem Blueprint" 
@@ -106,7 +106,7 @@ export default function EcosystemPage() {
         </div>
       </AnimatedSection>
 
-      {/* FILTER BAR - NON-STICKY */}
+      {/* FILTER BAR */}
       <AnimatedSection className="relative z-20 bg-black border-b border-white/10 py-10">
         <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between gap-6">
           <AnimatedItem className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
@@ -138,19 +138,25 @@ export default function EcosystemPage() {
       </AnimatedSection>
 
       {/* PROJECT GRID */}
-      <AnimatedSection className="relative z-10 py-20 border-b border-white/10 bg-black" staggerChildren={0.1}>
+      <AnimatedSection className="relative z-20 py-20 border-b border-white/10 bg-black" staggerChildren={0.1}>
         <div className="max-w-[1400px] mx-auto px-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10">
-            {filteredProjects.map((p) => (
-              <AnimatedItem key={p.id} className="h-full">
-                <ProjectCard project={p} />
-              </AnimatedItem>
-            ))}
-            {!loading && filteredProjects.length === 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10 relative z-30">
+            {loading ? (
+              <div className="col-span-full py-40 flex flex-col items-center justify-center bg-black">
+                <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+                <p className="font-code text-[10px] uppercase tracking-[4px] text-muted-foreground">Accessing Node...</p>
+              </div>
+            ) : filteredProjects.length === 0 ? (
               <div className="col-span-full py-40 text-center bg-black">
                 <Box className="w-12 h-12 text-muted-foreground/20 mx-auto mb-4" />
                 <p className="font-code text-xs uppercase tracking-widest text-muted-foreground text-center">No projects listed in this category yet.</p>
               </div>
+            ) : (
+              filteredProjects.map((p) => (
+                <AnimatedItem key={p.id} className="h-full">
+                  <ProjectCard project={p} />
+                </AnimatedItem>
+              ))
             )}
           </div>
         </div>
@@ -176,7 +182,7 @@ export default function EcosystemPage() {
         </AnimatedSection>
       )}
 
-      {/* RANDOM DEEP DIVE SECTION */}
+      {/* DEEP DIVE SECTION */}
       {randomPost && (
         <AnimatedSection className="relative z-10 border-b border-white/10 bg-black" staggerChildren={0.25}>
           <div className="grid grid-cols-1 lg:grid-cols-2">

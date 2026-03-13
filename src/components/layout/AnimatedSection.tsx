@@ -47,10 +47,10 @@ export function AnimatedSection({
     <motion.section
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
+      viewport={{ once: true, amount: 0.05 }}
       variants={containerVariants}
       custom={staggerChildren}
-      className={cn("relative", className)}
+      className={cn("relative z-10", className)}
       {...props}
     >
       {children}
@@ -60,7 +60,7 @@ export function AnimatedSection({
 
 export function AnimatedItem({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <motion.div variants={itemVariants} className={cn("relative", className)}>
+    <motion.div variants={itemVariants} className={cn("relative z-20", className)}>
       {children}
     </motion.div>
   );
