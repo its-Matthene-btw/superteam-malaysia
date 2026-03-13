@@ -16,7 +16,7 @@ export default function SeedPage() {
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const sqlSchema = `-- MASTER MIGRATION SQL (FULL SYSTEM)
+  const sqlSchema = `-- MASTER MIGRATION SQL (v2.1 - RBAC RECURSION FIX)
 
 -- 1. Profiles (RBAC)
 CREATE TABLE IF NOT EXISTS profiles (
@@ -26,7 +26,28 @@ CREATE TABLE IF NOT EXISTS profiles (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 2. Core CMS Tables
+-- 2. RBAC Helper Functions (Crucial to prevent infinite recursion)
+CREATE OR REPLACE FUNCTION public.check_is_admin()
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = auth.uid() AND role = 'admin'
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE OR REPLACE FUNCTION public.check_is_staff()
+RETURNS boolean AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = auth.uid() AND role IN ('admin', 'editor')
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 3. Core CMS Tables
 CREATE TABLE IF NOT EXISTS members (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text UNIQUE NOT NULL,
@@ -130,7 +151,6 @@ CREATE TABLE IF NOT EXISTS site_settings (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 3. Ecosystem Tables
 CREATE TABLE IF NOT EXISTS ecosystem_projects (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
@@ -193,7 +213,7 @@ ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
 
--- 5. Policies
+-- 5. Policies (v2.1 Recursive Fix)
 -- Public Selects
 CREATE POLICY "Public Read Profiles" ON profiles FOR SELECT USING (true);
 CREATE POLICY "Public Read Members" ON members FOR SELECT USING (true);
@@ -210,27 +230,27 @@ CREATE POLICY "Public Read Eco Categories" ON ecosystem_categories FOR SELECT US
 CREATE POLICY "Public Read Eco Opportunities" ON ecosystem_opportunities FOR SELECT USING (true);
 
 -- Authenticated Staff Access (Modify)
-CREATE POLICY "Staff Modify Members" ON members FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-CREATE POLICY "Staff Modify Partners" ON partners FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-CREATE POLICY "Staff Modify Stats" ON stats FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-CREATE POLICY "Staff Modify Testimonials" ON testimonials FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-CREATE POLICY "Staff Modify Events" ON events FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-CREATE POLICY "Staff Modify News" ON news FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-CREATE POLICY "Staff Modify FAQs" ON faqs FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-CREATE POLICY "Staff Modify Eco Projects" ON ecosystem_projects FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-CREATE POLICY "Staff Modify Eco Features" ON ecosystem_features FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-CREATE POLICY "Staff Modify Eco Categories" ON ecosystem_categories FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-CREATE POLICY "Staff Modify Eco Opportunities" ON ecosystem_opportunities FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Modify Members" ON members FOR ALL TO authenticated USING (check_is_staff());
+CREATE POLICY "Staff Modify Partners" ON partners FOR ALL TO authenticated USING (check_is_staff());
+CREATE POLICY "Staff Modify Stats" ON stats FOR ALL TO authenticated USING (check_is_staff());
+CREATE POLICY "Staff Modify Testimonials" ON testimonials FOR ALL TO authenticated USING (check_is_staff());
+CREATE POLICY "Staff Modify Events" ON events FOR ALL TO authenticated USING (check_is_staff());
+CREATE POLICY "Staff Modify News" ON news FOR ALL TO authenticated USING (check_is_staff());
+CREATE POLICY "Staff Modify FAQs" ON faqs FOR ALL TO authenticated USING (check_is_staff());
+CREATE POLICY "Staff Modify Eco Projects" ON ecosystem_projects FOR ALL TO authenticated USING (check_is_staff());
+CREATE POLICY "Staff Modify Eco Features" ON ecosystem_features FOR ALL TO authenticated USING (check_is_staff());
+CREATE POLICY "Staff Modify Eco Categories" ON ecosystem_categories FOR ALL TO authenticated USING (check_is_staff());
+CREATE POLICY "Staff Modify Eco Opportunities" ON ecosystem_opportunities FOR ALL TO authenticated USING (check_is_staff());
 
--- Inbox/Leads Policies
+-- Admin Only Management
+CREATE POLICY "Admin Full Profiles" ON profiles FOR ALL TO authenticated USING (check_is_admin());
+CREATE POLICY "Admin Full Settings" ON site_settings FOR ALL TO authenticated USING (check_is_admin());
+
+-- Leads/Inbox
 CREATE POLICY "Public Insert Contacts" ON contacts FOR INSERT WITH CHECK (true);
-CREATE POLICY "Staff Manage Contacts" ON contacts FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
+CREATE POLICY "Staff Manage Contacts" ON contacts FOR ALL TO authenticated USING (check_is_staff());
 CREATE POLICY "Public Insert Newsletter" ON newsletter_subscribers FOR INSERT WITH CHECK (true);
-CREATE POLICY "Staff Manage Newsletter" ON newsletter_subscribers FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role IN ('admin', 'editor')));
-
--- Admin Only
-CREATE POLICY "Admin All Profiles" ON profiles FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
-CREATE POLICY "Admin All Settings" ON site_settings FOR ALL TO authenticated USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+CREATE POLICY "Staff Manage Newsletter" ON newsletter_subscribers FOR ALL TO authenticated USING (check_is_staff());
 
 -- 6. Auth Trigger
 CREATE OR REPLACE FUNCTION public.handle_new_user()

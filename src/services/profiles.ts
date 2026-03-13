@@ -23,9 +23,10 @@ export async function getCurrentProfile() {
     .single();
 
   if (error) {
-    // PGRST116 is the code for "no rows found", which is expected for new users before role assignment
+    // PGRST116 is "no rows found"
+    // 42P17 is "infinite recursion" (indicates policies need fixing)
     if (error.code !== 'PGRST116') {
-      console.error('Error fetching profile:', error.message || error);
+      console.error(`Profile Fetch Code: ${error.code} - ${error.message || error}`);
     }
     return null;
   }
