@@ -25,7 +25,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { getTestimonials, createTestimonial, updateTestimonial, deleteTestimonial } from '@/services/testimonials';
 import { getCurrentProfile, Profile } from '@/services/profiles';
 import { Testimonial } from '@/types/database';
-import { Plus, Edit2, Trash2, Eye, Lock, Loader2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, Eye, Lock, Loader2, Link as LinkIcon, ImageIcon } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
@@ -43,10 +43,9 @@ export default function TestimonialsAdmin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTestimonial, setEditingTestimonial] = useState<Partial<Testimonial> | null>(null);
   const [formData, setFormData] = useState<Partial<Testimonial>>({
-    name: '', role: '', content: '', type: 'official', avatar_url: '', twitter_url: ''
+    name: '', role: '', content: '', type: 'official', avatar_url: '', twitter_url: '', tweet_image_url: ''
   });
 
-  // FAIL-SAFE: Default to viewer if profile is loading or missing
   const isViewer = loading || !profile || profile.role === 'viewer';
 
   useEffect(() => {
@@ -73,10 +72,14 @@ export default function TestimonialsAdmin() {
     if (isViewer && !testimonial) return;
     if (testimonial) {
       setEditingTestimonial(testimonial);
-      setFormData(testimonial);
+      setFormData({
+        ...testimonial,
+        twitter_url: testimonial.twitter_url || '',
+        tweet_image_url: testimonial.tweet_image_url || ''
+      });
     } else {
       setEditingTestimonial(null);
-      setFormData({ name: '', role: '', content: '', type: 'official', avatar_url: '', twitter_url: '' });
+      setFormData({ name: '', role: '', content: '', type: 'official', avatar_url: '', twitter_url: '', tweet_image_url: '' });
     }
     setIsModalOpen(true);
   };
@@ -103,7 +106,6 @@ export default function TestimonialsAdmin() {
   };
 
   const handleDelete = async (id: string) => {
-    // Explicit server-side intent check
     if (isViewer) {
       toast({ variant: 'destructive', title: 'Permission Denied', description: 'Read-only users cannot remove content.' });
       return;
@@ -199,7 +201,7 @@ export default function TestimonialsAdmin() {
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="glass border-white/10 text-white sm:max-w-[600px]">
+        <DialogContent className="glass border-white/10 text-white sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-black uppercase tracking-tighter flex items-center gap-2">
               {isViewer ? 'View' : editingTestimonial ? 'Edit' : 'Add'} <span className="text-primary">Feedback</span>
@@ -264,6 +266,34 @@ export default function TestimonialsAdmin() {
                   value={formData.avatar_url || ''} 
                   onChange={(e) => setFormData({...formData, avatar_url: e.target.value})} 
                   className="glass border-white/10" 
+                  placeholder="https://picsum.photos/seed/..."
+                  disabled={isViewer}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                  <LinkIcon className="w-3 h-3" /> Twitter URL
+                </Label>
+                <Input 
+                  value={formData.twitter_url || ''} 
+                  onChange={(e) => setFormData({...formData, twitter_url: e.target.value})} 
+                  className="glass border-white/10" 
+                  placeholder="https://x.com/user/status/..."
+                  disabled={isViewer}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+                  <ImageIcon className="w-3 h-3" /> Tweet Image URL
+                </Label>
+                <Input 
+                  value={formData.tweet_image_url || ''} 
+                  onChange={(e) => setFormData({...formData, tweet_image_url: e.target.value})} 
+                  className="glass border-white/10" 
+                  placeholder="https://pbs.twimg.com/media/..."
                   disabled={isViewer}
                 />
               </div>
