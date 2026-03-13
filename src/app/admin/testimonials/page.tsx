@@ -103,14 +103,16 @@ export default function TestimonialsAdmin() {
   };
 
   const handleDelete = async (id: string) => {
+    // Explicit server-side intent check
     if (isViewer) {
-      toast({ variant: 'destructive', title: 'Permission Denied', description: 'Viewers cannot delete records.' });
+      toast({ variant: 'destructive', title: 'Permission Denied', description: 'Read-only users cannot remove content.' });
       return;
     }
-    if (confirm('Delete this testimonial?')) {
+    
+    if (confirm('Are you sure you want to permanently delete this feedback?')) {
       try {
         await deleteTestimonial(id);
-        toast({ title: 'Success', description: 'Testimonial removed.' });
+        toast({ title: 'Success', description: 'Testimonial removed from system.' });
         fetchTestimonials();
       } catch (error) {
         toast({ variant: 'destructive', title: 'Error', description: 'Failed to delete testimonial.' });
@@ -187,6 +189,7 @@ export default function TestimonialsAdmin() {
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     )}
+                    {isViewer && <Lock className="w-4 h-4 text-muted-foreground opacity-20" />}
                   </div>
                 </TableCell>
               </TableRow>
