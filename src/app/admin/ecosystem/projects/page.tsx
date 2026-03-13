@@ -16,6 +16,10 @@ export default async function AdminProjectsPage() {
     .select('*')
     .order('name', { ascending: true });
 
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user?.id).single();
+  const isAdmin = profile?.role === 'admin';
+
   if (error) {
     console.error('Error fetching projects:', error.message || error);
   }
@@ -37,11 +41,13 @@ export default async function AdminProjectsPage() {
           <AlertTitle>Database Sync Error</AlertTitle>
           <AlertDescription className="font-code text-xs uppercase tracking-tight">
             {error.message || 'Could not access ecosystem_projects table.'}
-            <div className="mt-4">
-              <Link href="/admin/seed" className="underline hover:text-white transition-colors">
-                Run migration in System Seed -&gt;
-              </Link>
-            </div>
+            {isAdmin && (
+              <div className="mt-4">
+                <Link href="/admin/seed" className="underline hover:text-white transition-colors">
+                  Run migration in System Seed -&gt;
+                </Link>
+              </div>
+            )}
           </AlertDescription>
         </Alert>
       ) : (

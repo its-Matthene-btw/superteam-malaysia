@@ -7,6 +7,7 @@ import { getMembers } from '@/services/members';
 import { getEvents } from '@/services/events';
 import { getPartners } from '@/services/partners';
 import { getTestimonials } from '@/services/testimonials';
+import { getCurrentProfile, Profile } from '@/services/profiles';
 import { Users, Calendar, Handshake, MessageSquareQuote, Sparkles, Database } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -19,17 +20,19 @@ export default function DashboardPage() {
     partners: 0,
     testimonials: 0
   });
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchStats() {
       try {
-        const [m, e, p, t] = await Promise.all([
+        const [m, e, p, t, prof] = await Promise.all([
           getMembers(),
           getEvents(),
           getPartners(),
-          getTestimonials()
+          getTestimonials(),
+          getCurrentProfile()
         ]);
         setStats({
           members: m?.length || 0,
@@ -37,6 +40,7 @@ export default function DashboardPage() {
           partners: p?.length || 0,
           testimonials: t?.length || 0
         });
+        setProfile(prof);
       } catch (err: any) {
         console.error('Error fetching dashboard stats:', err);
         setError('Database error. Ensure your Supabase tables exist and RLS policies are applied.');
@@ -67,11 +71,13 @@ export default function DashboardPage() {
           <p className="text-muted-foreground mt-2">Manage the Superteam Malaysia ecosystem content.</p>
         </div>
         
-        <Link href="/admin/seed">
-          <Button variant="outline" className="glass border-white/10 text-xs font-code uppercase tracking-widest gap-2">
-            <Database className="w-4 h-4" /> Seed Database
-          </Button>
-        </Link>
+        {profile?.role === 'admin' && (
+          <Link href="/admin/seed">
+            <Button variant="outline" className="glass border-white/10 text-xs font-code uppercase tracking-widest gap-2">
+              <Database className="w-4 h-4" /> Seed Database
+            </Button>
+          </Link>
+        )}
       </div>
 
       {error && (
