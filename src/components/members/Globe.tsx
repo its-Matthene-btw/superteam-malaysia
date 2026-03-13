@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useRef } from 'react';
@@ -119,6 +118,18 @@ export default function Globe() {
       projection.rotate(rotation as [number, number]);
       render();
     });
+
+    // Add drag behavior
+    d3.select(canvas).call(
+      d3.drag<HTMLCanvasElement, unknown>()
+        .on("drag", (event) => {
+          const k = 75 / projection.scale();
+          rotation[0] += event.dx * k;
+          rotation[1] -= event.dy * k;
+          // Clamp latitude to avoid flipping
+          rotation[1] = Math.max(-90, Math.min(90, rotation[1]));
+        })
+    );
 
     const handleResize = () => {
       calculateLayout();

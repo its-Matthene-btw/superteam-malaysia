@@ -160,6 +160,17 @@ export default function Hero() {
       }
     });
 
+    // Add drag behavior
+    d3.select(canvas).call(
+      d3.drag<HTMLCanvasElement, unknown>()
+        .on("drag", (event) => {
+          const k = 75 / projection.scale();
+          rotation[0] += event.dx * k;
+          rotation[1] -= event.dy * k;
+          rotation[1] = Math.max(-90, Math.min(90, rotation[1]));
+        })
+    );
+
     loadWorldData();
 
     return () => {
@@ -231,8 +242,8 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <canvas ref={canvasRef} id="globe-canvas" className="block" />
+      <div className="absolute inset-0 z-0">
+        <canvas ref={canvasRef} id="globe-canvas" className="block cursor-grab active:cursor-grabbing" />
       </div>
     </section>
   );
