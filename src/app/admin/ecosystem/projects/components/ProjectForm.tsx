@@ -86,7 +86,7 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Protocol Name</Label>
+                    <FormLabel className="text-xs uppercase tracking-widest text-muted-foreground">Protocol Name</FormLabel>
                     <FormControl>
                       <Input {...field} value={field.value ?? ''} className="glass border-white/10" />
                     </FormControl>
@@ -335,8 +335,6 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
               )}
             />
             
-            <StatItem value="500+" label="Active Builders" />
-            
             <Button type="submit" className="w-full solana-gradient h-14 font-black uppercase tracking-widest text-xs">
               {project ? 'Update Protocol Record' : 'Launch Ecosystem Entry'}
             </Button>
@@ -344,16 +342,5 @@ export default function ProjectForm({ project, categories }: { project?: Ecosyst
         </Form>
       </CardContent>
     </Card>
-  );
-}
-
-function StatItem({ value, label }: { value: any, label: string }) {
-  return (
-    <div className="border-l-2 border-primary pl-6 py-2">
-      <div className="text-2xl font-black font-code text-white mb-1">
-        {value}
-      </div>
-      <div className="font-code text-[10px] text-muted-foreground uppercase tracking-widest">{label}</div>
-    </div>
   );
 }
