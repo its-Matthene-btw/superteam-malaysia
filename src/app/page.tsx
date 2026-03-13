@@ -48,7 +48,6 @@ export default function Home() {
         setPartners(p);
         setTestimonials(t);
         
-        // If everything is empty, database probably needs seeding
         if (s.length === 0 && e.length === 0 && m.length === 0) {
           setError(true);
         }
@@ -132,7 +131,7 @@ export default function Home() {
                   loop 
                   muted 
                   playsInline 
-                  className="w-full max-w-[600px] h-auto object-contain opacity-90 grayscale contrast-125 mix-blend-screen"
+                  className="w-full max-w-[600px] h-auto object-contain"
                 >
                   <source src={item.video} type="video/webm" />
                 </video>
