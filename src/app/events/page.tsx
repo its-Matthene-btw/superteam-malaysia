@@ -45,7 +45,7 @@ export default function EventsPage() {
       
       {/* 1. HERO SECTION */}
       <AnimatedSection className="relative pt-20 border-b border-white/10 grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] bg-white/10 gap-[1px]" staggerChildren={0.2}>
-        <div className="bg-[#0a0a0c] p-10 lg:p-24 relative overflow-hidden flex flex-col justify-center">
+        <div className="bg-black p-10 lg:p-24 relative overflow-hidden flex flex-col justify-center">
           <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:linear-gradient(to_bottom,black:30%,transparent:100%)]" />
           
           <div className="relative z-10">
@@ -71,7 +71,7 @@ export default function EventsPage() {
           </div>
         </div>
 
-        <div className="relative bg-[#050505] overflow-hidden min-h-[400px] lg:min-h-full flex items-center justify-center">
+        <div className="relative bg-black overflow-hidden min-h-[400px] lg:min-h-full flex items-center justify-center">
           <video 
             autoPlay 
             loop 
@@ -86,7 +86,7 @@ export default function EventsPage() {
 
       {/* 2. FEATURED EVENT */}
       {featured && (
-        <AnimatedSection className="border-b border-white/10 bg-[#050505]" staggerChildren={0.2}>
+        <AnimatedSection className="border-b border-white/10 bg-black" staggerChildren={0.2}>
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <AnimatedItem className="p-10 lg:p-20 flex flex-col justify-center border-r border-white/10">
               <div className="inline-block bg-primary text-black px-4 py-1.5 text-[10px] font-black uppercase tracking-widest mb-8">MAJOR_SPOTLIGHT</div>
@@ -111,7 +111,7 @@ export default function EventsPage() {
                 REGISTER_NOW <ArrowRight className="w-4 h-4" />
               </a>
             </AnimatedItem>
-            <AnimatedItem className="relative bg-zinc-900 overflow-hidden min-h-[400px] lg:min-h-full group">
+            <AnimatedItem className="relative bg-black overflow-hidden min-h-[400px] lg:min-h-full group">
               <Image 
                 src={featured.image_url || `https://picsum.photos/seed/${featured.id}/1200/800`} 
                 alt={featured.title} 
@@ -125,7 +125,7 @@ export default function EventsPage() {
       )}
 
       {/* 3. FILTER SYSTEM */}
-      <div className="bg-[#0a0a0c] border-b border-white/10 py-8 relative z-50">
+      <div className="bg-black border-b border-white/10 py-8 relative z-50">
         <div className="max-w-[1400px] mx-auto px-10 flex items-center gap-6 overflow-x-auto no-scrollbar">
           <span className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] whitespace-nowrap">// FILTER_BY:</span>
           <div className="flex gap-4">
@@ -157,17 +157,17 @@ export default function EventsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-white/10 border border-white/10">
             {loading ? (
-              <div className="col-span-full py-40 flex flex-col items-center justify-center bg-[#0a0a0c]">
+              <div className="col-span-full py-40 flex flex-col items-center justify-center bg-black">
                 <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
                 <p className="font-code text-[10px] uppercase tracking-[4px] text-muted-foreground">Accessing Node...</p>
               </div>
             ) : filteredUpcoming.length === 0 ? (
-              <div className="col-span-full py-40 text-center bg-[#0a0a0c]">
+              <div className="col-span-full py-40 text-center bg-black">
                 <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">No events scheduled for this protocol.</p>
               </div>
             ) : filteredUpcoming.map(event => (
               <AnimatedItem key={event.id}>
-                <div className="bg-[#0a0a0c] flex flex-col group hover:bg-[#050505] transition-all duration-500 relative overflow-hidden h-full">
+                <div className="bg-black flex flex-col group hover:bg-[#050505] transition-all duration-500 relative overflow-hidden h-full">
                   <div className="relative h-56 overflow-hidden border-b border-white/10">
                     <Image 
                       src={event.image_url || `https://picsum.photos/seed/${event.id}/800/600`} 
@@ -211,7 +211,7 @@ export default function EventsPage() {
       </AnimatedSection>
 
       {/* 5 & 6. LUMA & MAP SECTION */}
-      <AnimatedSection className="grid grid-cols-1 lg:grid-cols-2 border-b border-white/10 bg-[#050505]" staggerChildren={0.2}>
+      <AnimatedSection className="grid grid-cols-1 lg:grid-cols-2 border-b border-white/10 bg-black" staggerChildren={0.2}>
         <AnimatedItem className="p-10 lg:p-20 border-r border-white/10 flex flex-col">
           <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-4">// CALENDAR_VIEW</div>
           <h3 className="text-3xl font-black uppercase tracking-tight mb-4">Luma Directory</h3>
@@ -243,12 +243,12 @@ export default function EventsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10">
             {past.length === 0 ? (
-              <div className="col-span-full py-24 text-center bg-[#0a0a0c]">
+              <div className="col-span-full py-24 text-center bg-black">
                 <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">No past events found in database.</p>
               </div>
             ) : past.map(event => (
               <AnimatedItem key={event.id}>
-                <div className="bg-[#0a0a0c] flex flex-col opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500 h-full">
+                <div className="bg-black flex flex-col opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500 h-full">
                   <div className="relative h-40 overflow-hidden border-b border-white/10">
                     <Image 
                       src={event.image_url || `https://picsum.photos/seed/${event.id}/600/400`} 
