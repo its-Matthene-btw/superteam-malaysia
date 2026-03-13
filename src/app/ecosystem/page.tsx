@@ -106,64 +106,68 @@ export default function EcosystemPage() {
         </div>
       </AnimatedSection>
 
-      {/* FILTER BAR */}
-      <AnimatedSection className="relative z-20 bg-black border-b border-white/10 py-10">
-        <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between gap-6">
-          <AnimatedItem className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
-            <FilterButton 
-              active={activeFilter === 'all'} 
-              onClick={() => setActiveFilter('all')}
-              label="All Ecosystem" 
-            />
-            {categories.map(cat => (
+      {/* FILTER BAR - Conditional to ensure animation triggers correctly after data load */}
+      {!loading && (
+        <AnimatedSection className="relative z-20 bg-black border-b border-white/10 py-10">
+          <div className="max-w-[1400px] mx-auto px-10 flex flex-col md:flex-row justify-between gap-6">
+            <AnimatedItem className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
               <FilterButton 
-                key={cat.id}
-                active={activeFilter === cat.name}
-                onClick={() => setActiveFilter(cat.name)}
-                label={cat.name}
+                active={activeFilter === 'all'} 
+                onClick={() => setActiveFilter('all')}
+                label="All Ecosystem" 
               />
-            ))}
-          </AnimatedItem>
-          <AnimatedItem className="relative w-full md:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input 
-              type="text"
-              placeholder="Search protocols..."
-              className="w-full bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2 text-sm outline-none focus:border-primary transition-all"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </AnimatedItem>
-        </div>
-      </AnimatedSection>
+              {categories.map(cat => (
+                <FilterButton 
+                  key={cat.id}
+                  active={activeFilter === cat.name}
+                  onClick={() => setActiveFilter(cat.name)}
+                  label={cat.name}
+                />
+              ))}
+            </AnimatedItem>
+            <AnimatedItem className="relative w-full md:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input 
+                type="text"
+                placeholder="Search protocols..."
+                className="w-full bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2 text-sm outline-none focus:border-primary transition-all"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </AnimatedItem>
+          </div>
+        </AnimatedSection>
+      )}
 
       {/* PROJECT GRID */}
-      <AnimatedSection className="relative z-20 py-20 border-b border-white/10 bg-black" staggerChildren={0.1}>
-        <div className="max-w-[1400px] mx-auto px-10">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10 relative z-30">
-            {loading ? (
-              <div className="col-span-full py-40 flex flex-col items-center justify-center bg-black">
-                <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-                <p className="font-code text-[10px] uppercase tracking-[4px] text-muted-foreground">Accessing Node...</p>
-              </div>
-            ) : filteredProjects.length === 0 ? (
-              <div className="col-span-full py-40 text-center bg-black">
-                <Box className="w-12 h-12 text-muted-foreground/20 mx-auto mb-4" />
-                <p className="font-code text-xs uppercase tracking-widest text-muted-foreground text-center">No projects listed in this category yet.</p>
-              </div>
-            ) : (
-              filteredProjects.map((p) => (
-                <AnimatedItem key={p.id} className="h-full">
-                  <ProjectCard project={p} />
-                </AnimatedItem>
-              ))
-            )}
+      {loading ? (
+        <section className="py-40 flex flex-col items-center justify-center bg-black border-b border-white/10">
+          <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+          <p className="font-code text-[10px] uppercase tracking-[4px] text-muted-foreground">Accessing Node...</p>
+        </section>
+      ) : (
+        <AnimatedSection className="relative z-30 py-20 border-b border-white/10 bg-black" staggerChildren={0.1}>
+          <div className="max-w-[1400px] mx-auto px-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10 relative z-40">
+              {filteredProjects.length === 0 ? (
+                <div className="col-span-full py-40 text-center bg-black">
+                  <Box className="w-12 h-12 text-muted-foreground/20 mx-auto mb-4" />
+                  <p className="font-code text-xs uppercase tracking-widest text-muted-foreground text-center">No projects listed in this category yet.</p>
+                </div>
+              ) : (
+                filteredProjects.map((p) => (
+                  <AnimatedItem key={p.id} className="h-full">
+                    <ProjectCard project={p} />
+                  </AnimatedItem>
+                ))
+              )}
+            </div>
           </div>
-        </div>
-      </AnimatedSection>
+        </AnimatedSection>
+      )}
 
       {/* FEATURED PILLARS */}
-      {featured.length > 0 && (
+      {!loading && featured.length > 0 && (
         <AnimatedSection className="relative z-10 py-32 bg-black border-b border-white/10" staggerChildren={0.2}>
           <div className="max-w-[1400px] mx-auto px-10">
             <AnimatedItem className="mb-16">
@@ -183,7 +187,7 @@ export default function EcosystemPage() {
       )}
 
       {/* DEEP DIVE SECTION */}
-      {randomPost && (
+      {!loading && randomPost && (
         <AnimatedSection className="relative z-10 border-b border-white/10 bg-black" staggerChildren={0.25}>
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <AnimatedItem className="p-10 lg:p-24 border-r border-white/10 flex flex-col justify-center h-full bg-black">
@@ -222,7 +226,7 @@ export default function EcosystemPage() {
       )}
 
       {/* OPPORTUNITIES */}
-      {opportunities.length > 0 && (
+      {!loading && opportunities.length > 0 && (
         <AnimatedSection className="relative z-10 py-32 border-b border-white/10 bg-black" staggerChildren={0.1}>
           <div className="max-w-[1400px] mx-auto px-10">
             <AnimatedItem className="mb-16">
@@ -313,7 +317,7 @@ function ProjectCard({ project }: { project: EcosystemProject }) {
   return (
     <Link 
       href={`/ecosystem/${project.slug}`}
-      className="bg-black p-10 flex flex-col group transition-all duration-500 hover:bg-[#050505] relative overflow-hidden h-full z-10"
+      className="bg-black p-10 flex flex-col group transition-all duration-500 hover:bg-[#050505] relative overflow-hidden h-full z-50"
     >
       <div className="absolute inset-0 border border-transparent group-hover:border-primary/30 transition-colors z-10 pointer-events-none shadow-[inset_0_0_30px_rgba(153,69,255,0)] group-hover:shadow-[inset_0_0_30px_rgba(153,69,255,0.1)]" />
       <div className="flex justify-between items-start mb-8 relative z-20">

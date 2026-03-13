@@ -85,7 +85,7 @@ export default function EventsPage() {
       </AnimatedSection>
 
       {/* 2. FEATURED EVENT */}
-      {featured && (
+      {!loading && featured && (
         <AnimatedSection className="relative z-10 border-b border-white/10 bg-black" staggerChildren={0.2}>
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <AnimatedItem className="p-10 lg:p-20 flex flex-col justify-center border-r border-white/10 bg-black">
@@ -148,67 +148,71 @@ export default function EventsPage() {
       </div>
 
       {/* 4. UPCOMING GRID */}
-      <AnimatedSection className="relative z-20 py-24 bg-black border-b border-white/10" staggerChildren={0.1}>
-        <div className="max-w-[1400px] mx-auto px-10">
-          <AnimatedItem className="flex items-center justify-between mb-16">
-            <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter">Upcoming Schedule</h2>
-            <div className="font-code text-[10px] text-primary uppercase tracking-[3px]">[ SYSTEM_SYNCED ]</div>
-          </AnimatedItem>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-white/10 border border-white/10 relative z-30">
-            {loading ? (
-              <div className="col-span-full py-40 flex flex-col items-center justify-center bg-black">
-                <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-                <p className="font-code text-[10px] uppercase tracking-[4px] text-muted-foreground">Accessing Node...</p>
-              </div>
-            ) : filteredUpcoming.length === 0 ? (
-              <div className="col-span-full py-40 text-center bg-black">
-                <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">No events scheduled for this protocol.</p>
-              </div>
-            ) : filteredUpcoming.map(event => (
-              <AnimatedItem key={event.id} className="h-full">
-                <div className="bg-black flex flex-col group hover:bg-[#050505] transition-all duration-500 relative overflow-hidden h-full z-10">
-                  <div className="relative h-56 overflow-hidden border-b border-white/10">
-                    <Image 
-                      src={event.image_url || `https://picsum.photos/seed/${event.id}/800/600`} 
-                      alt={event.title} 
-                      fill 
-                      className="object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
-                    />
-                    <div className="absolute top-4 right-4 bg-black/80 border border-white/10 px-3 py-1 font-code text-[9px] text-primary uppercase tracking-widest">
-                      {event.category || 'EVENT'}
-                    </div>
-                  </div>
-                  <div className="p-8 flex flex-col flex-1 bg-black">
-                    <h3 className="text-2xl font-black uppercase tracking-tight mb-4 group-hover:text-primary transition-colors">{event.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{event.description}</p>
-                    
-                    <div className="grid grid-cols-2 gap-4 mb-8 pt-6 border-t border-white/5">
-                      <div>
-                        <div className="font-code text-[9px] text-muted-foreground uppercase tracking-widest mb-1">DATE</div>
-                        <div className="font-code text-xs font-bold text-white">{new Date(event.event_date).toLocaleDateString().toUpperCase()}</div>
-                      </div>
-                      <div>
-                        <div className="font-code text-[9px] text-muted-foreground uppercase tracking-widest mb-1">LOCATION</div>
-                        <div className="font-code text-xs font-bold text-white truncate">{event.location?.toUpperCase() || 'VIRTUAL'}</div>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <a href={event.luma_url || '#'} target="_blank" className="flex-1 bg-primary text-black font-code text-[10px] font-black uppercase tracking-widest py-4 text-center hover:bg-white transition-colors">
-                        REGISTER_ON_LUMA
-                      </a>
-                      <Link href={`/events/${event.id}`} className="flex-1 border border-white/10 text-white font-code text-[10px] font-black uppercase tracking-widest py-4 text-center hover:border-primary hover:text-primary transition-all">
-                        DETAILS
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </AnimatedItem>
-            ))}
-          </div>
+      {loading ? (
+        <div className="py-40 flex flex-col items-center justify-center bg-black border-b border-white/10">
+          <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+          <p className="font-code text-[10px] uppercase tracking-[4px] text-muted-foreground">Accessing Node...</p>
         </div>
-      </AnimatedSection>
+      ) : (
+        <AnimatedSection className="relative z-20 py-24 bg-black border-b border-white/10" staggerChildren={0.1}>
+          <div className="max-w-[1400px] mx-auto px-10">
+            <AnimatedItem className="flex items-center justify-between mb-16">
+              <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter">Upcoming Schedule</h2>
+              <div className="font-code text-[10px] text-primary uppercase tracking-[3px]">[ SYSTEM_SYNCED ]</div>
+            </AnimatedItem>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-white/10 border border-white/10 relative z-30">
+              {filteredUpcoming.length === 0 ? (
+                <div className="col-span-full py-40 text-center bg-black">
+                  <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">No events scheduled for this protocol.</p>
+                </div>
+              ) : (
+                filteredUpcoming.map(event => (
+                  <AnimatedItem key={event.id} className="h-full">
+                    <div className="bg-black flex flex-col group hover:bg-[#050505] transition-all duration-500 relative overflow-hidden h-full z-10">
+                      <div className="relative h-56 overflow-hidden border-b border-white/10">
+                        <Image 
+                          src={event.image_url || `https://picsum.photos/seed/${event.id}/800/600`} 
+                          alt={event.title} 
+                          fill 
+                          className="object-cover grayscale opacity-70 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                        />
+                        <div className="absolute top-4 right-4 bg-black/80 border border-white/10 px-3 py-1 font-code text-[9px] text-primary uppercase tracking-widest">
+                          {event.category || 'EVENT'}
+                        </div>
+                      </div>
+                      <div className="p-8 flex flex-col flex-1 bg-black">
+                        <h3 className="text-2xl font-black uppercase tracking-tight mb-4 group-hover:text-primary transition-colors">{event.title}</h3>
+                        <p className="text-muted-foreground text-sm leading-relaxed mb-8 flex-1 line-clamp-3">{event.description}</p>
+                        
+                        <div className="grid grid-cols-2 gap-4 mb-8 pt-6 border-t border-white/5">
+                          <div>
+                            <div className="font-code text-[9px] text-muted-foreground uppercase tracking-widest mb-1">DATE</div>
+                            <div className="font-code text-xs font-bold text-white">{new Date(event.event_date).toLocaleDateString().toUpperCase()}</div>
+                          </div>
+                          <div>
+                            <div className="font-code text-[9px] text-muted-foreground uppercase tracking-widest mb-1">LOCATION</div>
+                            <div className="font-code text-xs font-bold text-white truncate">{event.location?.toUpperCase() || 'VIRTUAL'}</div>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <a href={event.luma_url || '#'} target="_blank" className="flex-1 bg-primary text-black font-code text-[10px] font-black uppercase tracking-widest py-4 text-center hover:bg-white transition-colors">
+                            REGISTER_ON_LUMA
+                          </a>
+                          <Link href={`/events/${event.id}`} className="flex-1 border border-white/10 text-white font-code text-[10px] font-black uppercase tracking-widest py-4 text-center hover:border-primary hover:text-primary transition-all">
+                            DETAILS
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </AnimatedItem>
+                ))
+              )}
+            </div>
+          </div>
+        </AnimatedSection>
+      )}
 
       {/* 5 & 6. LUMA & MAP SECTION */}
       <AnimatedSection className="relative z-10 grid grid-cols-1 lg:grid-cols-2 border-b border-white/10 bg-black" staggerChildren={0.2}>
@@ -234,43 +238,45 @@ export default function EventsPage() {
       </AnimatedSection>
 
       {/* 7. PAST EVENTS SECTION */}
-      <AnimatedSection className="relative z-10 py-24 bg-black border-b border-white/10" staggerChildren={0.1}>
-        <div className="max-w-[1400px] mx-auto px-10">
-          <AnimatedItem className="flex items-center justify-between mb-16">
-            <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter">Archived Events</h2>
-            <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px]">[ PAST_TRANSMISSIONS ]</div>
-          </AnimatedItem>
+      {!loading && (
+        <AnimatedSection className="relative z-10 py-24 bg-black border-b border-white/10" staggerChildren={0.1}>
+          <div className="max-w-[1400px] mx-auto px-10">
+            <AnimatedItem className="flex items-center justify-between mb-16">
+              <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter">Archived Events</h2>
+              <div className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px]">[ PAST_TRANSMISSIONS ]</div>
+            </AnimatedItem>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10 relative z-30">
-            {past.length === 0 ? (
-              <div className="col-span-full py-24 text-center bg-black">
-                <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">No past events found in database.</p>
-              </div>
-            ) : past.map(event => (
-              <AnimatedItem key={event.id} className="h-full">
-                <div className="bg-black flex flex-col opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500 h-full z-10">
-                  <div className="relative h-40 overflow-hidden border-b border-white/10">
-                    <Image 
-                      src={event.image_url || `https://picsum.photos/seed/${event.id}/600/400`} 
-                      alt={event.title} 
-                      fill 
-                      className="object-cover" 
-                    />
-                  </div>
-                  <div className="p-6 flex flex-col flex-1 bg-black">
-                    <div className="font-code text-[9px] text-muted-foreground uppercase tracking-widest mb-2">{new Date(event.event_date).toLocaleDateString()}</div>
-                    <h3 className="text-xl font-black uppercase tracking-tight mb-4">{event.title}</h3>
-                    <p className="text-muted-foreground text-xs leading-relaxed mb-6 line-clamp-2">{event.description}</p>
-                    <a href="#" className="mt-auto font-code text-[10px] text-primary uppercase tracking-[2px] flex items-center gap-2 hover:text-white transition-colors">
-                      VIEW_RECAP <ArrowRight className="w-3 h-3" />
-                    </a>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/10 border border-white/10 relative z-30">
+              {past.length === 0 ? (
+                <div className="col-span-full py-24 text-center bg-black">
+                  <p className="font-code text-xs uppercase tracking-widest text-muted-foreground">No past events found in database.</p>
                 </div>
-              </AnimatedItem>
-            ))}
+              ) : past.map(event => (
+                <AnimatedItem key={event.id} className="h-full">
+                  <div className="bg-black flex flex-col opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-500 h-full z-10">
+                    <div className="relative h-40 overflow-hidden border-b border-white/10">
+                      <Image 
+                        src={event.image_url || `https://picsum.photos/seed/${event.id}/600/400`} 
+                        alt={event.title} 
+                        fill 
+                        className="object-cover" 
+                      />
+                    </div>
+                    <div className="p-6 flex flex-col flex-1 bg-black">
+                      <div className="font-code text-[9px] text-muted-foreground uppercase tracking-widest mb-2">{new Date(event.event_date).toLocaleDateString()}</div>
+                      <h3 className="text-xl font-black uppercase tracking-tight mb-4">{event.title}</h3>
+                      <p className="text-muted-foreground text-xs leading-relaxed mb-6 line-clamp-2">{event.description}</p>
+                      <a href="#" className="mt-auto font-code text-[10px] text-primary uppercase tracking-[2px] flex items-center gap-2 hover:text-white transition-colors">
+                        VIEW_RECAP <ArrowRight className="w-3 h-3" />
+                      </a>
+                    </div>
+                  </div>
+                </AnimatedItem>
+              ))}
+            </div>
           </div>
-        </div>
-      </AnimatedSection>
+        </AnimatedSection>
+      )}
 
       {/* 8. COMMUNITY CTA */}
       <AnimatedSection className="relative z-10 py-40 text-center relative overflow-hidden bg-black" staggerChildren={0.2}>
