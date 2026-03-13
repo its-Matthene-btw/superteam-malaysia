@@ -1,13 +1,11 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Navbar from '@/components/layout/Navbar';
 import Hero from '@/components/home/Hero';
 import EcosystemPartners from '@/components/home/EcosystemPartners';
-import EventSection from '@/components/home/EventSection';
-import CommunityCarousel from '@/components/home/CommunityCarousel';
-import WallOfLove from '@/components/home/WallOfLove';
-import FaqCtaSection from '@/components/home/FaqCtaSection';
 import Footer from '@/components/layout/Footer';
 import { getStats } from '@/services/stats';
 import { getUpcomingEvents } from '@/services/events';
@@ -19,6 +17,12 @@ import { Wrench, LayoutGrid, DollarSign, TrendingUp, Code2, Globe, CheckCircle2,
 import Link from 'next/link';
 import WatermarkS from '@/components/home/WatermarkS';
 import { AnimatedSection, AnimatedItem } from '@/components/layout/AnimatedSection';
+
+// Dynamic imports for below-the-fold components
+const EventSection = dynamic(() => import('@/components/home/EventSection'), { ssr: false });
+const CommunityCarousel = dynamic(() => import('@/components/home/CommunityCarousel'), { ssr: false });
+const WallOfLove = dynamic(() => import('@/components/home/WallOfLove'), { ssr: false });
+const FaqCtaSection = dynamic(() => import('@/components/home/FaqCtaSection'), { ssr: false });
 
 const iconMap: Record<string, any> = {
   Wrench, LayoutGrid, DollarSign, TrendingUp, Code2, Globe, CheckCircle2, Users
