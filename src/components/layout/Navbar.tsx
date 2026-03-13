@@ -7,6 +7,7 @@ import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { getSettings } from '@/services/settings';
+import Logo from './Logo';
 
 const XIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -58,7 +59,7 @@ export default function Navbar() {
     >
       <div className="w-full px-4 lg:px-8 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2 flex-shrink-0">
-          <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center font-bold text-white shadow-[0_0_15px_rgba(153,69,255,0.4)] text-xl">S</div>
+          <Logo className="w-10 h-10 text-white" />
           <span className="font-headline font-bold text-xl lg:text-2xl tracking-tighter text-white uppercase">SUPERTEAM</span>
         </Link>
 

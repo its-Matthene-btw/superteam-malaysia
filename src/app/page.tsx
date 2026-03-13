@@ -17,6 +17,7 @@ import { getTestimonials } from '@/services/testimonials';
 import { Stat, Event, Member, Partner, Testimonial } from '@/types/database';
 import { Wrench, LayoutGrid, DollarSign, TrendingUp, Code2, Globe, CheckCircle2, Users, Database } from 'lucide-react';
 import Link from 'next/link';
+import WatermarkS from '@/components/home/WatermarkS';
 
 const iconMap: Record<string, any> = {
   Wrench, LayoutGrid, DollarSign, TrendingUp, Code2, Globe, CheckCircle2, Users
@@ -110,7 +111,7 @@ export default function Home() {
 
       {/* Dynamic Stats Section */}
       <section className="w-full bg-white/5 relative overflow-hidden border-b border-white/10">
-        <div className="bg-watermark">S</div>
+        <WatermarkS />
         <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-[2.5fr_7.5fr] gap-10 md:gap-16 px-10 py-24 md:py-32">
           <div className="stats-header">
             <h2 className="text-5xl font-headline font-bold tracking-tight text-white">In <span className="text-white">Numbers</span></h2>

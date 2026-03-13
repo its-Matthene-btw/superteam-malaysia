@@ -121,10 +121,6 @@
 .shape-pyramid::after { content: ''; position: absolute; top: 0; left: -120px; border-left: 120px solid transparent; border-right: 0px solid transparent; border-bottom: 200px solid rgba(255,255,255,0.2); }
 
 /* --- Stats Section Specific Styles --- */
-.bg-watermark {
-  @apply absolute left-[-5%] top-1/2 -translate-y-1/2 text-[65vw] font-black text-white/[0.015] pointer-events-none z-0 leading-none select-none;
-}
-
 .stat-cell {
   @apply flex flex-col justify-between p-2.5 px-8 min-h-[160px] border-l border-white/10;
 }

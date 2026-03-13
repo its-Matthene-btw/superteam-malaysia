@@ -14,10 +14,10 @@ export default function EventSection({ events }: { events: Event[] }) {
 
   return (
     <section id="events" className="w-full border-b border-white/10 bg-black">
-      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-[4fr_6fr] border-x border-white/10 bg-white/5 gap-[1px]">
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 border-x border-white/10 bg-white/5 gap-[1px]">
         
         {/* LEFT COLUMN - STICKY */}
-        <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center p-10 lg:p-24 bg-black relative overflow-hidden border-r border-white/10">
+        <div className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center p-10 lg:p-16 bg-black relative overflow-hidden border-r border-white/10">
           {/* Abstract Grid Background */}
           <div 
             className="absolute inset-0 z-0 opacity-50"
@@ -31,7 +31,7 @@ export default function EventSection({ events }: { events: Event[] }) {
           
           <div className="relative z-10">
             <div className="font-code text-[10px] text-primary uppercase tracking-[3px] mb-6">// EVENTS_RADAR</div>
-            <h2 className="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter mb-10 uppercase text-white">
+            <h2 className="text-6xl lg:text-7xl font-black leading-[0.9] tracking-tighter mb-10 uppercase text-white">
               Upcoming<br /><span className="text-primary">Schedule.</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-md leading-relaxed font-medium mb-12">

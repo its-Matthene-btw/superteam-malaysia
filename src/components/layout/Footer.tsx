@@ -6,6 +6,7 @@ import { MessageSquare, ArrowUp, Send, Loader2, CheckCircle2, Github, Linkedin }
 import { useState, useEffect } from 'react';
 import { subscribeToNewsletter } from '@/services/newsletter';
 import { getSettings } from '@/services/settings';
+import Logo from './Logo';
 
 const XIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
@@ -53,8 +54,9 @@ export default function Footer() {
         <div className="footer-main-grid grid grid-cols-1 lg:grid-cols-[4fr_2fr_3fr_3fr] border-b border-white/10">
           
           <div className="footer-col p-10 lg:p-16 border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col">
-            <Link href="/" className="brand-logo text-4xl font-headline font-extrabold tracking-tighter uppercase leading-none mb-8 hover:opacity-80 transition-opacity text-white">
-              Superteam<br /><span className="text-primary">Malaysia</span>
+            <Link href="/" className="flex items-center space-x-4 mb-8">
+              <Logo className="w-12 h-12 text-white" />
+              <span className='font-headline font-bold text-2xl tracking-tighter text-white uppercase'>Superteam</span>
             </Link>
             <p className="brand-desc text-base text-muted-foreground leading-relaxed max-sm:max-w-xs mb-10">
               A decentralized community of founders, developers, and creatives building the future of the Solana ecosystem.
