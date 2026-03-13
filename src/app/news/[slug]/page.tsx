@@ -11,6 +11,8 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { subscribeToNewsletter } from '@/services/newsletter';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function NewsDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -26,6 +28,9 @@ export default function NewsDetail({ params }: { params: Promise<{ slug: string 
       try {
         const found = await getPostBySlug(slug);
         setPost(found);
+        
+        // Update document metadata if provided
+        if (found?.meta_title) document.title = found.meta_title;
         
         // Fetch recommendations (just get recent ones and filter current)
         const all = await getNews();
@@ -128,12 +133,16 @@ export default function NewsDetail({ params }: { params: Promise<{ slug: string 
         {/* Content Body */}
         <article className="p-10 lg:p-20 xl:p-24 max-w-[1000px]">
           <div className="prose prose-invert prose-2xl max-w-none leading-relaxed text-white/80 font-body space-y-10">
-            <div className="text-2xl lg:text-3xl font-bold text-white mb-12 border-l-4 border-primary pl-8 py-2">
-              {post.excerpt}
-            </div>
+            {post.excerpt && (
+              <div className="text-2xl lg:text-3xl font-bold text-white mb-12 border-l-4 border-primary pl-8 py-2">
+                {post.excerpt}
+              </div>
+            )}
             
-            <div className="whitespace-pre-wrap">
-              {post.content}
+            <div className="rich-content">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {post.content || ''}
+              </ReactMarkdown>
             </div>
 
             {/* Precision Figure Box */}
@@ -205,7 +214,7 @@ export default function NewsDetail({ params }: { params: Promise<{ slug: string 
         <div className="p-16 lg:p-24 flex flex-col justify-center">
           <div className="font-code text-primary text-xs font-bold tracking-[3px] mb-8">// STAY_SYNCED</div>
           <h2 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter mb-6">The Weekly Dispatch</h2>
-          <p className="text-xl text-muted-foreground mb-12 max-w-sm">Get technical updates and bounty alerts direct to your terminal.</p>
+          <p className="text-xl text-muted-foreground mb-12 max-sm:max-w-xs">Get technical updates and bounty alerts direct to your terminal.</p>
           
           <form onSubmit={handleSubscribe} className="space-y-6">
             <div className="flex border border-white/10 bg-[#050505] p-1">
@@ -235,6 +244,21 @@ export default function NewsDetail({ params }: { params: Promise<{ slug: string 
       </section>
 
       <Footer />
+      <style jsx global>{`
+        .rich-content h1, .rich-content h2, .rich-content h3 { @apply font-black uppercase tracking-tighter mb-6 mt-12 text-white; }
+        .rich-content h1 { @apply text-4xl; }
+        .rich-content h2 { @apply text-3xl; }
+        .rich-content h3 { @apply text-2xl; }
+        .rich-content p { @apply text-white/80 leading-relaxed mb-8; }
+        .rich-content img { @apply rounded-xl border border-white/10 my-10 w-full; }
+        .rich-content a { @apply text-primary font-bold underline hover:text-white transition-colors; }
+        .rich-content ul { @apply list-disc pl-6 mb-8 space-y-4 text-white/80; }
+        .rich-content ol { @apply list-decimal pl-6 mb-8 space-y-4 text-white/80; }
+        .rich-content blockquote { @apply border-l-4 border-primary/40 pl-8 italic my-10 text-white/60; }
+        .rich-content code { @apply bg-white/10 px-2 py-1 rounded font-code text-sm text-primary; }
+        .rich-content pre { @apply bg-[#050505] border border-white/10 p-6 rounded-xl overflow-x-auto my-10; }
+        .rich-content pre code { @apply bg-transparent p-0 text-white/90; }
+      `}</style>
     </main>
   );
 }

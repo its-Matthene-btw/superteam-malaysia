@@ -1,4 +1,3 @@
-
 export interface Member {
   id: string;
   name: string;
@@ -75,6 +74,9 @@ export interface NewsPost {
   image_url: string | null;
   published_at: string;
   created_at: string;
+  meta_title: string | null;
+  meta_description: string | null;
+  meta_keywords: string | null;
 }
 
 export interface FAQ {

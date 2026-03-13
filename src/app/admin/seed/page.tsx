@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -103,24 +102,35 @@ CREATE TABLE IF NOT EXISTS events (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 6. Ensure missing columns exist (Robust Migration)
+-- 6. Create News Table (Enhanced with SEO)
+CREATE TABLE IF NOT EXISTS news (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  slug text UNIQUE NOT NULL,
+  excerpt text,
+  content text,
+  image_url text,
+  published_at timestamp WITH TIME ZONE NOT NULL,
+  meta_title text,
+  meta_description text,
+  meta_keywords text,
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+-- 7. Ensure missing columns exist (Robust Migration)
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='events' AND COLUMN_NAME='image_url') THEN
         ALTER TABLE events ADD COLUMN image_url text;
     END IF;
-    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='events' AND COLUMN_NAME='status') THEN
-        ALTER TABLE events ADD COLUMN status text DEFAULT 'upcoming';
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='events' AND COLUMN_NAME='featured') THEN
-        ALTER TABLE events ADD COLUMN featured boolean DEFAULT false;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='events' AND COLUMN_NAME='category') THEN
-        ALTER TABLE events ADD COLUMN category text;
+    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='news' AND COLUMN_NAME='meta_title') THEN
+        ALTER TABLE news ADD COLUMN meta_title text;
+        ALTER TABLE news ADD COLUMN meta_description text;
+        ALTER TABLE news ADD COLUMN meta_keywords text;
     END IF;
 END $$;
 
--- 7. Enable RLS
+-- 8. Enable RLS
 ALTER TABLE ecosystem_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
@@ -129,8 +139,9 @@ ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE news ENABLE ROW LEVEL SECURITY;
 
--- 8. Create Policies (Idempotent)
+-- 9. Create Policies (Idempotent)
 DROP POLICY IF EXISTS "Public Read Ecosystem" ON ecosystem_projects;
 CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
 
@@ -178,6 +189,12 @@ CREATE POLICY "Public Read Events" ON events FOR SELECT USING (true);
 
 DROP POLICY IF EXISTS "Admin All Events" ON events;
 CREATE POLICY "Admin All Events" ON events FOR ALL TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Public Read News Posts" ON news;
+CREATE POLICY "Public Read News Posts" ON news FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin All News Posts" ON news;
+CREATE POLICY "Admin All News Posts" ON news FOR ALL TO authenticated USING (true);
 `;
 
   const copySql = () => {
@@ -330,7 +347,7 @@ CREATE POLICY "Admin All Events" ON events FOR ALL TO authenticated USING (true)
                 </Button>
               </div>
             </CardContent>
-          </Card>
+          </div>
         </div>
       </div>
     </div>
