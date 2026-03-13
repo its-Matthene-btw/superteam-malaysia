@@ -23,7 +23,10 @@ export async function getCurrentProfile() {
     .single();
 
   if (error) {
-    console.error('Error fetching profile:', error);
+    // PGRST116 is the code for "no rows found", which is expected for new users before role assignment
+    if (error.code !== 'PGRST116') {
+      console.error('Error fetching profile:', error.message || error);
+    }
     return null;
   }
 
@@ -36,7 +39,10 @@ export async function getAllProfiles() {
     .select('*')
     .order('created_at', { ascending: false });
 
-  if (error) throw error;
+  if (error) {
+    console.error('Error fetching all profiles:', error.message || error);
+    throw error;
+  }
   return data as Profile[];
 }
 
@@ -52,8 +58,6 @@ export async function updateProfileRole(id: string, role: UserRole) {
 }
 
 export async function deleteProfile(id: string) {
-  // Note: This only deletes the profile record. 
-  // In a real app, you'd call a Supabase Edge Function to delete the Auth user.
   const { error } = await supabase.from('profiles').delete().eq('id', id);
   if (error) throw error;
 }

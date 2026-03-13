@@ -8,7 +8,7 @@ import { getEvents } from '@/services/events';
 import { getPartners } from '@/services/partners';
 import { getTestimonials } from '@/services/testimonials';
 import { getCurrentProfile, Profile } from '@/services/profiles';
-import { Users, Calendar, Handshake, MessageSquareQuote, Sparkles, Database } from 'lucide-react';
+import { Users, Calendar, Handshake, MessageSquareQuote, Sparkles, Database, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -27,23 +27,34 @@ export default function DashboardPage() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const [m, e, p, t, prof] = await Promise.all([
+        // Individual fetches to handle partial table failures
+        const results = await Promise.allSettled([
           getMembers(),
           getEvents(),
           getPartners(),
           getTestimonials(),
           getCurrentProfile()
         ]);
+
+        const [m, e, p, t, prof] = results.map(res => res.status === 'fulfilled' ? res.value : null);
+
         setStats({
           members: m?.length || 0,
           events: e?.length || 0,
           partners: p?.length || 0,
           testimonials: t?.length || 0
         });
-        setProfile(prof);
+        
+        setProfile(prof as Profile | null);
+
+        // Check if all core tables failed
+        const failedCount = results.filter(res => res.status === 'rejected').length;
+        if (failedCount > 2) {
+          setError('System connection limited. Database tables may not be initialized.');
+        }
       } catch (err: any) {
         console.error('Error fetching dashboard stats:', err);
-        setError('Database error. Ensure your Supabase tables exist and RLS policies are applied.');
+        setError('Connection error. Please check your network and Supabase configuration.');
       } finally {
         setLoading(false);
       }
@@ -71,18 +82,23 @@ export default function DashboardPage() {
           <p className="text-muted-foreground mt-2">Manage the Superteam Malaysia ecosystem content.</p>
         </div>
         
-        {profile?.role === 'admin' && (
+        {/* Bootstrap shortcut for users without a profile yet (initial setup) */}
+        {!profile && !loading && (
           <Link href="/admin/seed">
-            <Button variant="outline" className="glass border-white/10 text-xs font-code uppercase tracking-widest gap-2">
-              <Database className="w-4 h-4" /> Seed Database
+            <Button variant="outline" className="glass border-primary/20 text-xs font-code uppercase tracking-widest gap-2 text-primary hover:bg-primary hover:text-black">
+              <Database className="w-4 h-4" /> Initialize System
             </Button>
           </Link>
         )}
       </div>
 
       {error && (
-        <div className="p-6 rounded-xl border border-destructive/20 bg-destructive/5 text-destructive text-sm font-medium animate-pulse">
-          CRITICAL ERROR: {error}
+        <div className="p-6 rounded-xl border border-warning/20 bg-yellow-500/5 text-yellow-500 text-sm font-medium flex items-center gap-4">
+          <AlertTriangle className="w-5 h-5 shrink-0" />
+          <div>
+            <p className="font-bold uppercase tracking-widest text-xs mb-1">Warning: {error}</p>
+            <p className="opacity-70">Go to the Seed page to run migrations and initialize tables.</p>
+          </div>
         </div>
       )}
 
@@ -107,7 +123,7 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent className="p-0">
           <div className="p-10 text-center text-muted-foreground font-code text-xs uppercase tracking-widest">
-            {loading ? 'Analyzing transactions...' : 'Database connected. All systems operational.'}
+            {loading ? 'Analyzing transactions...' : error ? 'System awaiting initialization.' : 'Database connected. All systems operational.'}
           </div>
         </CardContent>
       </Card>
