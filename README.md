@@ -1,246 +1,325 @@
-<p align="center">
-<strong>A modern Web3 community platform built for Superteam Malaysia to serve as the digital hub for builders, creators, and founders in the Solana ecosystem.</strong>
-</p>
+# Superteam Malaysia — Web3 Community Platform
 
-<p align="center">
-This project is a submission for the <strong>Superteam Malaysia Website Design & Build Challenge</strong>.
-</p>
+A modern **Web3 community platform** built for **Superteam Malaysia** to serve as the digital hub for builders, creators, and founders in the **Solana ecosystem**.
+
+This project is a submission for the **Superteam Malaysia Website Design & Build Challenge**.
 
 ---
 
-## Live Demo
+# 🌐 Live Demo
 
-The platform is deployed and accessible live:
+The platform is deployed and accessible online.
 
-| Site | Link |
-|-----|------|
-| Live Site | https://superteam-malaysia-sigma.vercel.app |
-| Admin CMS | https://superteam-malaysia-sigma.vercel.app/admin |
+| Platform         | Link                                              |
+| ---------------- | ------------------------------------------------- |
+| **Live Website** | https://superteam-malaysia-sigma.vercel.app       |
+| **Admin CMS**    | https://superteam-malaysia-sigma.vercel.app/admin |
 
 ---
 
-## Admin Access (Demo)
+# 🔐 Admin CMS Demo Access
 
 A custom CMS dashboard is available for content management.
 
-Judges can use the following demo credentials to explore the admin panel.
+Judges can log in using the following demo accounts to explore **role-based permissions**.
 
-**Email:** admin@superteam.my  
-**Password:** Admin123!secure 
+| Role       | Email                                             | Password        | Access              |
+| ---------- | ------------------------------------------------- | --------------- | ------------------- |
+| **Admin**  | [admin@superteam.my](mailto:admin@superteam.my)   | Admin123!secure | Full CMS access     |
+| **Editor** | [editor@superteam.my](mailto:editor@superteam.my) | Admin123!secure | Content management  |
+| **Viewer** | [viewer@superteam.my](mailto:viewer@superteam.my) | Admin123!secure | Read-only dashboard |
 
-> Note: These credentials provide full access to the CMS for demonstration purposes and should be changed in a production environment.
+⚠️ **Note:** These credentials are for demonstration purposes only and should be changed in production.
 
 ---
 
-## Features
+# 🛠 Features
 
-The platform is designed to be a comprehensive resource for the Superteam MY community.
+The platform is designed to be the **digital hub for the Superteam Malaysia community**.
 
 ### Dynamic Events System
-Browse upcoming and past events, workshops, and hackathons.
+
+Browse upcoming and past:
+
+* Workshops
+* Hackathons
+* Community meetups
+
+Events update dynamically from the CMS.
+
+---
 
 ### Luma Event Integration
-View an embedded Luma calendar and link directly to Luma for event registration.
+
+The platform integrates with **Luma** for event management.
+
+Features include:
+
+* Embedded Luma calendar
+* Direct event registration
+* Dynamic event cards
+* Upcoming and past event listings
+
+---
 
 ### Ecosystem Explorer
-Discover projects being built within the Superteam MY ecosystem with detailed project pages.
+
+Discover projects built within the **Superteam MY ecosystem**.
+
+Each project includes:
+
+* Description
+* Project links
+* Team information
+* Ecosystem connections
+
+---
 
 ### Community Members Directory
-A filterable directory of community members and their profiles.
 
-### Full-Featured Admin CMS
-A secure custom-built dashboard for non-technical admins to manage all site content.
+A searchable directory of community builders.
 
-### Announcements & Blog
-A system for publishing news, updates, and articles.
+Features include:
 
-### Wall of Love
-A showcase of community testimonials and success stories.
-
-### Admin Contact Inbox
-A dedicated inbox for viewing and managing messages sent via the contact form.
-
-### Newsletter Collection
-Functionality to capture user emails for newsletters.
-
-### Fully Responsive Design
-A seamless experience across desktop, tablet, and mobile devices.
+* Profile photos
+* Roles and companies
+* Skill tags
+* Social links
 
 ---
 
-## Luma Integration
+### Full Admin CMS
 
-The website integrates directly with **Luma** to streamline event management and provide a single source of truth for all community events.
-
-**Event Cards**
-Upcoming events are displayed dynamically with direct links to their Luma registration pages.
-
-**Embedded Calendar**
-A dedicated page features an embedded Luma calendar for a comprehensive view of all scheduled events.
-
-**Dynamic Updates**
-The system dynamically fetches and displays the latest event information to ensure content is always up to date.
-
----
-
-## CMS System
-
-The custom-built Content Management System empowers administrators to manage the entire platform without writing code.
+A custom-built CMS dashboard allows non-technical administrators to manage the entire platform.
 
 Admins can perform full CRUD operations for:
 
-- Events (create, edit, publish)
-- Members (community directory management)
-- Ecosystem Projects
-- Announcements and articles
-- Partners & Stats
-- Testimonials
-- Contact Messages
+* Events
+* Members
+* Ecosystem Projects
+* Announcements & Blog
+* Partners
+* Testimonials
+* Community Stats
+* Contact Messages
 
 ---
 
-## Tech Stack
+### Wall of Love
 
-**Frontend**
-- Next.js
-- React
-- Tailwind CSS
-
-**Backend**
-- Supabase (PostgreSQL Database)
-- Supabase Authentication
-- Supabase Storage
-
-**Integrations**
-- Luma (Events)
-- Twitter/X (Embedded Content)
+A section highlighting testimonials and success stories from the Superteam Malaysia community.
 
 ---
 
-## Architecture
+### Contact Inbox
 
-The platform uses a modern decoupled architecture with a **Next.js frontend** and **Supabase backend**.
-
-
-+--------------------------+ +---------------------------+ +-----------------------------+
-| User / Visitor | <--> | Next.js Frontend | <--> | Supabase Backend |
-+--------------------------+ | (Hosted on Vercel) | | (PostgreSQL, Auth, Storage)|
-+---------------------------+ +-----------------------------+
-|
-v
-+--------------------------+ +---------------------------+
-| Administrator | <--> | Admin CMS Dashboard |
-+--------------------------+ | (/admin route) |
-+---------------------------+
-
-
-**Frontend**
-The Next.js application renders the UI and fetches data. It is deployed on Vercel for performance and continuous deployment.
-
-**Backend**
-Supabase provides the PostgreSQL database, authentication for the admin panel, and asset storage.
-
-**Data Fetching**
-Data is fetched dynamically from Supabase and rendered on the frontend.
+Messages submitted through the contact form are stored and managed inside the CMS dashboard.
 
 ---
 
-## Project Structure
+### Newsletter Collection
 
+User emails are collected for community announcements and newsletters.
 
+---
+
+### Fully Responsive Design
+
+The platform provides a seamless experience across:
+
+* Desktop
+* Tablet
+* Mobile
+
+---
+
+# 🔑 Role-Based Access Control (RBAC)
+
+The CMS implements **role-based access control** to ensure secure access to administrative tools.
+
+| Role       | Permissions                                     |
+| ---------- | ----------------------------------------------- |
+| **Admin**  | Full system access including user management    |
+| **Editor** | Manage and edit content but cannot manage users |
+| **Viewer** | Read-only access to the dashboard               |
+
+### Admin Permissions
+
+* Manage users and roles
+* Manage events
+* Manage members
+* Manage ecosystem projects
+* Manage announcements
+* Manage partners and statistics
+* Access admin tools
+
+### Editor Permissions
+
+* Create and edit events
+* Update member profiles
+* Manage ecosystem projects
+* Publish announcements and articles
+* Update partners and stats
+
+### Viewer Permissions
+
+* View dashboard
+* View CMS data
+* Read-only access to content
+
+Restrictions are enforced through:
+
+* Protected routes
+* Role-based UI controls
+* Backend permission validation
+
+---
+
+# 🧱 Tech Stack
+
+## Frontend
+
+* **Next.js**
+* **React**
+* **Tailwind CSS**
+
+## Backend
+
+* **Supabase (PostgreSQL)**
+* **Supabase Authentication**
+* **Supabase Storage**
+
+## Integrations
+
+* **Luma** – Event management
+* **Twitter / X** – Embedded social content
+
+---
+
+# 🏗 Architecture
+
+The platform follows a **decoupled architecture** with a Next.js frontend and Supabase backend.
+
+```
+User / Visitor
+      │
+      ▼
+Next.js Frontend (Vercel)
+      │
+      ▼
+Supabase Backend
+(PostgreSQL, Auth, Storage)
+      │
+      ▼
+Admin CMS Dashboard
+(/admin route)
+```
+
+### Frontend
+
+The Next.js application renders UI components and fetches dynamic data.
+
+### Backend
+
+Supabase provides:
+
+* PostgreSQL database
+* Authentication
+* File storage
+
+---
+
+# 📁 Project Structure
+
+```
 /
-├── app/
-│ ├── (public)/
-│ │ ├── events/
-│ │ ├── ecosystem/
-│ │ ├── members/
-│ │ ├── news/
-│ │ └── contact/
-│ │
-│ └── (admin)/
-│ └── admin/
-│ ├── dashboard/
-│ ├── events/
-│ ├── members/
-│ └── ...
+├── app
+│   ├── (public)
+│   │   ├── events
+│   │   ├── ecosystem
+│   │   ├── members
+│   │   ├── news
+│   │   └── contact
+│   │
+│   └── (admin)
+│       └── admin
+│           ├── dashboard
+│           ├── events
+│           ├── members
+│           ├── ecosystem
+│           └── users
 │
-├── components/
-│ ├── ui/
-│ └── home/
+├── components
+│   ├── ui
+│   └── home
 │
-└── lib/
-└── supabase/
-
+└── lib
+    └── supabase
+```
 
 ---
 
-## Installation
+# ⚙️ Installation
 
-Clone the repository:
+### Clone the repository
 
-
+```bash
 git clone https://github.com/its-Matthene-btw/superteam-malaysia.git
+```
 
+### Install dependencies
 
-Install dependencies:
-
-
+```bash
 npm install
+```
 
+### Create environment variables
 
-Create a `.env.local` file:
+Create `.env.local`:
 
-
+```
 NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
 
+### Run development server
 
-Run the development server:
-
-
+```bash
 npm run dev
-
+```
 
 Open:
 
-
+```
 http://localhost:3000
-
+```
 
 ---
 
-## Deployment
+# 🚀 Deployment
 
-The project is deployed using **Vercel**.
+The platform is deployed using **Vercel**.
 
 Build command:
 
-
+```bash
 npm run build
-
-
----
-
-## Screenshots
-
-*(Placeholder section)*
-
-- Landing Page
-- Events Page
-- Ecosystem Explorer
-- Admin CMS Dashboard
+```
 
 ---
 
-## Future Improvements
+# 🔮 Future Improvements
 
-- Deeper Luma API Integration
-- Web3 Wallet Login
-- Advanced Member Profiles
-- Admin Analytics Dashboard
+Possible future enhancements include:
+
+* Deeper **Luma API integration**
+* **Web3 wallet authentication**
+* Advanced **member reputation system**
+* **Admin analytics dashboard**
+* Community **bounty tracking**
 
 ---
 
-<p align="center">
-Built with ❤️ for the <strong>Superteam Malaysia Website Design & Build Challenge</strong>.
-</p>
+# ❤️ Acknowledgment
+
+Built with ❤️ for the **Superteam Malaysia Website Design & Build Challenge**.
