@@ -1,10 +1,11 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { getCurrentProfile, Profile } from '@/services/profiles';
 import { 
   LayoutDashboard, 
   Users, 
@@ -18,35 +19,67 @@ import {
   Newspaper,
   Inbox,
   Database,
-  Settings
+  Settings,
+  ShieldCheck,
+  Loader2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
-  { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-  { name: 'Members', href: '/admin/members', icon: Users },
-  { name: 'Events', href: '/admin/events', icon: Calendar },
-  { name: 'Partners', href: '/admin/partners', icon: Handshake },
-  { name: 'Stats', href: '/admin/stats', icon: BarChart3 },
-  { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote },
-  { name: 'News', href: '/admin/news', icon: Newspaper },
-  { name: 'Messages', href: '/admin/messages', icon: Inbox },
-  { name: 'Ecosystem', href: '/admin/ecosystem', icon: Database },
-  { name: 'Settings', href: '/admin/settings', icon: Settings },
-  { name: 'Seed', href: '/admin/seed', icon: Database },
+  { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard, roles: ['admin', 'editor', 'viewer'] },
+  { name: 'Members', href: '/admin/members', icon: Users, roles: ['admin', 'editor', 'viewer'] },
+  { name: 'Events', href: '/admin/events', icon: Calendar, roles: ['admin', 'editor', 'viewer'] },
+  { name: 'Partners', href: '/admin/partners', icon: Handshake, roles: ['admin', 'editor', 'viewer'] },
+  { name: 'Stats', href: '/admin/stats', icon: BarChart3, roles: ['admin', 'editor', 'viewer'] },
+  { name: 'Testimonials', href: '/admin/testimonials', icon: MessageSquareQuote, roles: ['admin', 'editor', 'viewer'] },
+  { name: 'News', href: '/admin/news', icon: Newspaper, roles: ['admin', 'editor', 'viewer'] },
+  { name: 'Messages', href: '/admin/messages', icon: Inbox, roles: ['admin', 'editor', 'viewer'] },
+  { name: 'Ecosystem', href: '/admin/ecosystem', icon: Database, roles: ['admin', 'editor', 'viewer'] },
+  { name: 'Users', href: '/admin/users', icon: ShieldCheck, roles: ['admin'] },
+  { name: 'Settings', href: '/admin/settings', icon: Settings, roles: ['admin'] },
+  { name: 'Seed', href: '/admin/seed', icon: Database, roles: ['admin'] },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
+
+  useEffect(() => {
+    async function loadProfile() {
+      try {
+        const p = await getCurrentProfile();
+        setProfile(p);
+      } catch (err) {
+        console.error('Failed to load profile:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProfile();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push('/login');
   };
+
+  const filteredNavItems = navItems.filter(item => 
+    profile && item.roles.includes(profile.role)
+  );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center">
+        <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+        <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground">Authenticating Operator...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col lg:flex-row">
@@ -72,8 +105,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <span className="font-headline font-bold text-lg tracking-tighter text-white uppercase">SUPERTEAM</span>
           </Link>
 
+          <div className="mb-8 px-4 py-3 rounded-lg bg-white/5 border border-white/5">
+            <div className="flex items-center gap-3">
+              <div className={cn(
+                "w-2 h-2 rounded-full",
+                profile?.role === 'admin' ? "bg-primary animate-pulse" : 
+                profile?.role === 'editor' ? "bg-secondary" : "bg-white/20"
+              )} />
+              <div className="flex flex-col">
+                <span className="text-[10px] font-black uppercase tracking-widest text-white truncate max-w-[140px]">{profile?.email}</span>
+                <span className="text-[8px] font-code font-bold uppercase tracking-tighter text-muted-foreground">{profile?.role} node</span>
+              </div>
+            </div>
+          </div>
+
           <nav className="flex-1 space-y-1">
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <Link 
                 key={item.name} 
                 href={item.href}

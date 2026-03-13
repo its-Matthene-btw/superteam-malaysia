@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -5,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { seedDatabase, seedFAQsOnly, seedSiteSettings } from '@/lib/supabase/seed';
 import { seedEcosystemData } from '@/lib/supabase/ecosystem-seed';
-import { Database, CheckCircle2, Copy, ShieldCheck, Trash2, HelpCircle, Globe } from 'lucide-react';
+import { Database, CheckCircle2, Copy, ShieldCheck, Trash2, HelpCircle, Globe, Users } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 export default function SeedPage() {
@@ -15,8 +16,17 @@ export default function SeedPage() {
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const sqlSchema = `-- MASTER MIGRATION SQL
--- 1. Create Ecosystem Tables
+  const sqlSchema = `-- MASTER MIGRATION SQL (RBAC UPDATED)
+
+-- 1. Create Profiles Table (RBAC)
+CREATE TABLE IF NOT EXISTS profiles (
+  id uuid PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE,
+  email text UNIQUE NOT NULL,
+  role text NOT NULL DEFAULT 'viewer' CHECK (role IN ('admin', 'editor', 'viewer')),
+  created_at timestamp WITH TIME ZONE DEFAULT now()
+);
+
+-- 2. Create Ecosystem Tables
 CREATE TABLE IF NOT EXISTS ecosystem_projects (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
@@ -53,16 +63,6 @@ CREATE TABLE IF NOT EXISTS ecosystem_categories (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS ecosystem_opportunities (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  title text,
-  description text,
-  type text,
-  link text,
-  created_at timestamp WITH TIME ZONE DEFAULT now()
-);
-
--- 2. Create FAQs Table
 CREATE TABLE IF NOT EXISTS faqs (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   category text NOT NULL,
@@ -73,21 +73,12 @@ CREATE TABLE IF NOT EXISTS faqs (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 3. Create Newsletter Table
-CREATE TABLE IF NOT EXISTS newsletter_subscribers (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  email text UNIQUE NOT NULL,
-  created_at timestamp WITH TIME ZONE DEFAULT now()
-);
-
--- 4. Create Site Settings Table
 CREATE TABLE IF NOT EXISTS site_settings (
   id text PRIMARY KEY,
   value text,
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 5. Create Events Table (Enhanced)
 CREATE TABLE IF NOT EXISTS events (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   title text NOT NULL,
@@ -102,7 +93,6 @@ CREATE TABLE IF NOT EXISTS events (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 6. Create News Table (Enhanced with SEO)
 CREATE TABLE IF NOT EXISTS news (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   title text NOT NULL,
@@ -117,84 +107,56 @@ CREATE TABLE IF NOT EXISTS news (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 7. Ensure missing columns exist (Robust Migration)
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='events' AND COLUMN_NAME='image_url') THEN
-        ALTER TABLE events ADD COLUMN image_url text;
-    END IF;
-    IF NOT EXISTS (SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='news' AND COLUMN_NAME='meta_title') THEN
-        ALTER TABLE news ADD COLUMN meta_title text;
-        ALTER TABLE news ADD COLUMN meta_description text;
-        ALTER TABLE news ADD COLUMN meta_keywords text;
-    END IF;
-END $$;
-
--- 8. Enable RLS
+-- 3. Enable RLS
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_features ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
-ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
-ALTER TABLE newsletter_subscribers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE news ENABLE ROW LEVEL SECURITY;
 
--- 9. Create Policies (Idempotent)
-DROP POLICY IF EXISTS "Public Read Ecosystem" ON ecosystem_projects;
-CREATE POLICY "Public Read Ecosystem" ON ecosystem_projects FOR SELECT USING (true);
+-- 4. Create Policies (Idempotent)
+DROP POLICY IF EXISTS "Public Read Profiles" ON profiles;
+CREATE POLICY "Public Read Profiles" ON profiles FOR SELECT USING (true);
 
-DROP POLICY IF EXISTS "Admin Full Access Ecosystem" ON ecosystem_projects;
-CREATE POLICY "Admin Full Access Ecosystem" ON ecosystem_projects FOR ALL TO authenticated USING (true);
+DROP POLICY IF EXISTS "Admin Full Access Profiles" ON profiles;
+CREATE POLICY "Admin Full Access Profiles" ON profiles FOR ALL TO authenticated USING (
+  EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND role = 'admin')
+);
 
-DROP POLICY IF EXISTS "Public Read Features" ON ecosystem_features;
-CREATE POLICY "Public Read Features" ON ecosystem_features FOR SELECT USING (true);
+-- Content Policies (Editor/Admin)
+DROP POLICY IF EXISTS "Public Read Content" ON news;
+CREATE POLICY "Public Read Content" ON news FOR SELECT USING (true);
 
-DROP POLICY IF EXISTS "Admin All Features" ON ecosystem_features;
-CREATE POLICY "Admin All Features" ON ecosystem_features FOR ALL TO authenticated USING (true);
+DROP POLICY IF EXISTS "Editor Modify Content" ON news;
+CREATE POLICY "Editor Modify Content" ON news FOR ALL TO authenticated USING (
+  EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND role IN ('admin', 'editor'))
+);
 
-DROP POLICY IF EXISTS "Public Read Categories" ON ecosystem_categories;
-CREATE POLICY "Public Read Categories" ON ecosystem_categories FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Admin All Categories" ON ecosystem_categories;
-CREATE POLICY "Admin All Categories" ON ecosystem_categories FOR ALL TO authenticated USING (true);
-
-DROP POLICY IF EXISTS "Public Read Opportunities" ON ecosystem_opportunities;
-CREATE POLICY "Public Read Opportunities" ON ecosystem_opportunities FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Admin All Opportunities" ON ecosystem_opportunities;
-CREATE POLICY "Admin All Opportunities" ON ecosystem_opportunities FOR ALL TO authenticated USING (true);
-
-DROP POLICY IF EXISTS "Public Read FAQs" ON faqs;
-CREATE POLICY "Public Read FAQs" ON faqs FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Admin All FAQs" ON faqs;
-CREATE POLICY "Admin All FAQs" ON faqs FOR ALL TO authenticated USING (true);
-
-DROP POLICY IF EXISTS "Public Write News" ON newsletter_subscribers;
-CREATE POLICY "Public Write News" ON newsletter_subscribers FOR INSERT WITH CHECK (true);
-
-DROP POLICY IF EXISTS "Admin All News" ON newsletter_subscribers;
-CREATE POLICY "Admin All News" ON newsletter_subscribers FOR ALL TO authenticated USING (true);
-
-DROP POLICY IF EXISTS "Public Read Settings" ON site_settings;
-CREATE POLICY "Public Read Settings" ON site_settings FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Admin All Settings" ON site_settings;
-CREATE POLICY "Admin All Settings" ON site_settings FOR ALL TO authenticated USING (true);
-
+-- Repeat for other content tables...
 DROP POLICY IF EXISTS "Public Read Events" ON events;
 CREATE POLICY "Public Read Events" ON events FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Editor Modify Events" ON events;
+CREATE POLICY "Editor Modify Events" ON events FOR ALL TO authenticated USING (
+  EXISTS (SELECT 1 FROM profiles WHERE profiles.id = auth.uid() AND role IN ('admin', 'editor'))
+);
 
-DROP POLICY IF EXISTS "Admin All Events" ON events;
-CREATE POLICY "Admin All Events" ON events FOR ALL TO authenticated USING (true);
+-- 5. Trigger for Profile Creation
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email, role)
+  VALUES (new.id, new.email, 'viewer');
+  RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
-DROP POLICY IF EXISTS "Public Read News Posts" ON news;
-CREATE POLICY "Public Read News Posts" ON news FOR SELECT USING (true);
-
-DROP POLICY IF EXISTS "Admin All News Posts" ON news;
-CREATE POLICY "Admin All News Posts" ON news FOR ALL TO authenticated USING (true);
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 `;
 
   const copySql = () => {
@@ -263,7 +225,7 @@ CREATE POLICY "Admin All News Posts" ON news FOR ALL TO authenticated USING (tru
           <h1 className="text-4xl lg:text-5xl font-black uppercase tracking-tighter text-white">
             DATABASE <span className="text-primary">SYNC</span>
           </h1>
-          <p className="text-muted-foreground mt-2">Maintain core infrastructure and technical blueprints.</p>
+          <p className="text-muted-foreground mt-2">Maintain core infrastructure and RBAC blueprints.</p>
         </div>
       </div>
 
@@ -308,7 +270,7 @@ CREATE POLICY "Admin All News Posts" ON news FOR ALL TO authenticated USING (tru
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
-              <p className="text-xs text-muted-foreground">Initialize all hardcoded links, headlines, and SEO mesh parameters.</p>
+              <p className="text-xs text-muted-foreground">Initialize hardcoded links, headlines, and SEO mesh parameters.</p>
               <div className="mt-auto">
                 <Button onClick={handleSettingsSeed} disabled={settingsLoading} className="w-full bg-white text-black hover:bg-white/80 font-bold h-12 text-xs uppercase">
                   {settingsLoading ? 'Syncing...' : 'Seed Global Settings'}
@@ -324,7 +286,7 @@ CREATE POLICY "Admin All News Posts" ON news FOR ALL TO authenticated USING (tru
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-6 flex-1 flex flex-col">
-              <p className="text-xs text-muted-foreground">Populate technical FAQ parameters for Grants, Bounties, and Build Stations.</p>
+              <p className="text-xs text-muted-foreground">Populate FAQ parameters for Grants, Bounties, and Build Stations.</p>
               <div className="mt-auto">
                 <Button onClick={handleFaqSeed} disabled={faqLoading} className="w-full border border-white/10 hover:bg-white/5 font-bold h-12 text-xs uppercase">
                   {faqLoading ? 'Seeding...' : 'Seed Knowledge Base'}
