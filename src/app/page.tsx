@@ -76,19 +76,19 @@ export default function Home() {
       title: "Grants & Funding", 
       index: "03", 
       desc: "Superteam connects builders with grants and funding opportunities across the Solana ecosystem.",
-      video: "https://image2url.com/r2/default/videos/1773393988143-5175db13-8c2f-4cf4-a05e-8f56e34a5700.webm"
+      video: "https://image2url.com/r2/default/videos/1773398730655-a4c70031-aab1-4f87-bf99-3278898e9fea.webm"
     },
     { 
       title: "Bounties & Opportunities", 
       index: "04", 
       desc: "Members can earn by contributing to real projects through ecosystem bounties and freelance opportunities.",
-      video: "https://image2url.com/r2/default/videos/1773394101296-994b6a70-8dce-4b48-a7d1-896c23d305e9.webm"
+      video: "https://image2url.com/r2/default/videos/1773398842747-51e838a3-a9ba-4230-a50e-8972c4c84a1a.webm"
     },
     { 
       title: "Education & Learning", 
       index: "05", 
       desc: "We provide workshops, learning sessions, and community resources to help builders develop skills.",
-      video: "https://image2url.com/r2/default/videos/1773394228634-369b369a-76be-4427-9979-e8642a62ade5.webm"
+      video: "https://image2url.com/r2/default/videos/1773398899146-77357e24-5998-4748-989b-4d6f16defa76.webm"
     },
   ];
 
