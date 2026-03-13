@@ -433,7 +433,7 @@ CREATE TRIGGER on_auth_user_created
                 </Button>
               </div>
             </CardContent>
-          </div>
+          </Card>
         </div>
       </div>
     </div>
