@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS profiles (
 );
 
 -- 2. RBAC Helper Functions (Crucial to prevent infinite recursion)
+-- SECURITY DEFINER bypasses the RLS check on the profiles table itself
 CREATE OR REPLACE FUNCTION public.check_is_admin()
 RETURNS boolean AS $$
 BEGIN
@@ -196,7 +197,7 @@ CREATE TABLE IF NOT EXISTS ecosystem_opportunities (
   created_at timestamp WITH TIME ZONE DEFAULT now()
 );
 
--- 4. Enable RLS
+-- 4. Clean and Enable RLS
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE partners ENABLE ROW LEVEL SECURITY;
@@ -214,6 +215,17 @@ ALTER TABLE ecosystem_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ecosystem_opportunities ENABLE ROW LEVEL SECURITY;
 
 -- 5. Policies (v2.1 Recursive Fix)
+-- DYNAMICALLY DROP ALL EXISTING POLICIES TO PREVENT PERSISTENT RECURSION
+DO $$ 
+DECLARE 
+    pol RECORD;
+BEGIN 
+    FOR pol IN SELECT policyname, tablename FROM pg_policies WHERE schemaname = 'public' 
+    LOOP
+        EXECUTE format('DROP POLICY IF EXISTS %I ON public.%I', pol.policyname, pol.tablename);
+    END LOOP;
+END $$;
+
 -- Public Selects
 CREATE POLICY "Public Read Profiles" ON profiles FOR SELECT USING (true);
 CREATE POLICY "Public Read Members" ON members FOR SELECT USING (true);
@@ -271,7 +283,7 @@ CREATE TRIGGER on_auth_user_created
   const copySql = () => {
     navigator.clipboard.writeText(sqlSchema);
     setCopied(true);
-    toast({ title: "Copied!", description: "SQL migration copied." });
+    toast({ title: "Copied!", description: "SQL migration v2.1 copied." });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -346,6 +358,9 @@ CREATE TRIGGER on_auth_user_created
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-4 flex-1">
+            <p className="text-[10px] text-yellow-500 font-bold uppercase tracking-widest mb-2">
+              Note: Version 2.1 resolves recursion errors.
+            </p>
             <pre className="p-4 rounded bg-black/50 border border-white/5 text-[9px] font-code text-primary h-[400px] overflow-y-auto whitespace-pre-wrap relative">
               {sqlSchema}
               <button onClick={copySql} className="absolute top-2 right-2 p-2 bg-black/80 hover:bg-primary transition-all rounded">
@@ -418,7 +433,7 @@ CREATE TRIGGER on_auth_user_created
                 </Button>
               </div>
             </CardContent>
-          </Card>
+          </div>
         </div>
       </div>
     </div>

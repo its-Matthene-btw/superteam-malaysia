@@ -23,10 +23,12 @@ export async function getCurrentProfile() {
     .single();
 
   if (error) {
-    // PGRST116 is "no rows found"
-    // 42P17 is "infinite recursion" (indicates policies need fixing)
-    if (error.code !== 'PGRST116') {
-      console.error(`Profile Fetch Code: ${error.code} - ${error.message || error}`);
+    // PGRST116 is "no rows found" - expected for new users
+    // 42P17 is "infinite recursion" - indicates Supabase policies need the fix
+    if (error.code === '42P17') {
+      console.warn('SECURITY ALERT: Infinite recursion detected in database policies. Please run the SQL Migration v2.1 in Admin > Seed.');
+    } else if (error.code !== 'PGRST116') {
+      console.error(`Profile Fetch Error [${error.code}]: ${error.message}`);
     }
     return null;
   }
@@ -41,6 +43,9 @@ export async function getAllProfiles() {
     .order('created_at', { ascending: false });
 
   if (error) {
+    if (error.code === '42P17') {
+      throw new Error('Database security error: Infinite recursion detected. Please contact the administrator to run Migration v2.1.');
+    }
     console.error('Error fetching all profiles:', error.message || error);
     throw error;
   }
