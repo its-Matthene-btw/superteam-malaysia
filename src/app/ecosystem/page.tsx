@@ -43,7 +43,8 @@ export default function EcosystemPage() {
       } catch (err) {
         console.error(err);
       } finally {
-        setLoading(false);
+        // Sync with global entrance sequence
+        setTimeout(() => setLoading(false), 800);
       }
     }
     fetchData();
@@ -60,17 +61,8 @@ export default function EcosystemPage() {
 
   const featured = projects.filter(p => p.featured).slice(0, 2);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center">
-        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="font-code text-xs uppercase tracking-[4px] text-muted-foreground text-center">Synchronizing Network...</p>
-      </div>
-    );
-  }
-
   return (
-    <main className="min-h-screen bg-[#0a0a0c] text-white selection:bg-primary/30">
+    <main className={cn("min-h-screen bg-[#0a0a0c] text-white selection:bg-primary/30 transition-opacity duration-1000", loading ? "opacity-0" : "opacity-100")}>
       <Navbar />
 
       {/* HERO SECTION */}

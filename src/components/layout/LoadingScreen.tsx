@@ -1,14 +1,16 @@
-
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 import Logo from './Logo';
 
 export default function LoadingScreen() {
+  const pathname = usePathname();
   const [progress, setProgress] = useState(0);
   const [logIndex, setLogIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const prevPathname = useRef(pathname);
 
   const logs = [
     "ESTABLISHING LINK",
@@ -18,7 +20,27 @@ export default function LoadingScreen() {
     "RENDERING UI"
   ];
 
+  // Route detection for heavy visuals (Globes, Videos, Large Grids)
   useEffect(() => {
+    if (pathname !== prevPathname.current) {
+      // List of routes that require the high-fidelity entrance
+      const heavyRoutes = ['/', '/members', '/ecosystem', '/events', '/news', '/contact', '/faq'];
+      const isHeavy = heavyRoutes.some(route => 
+        pathname === route || pathname.startsWith(route + '/')
+      );
+
+      if (isHeavy) {
+        setProgress(0);
+        setLogIndex(0);
+        setIsVisible(true);
+      }
+      prevPathname.current = pathname;
+    }
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -26,12 +48,14 @@ export default function LoadingScreen() {
           setTimeout(() => setIsVisible(false), 600);
           return 100;
         }
-        return prev + Math.floor(Math.random() * 8) + 2;
+        // Random speed for "tech" feel - slightly faster on nav
+        const increment = Math.floor(Math.random() * 15) + 5;
+        return Math.min(prev + increment, 100);
       });
     }, 60);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isVisible, pathname]);
 
   useEffect(() => {
     const nextLog = Math.floor((progress / 100) * (logs.length - 1));
@@ -41,7 +65,7 @@ export default function LoadingScreen() {
   }, [progress, logIndex]);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isVisible && (
         <motion.div
           id="loader-wrapper"
