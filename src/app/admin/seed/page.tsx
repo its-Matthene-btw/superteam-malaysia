@@ -347,7 +347,7 @@ CREATE POLICY "Admin All News Posts" ON news FOR ALL TO authenticated USING (tru
                 </Button>
               </div>
             </CardContent>
-          </div>
+          </Card>
         </div>
       </div>
     </div>
