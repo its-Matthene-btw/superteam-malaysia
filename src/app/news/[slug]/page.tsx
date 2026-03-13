@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { subscribeToNewsletter } from '@/services/newsletter';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 export default function NewsDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -30,9 +31,11 @@ export default function NewsDetail({ params }: { params: Promise<{ slug: string 
         setPost(found);
         
         // Update document metadata if provided
-        if (found?.meta_title) document.title = found.meta_title;
+        if (found?.meta_title) {
+          document.title = found.meta_title;
+        }
         
-        // Fetch recommendations (just get recent ones and filter current)
+        // Fetch recommendations
         const all = await getNews();
         setRecommendations(all.filter(p => p.id !== found?.id).slice(0, 2));
       } catch (e) {
@@ -80,7 +83,7 @@ export default function NewsDetail({ params }: { params: Promise<{ slug: string 
           <Link href="/news" className="font-code text-[10px] text-muted-foreground uppercase tracking-[3px] mb-12 hover:text-white transition-colors flex items-center gap-2">
             <ArrowLeft className="w-3 h-3" /> BACK_TO_FEED
           </Link>
-          <div className="font-code text-primary text-xs font-bold tracking-[3px] mb-6">// ECOSYSTEM_MAJOR_2026</div>
+          <div className="font-code text-primary text-xs font-bold tracking-[3px] mb-6">// ECOSYSTEM_MAJOR_DISPATCH</div>
           <h1 className="text-5xl lg:text-7xl xl:text-8xl font-black leading-[0.9] tracking-tighter mb-10 uppercase">
             {post.title}
           </h1>
@@ -132,21 +135,21 @@ export default function NewsDetail({ params }: { params: Promise<{ slug: string 
 
         {/* Content Body */}
         <article className="p-10 lg:p-20 xl:p-24 max-w-[1000px]">
-          <div className="prose prose-invert prose-2xl max-w-none leading-relaxed text-white/80 font-body space-y-10">
+          <div className="rich-content prose prose-invert prose-2xl max-w-none leading-relaxed text-white/80 font-body">
             {post.excerpt && (
               <div className="text-2xl lg:text-3xl font-bold text-white mb-12 border-l-4 border-primary pl-8 py-2">
                 {post.excerpt}
               </div>
             )}
             
-            <div className="rich-content">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <div className="rich-content-renderer">
+              <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                 {post.content || ''}
               </ReactMarkdown>
             </div>
 
-            {/* Precision Figure Box */}
-            {post.image_url && (
+            {/* Precision Figure Box - Only show if content doesn't already look like it has images */}
+            {!post.content?.includes('<img') && !post.content?.includes('![]') && post.image_url && (
               <div className="my-20 p-2 border border-white/10 bg-white/[0.02] group">
                 <div className="relative aspect-video overflow-hidden border border-white/5">
                   <Image 
@@ -245,19 +248,20 @@ export default function NewsDetail({ params }: { params: Promise<{ slug: string 
 
       <Footer />
       <style jsx global>{`
-        .rich-content h1, .rich-content h2, .rich-content h3 { @apply font-black uppercase tracking-tighter mb-6 mt-12 text-white; }
-        .rich-content h1 { @apply text-4xl; }
-        .rich-content h2 { @apply text-3xl; }
-        .rich-content h3 { @apply text-2xl; }
-        .rich-content p { @apply text-white/80 leading-relaxed mb-8; }
-        .rich-content img { @apply rounded-xl border border-white/10 my-10 w-full; }
-        .rich-content a { @apply text-primary font-bold underline hover:text-white transition-colors; }
-        .rich-content ul { @apply list-disc pl-6 mb-8 space-y-4 text-white/80; }
-        .rich-content ol { @apply list-decimal pl-6 mb-8 space-y-4 text-white/80; }
-        .rich-content blockquote { @apply border-l-4 border-primary/40 pl-8 italic my-10 text-white/60; }
-        .rich-content code { @apply bg-white/10 px-2 py-1 rounded font-code text-sm text-primary; }
-        .rich-content pre { @apply bg-[#050505] border border-white/10 p-6 rounded-xl overflow-x-auto my-10; }
-        .rich-content pre code { @apply bg-transparent p-0 text-white/90; }
+        .rich-content-renderer h1, .rich-content-renderer h2, .rich-content-renderer h3 { @apply font-black uppercase tracking-tighter mb-6 mt-12 text-white; }
+        .rich-content-renderer h1 { @apply text-4xl; }
+        .rich-content-renderer h2 { @apply text-3xl; }
+        .rich-content-renderer h3 { @apply text-2xl; }
+        .rich-content-renderer p { @apply text-white/80 leading-relaxed mb-8; }
+        .rich-content-renderer .lead { @apply text-2xl font-bold text-white mb-10; }
+        .rich-content-renderer img { @apply rounded-xl border border-white/10 my-10 w-full; }
+        .rich-content-renderer a { @apply text-primary font-bold underline hover:text-white transition-colors; }
+        .rich-content-renderer ul { @apply list-disc pl-6 mb-8 space-y-4 text-white/80; }
+        .rich-content-renderer ol { @apply list-decimal pl-6 mb-8 space-y-4 text-white/80; }
+        .rich-content-renderer blockquote { @apply border-l-4 border-primary/40 pl-8 italic my-10 text-white/60; }
+        .rich-content-renderer code { @apply bg-white/10 px-2 py-1 rounded font-code text-sm text-primary; }
+        .rich-content-renderer pre { @apply bg-[#050505] border border-white/10 p-6 rounded-xl overflow-x-auto my-10; }
+        .rich-content-renderer pre code { @apply bg-transparent p-0 text-white/90; }
       `}</style>
     </main>
   );

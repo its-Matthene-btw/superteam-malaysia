@@ -28,6 +28,7 @@ import { toast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 export default function NewsAdmin() {
   const [posts, setPosts] = useState<NewsPost[]>([]);
@@ -236,7 +237,7 @@ export default function NewsAdmin() {
                   <Textarea 
                     value={formData.content || ''} 
                     onChange={(e) => setFormData({...formData, content: e.target.value})} 
-                    className="glass border-white/10 min-h-[400px] font-mono text-sm leading-relaxed" 
+                    className="glass border-white/10 min-h-[500px] font-mono text-sm leading-relaxed" 
                     placeholder="Write your article here using Markdown or HTML..."
                   />
                 </div>
@@ -323,8 +324,8 @@ export default function NewsAdmin() {
                   <div className="p-6 border-l-4 border-primary bg-primary/5 italic text-xl text-white/80">
                     {formData.excerpt || 'No excerpt provided.'}
                   </div>
-                  <div className="prose prose-invert prose-lg max-w-none">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  <div className="rich-content-styles prose prose-invert prose-lg max-w-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
                       {formData.content || '_No content to preview._'}
                     </ReactMarkdown>
                   </div>
@@ -344,6 +345,19 @@ export default function NewsAdmin() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <style jsx global>{`
+        .rich-content-styles h1, .rich-content-styles h2, .rich-content-styles h3 { @apply font-black uppercase tracking-tighter mb-6 mt-12 text-white; }
+        .rich-content-styles h1 { @apply text-4xl; }
+        .rich-content-styles h2 { @apply text-3xl; }
+        .rich-content-styles h3 { @apply text-2xl; }
+        .rich-content-styles p { @apply text-white/80 leading-relaxed mb-8 text-lg; }
+        .rich-content-styles .lead { @apply text-2xl font-bold text-white mb-10; }
+        .rich-content-styles img { @apply rounded-xl border border-white/10 my-10 w-full object-cover; }
+        .rich-content-styles ul { @apply list-disc pl-6 mb-8 space-y-4 text-white/80; }
+        .rich-content-styles ol { @apply list-decimal pl-6 mb-8 space-y-4 text-white/80; }
+        .rich-content-styles blockquote { @apply border-l-4 border-primary/40 pl-8 italic my-10 text-white/60; }
+      `}</style>
     </div>
   );
 }
